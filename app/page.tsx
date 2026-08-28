@@ -2,7 +2,7 @@ import { FoundationReveal } from "@/components/foundation-reveal";
 import { SiteHeader } from "@/components/site-header";
 import { SelectedWork } from "@/components/selected-work";
 import { Services } from "@/components/services";
-import { BloomCTA } from "@/components/bloom-cta";
+import { FinalCTA } from "@/components/botanical-growth";
 
 export default function Home() {
   return (
@@ -44,7 +44,7 @@ export default function Home() {
 
         <Services />
 
-        <BloomCTA />
+        <FinalCTA />
 
         <footer className="site-footer">
           <div className="site-footer__main">
