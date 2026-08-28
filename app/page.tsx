@@ -2,7 +2,6 @@ import { FoundationReveal } from "@/components/foundation-reveal";
 import { SiteHeader } from "@/components/site-header";
 import { SelectedWork } from "@/components/selected-work";
 import { Services } from "@/components/services";
-import { Process } from "@/components/process";
 
 export default function Home() {
   return (
@@ -44,8 +43,6 @@ export default function Home() {
 
         <Services />
 
-        <Process />
-
         <section className="final-cta" id="contact" aria-labelledby="contact-title">
           <div className="final-cta__atmosphere" aria-hidden="true">
             <div className="final-cta__light" />
@@ -54,16 +51,42 @@ export default function Home() {
             <div className="final-cta__vignette" />
           </div>
 
+          <img
+            className="final-cta__roses"
+            src="/images/cta-roses.png"
+            alt=""
+            aria-hidden="true"
+          />
+
           <div className="final-cta__content" data-final-reveal>
+            <p className="final-cta__eyebrow">Ready to elevate your business?</p>
             <h2 id="contact-title">
-              <span>Let&apos;s build</span>
-              <span>something</span>
-              <span>serious.</span>
+              Premium websites that move businesses forward.
             </h2>
+            <p className="final-cta__subline">
+              Strategy, design and development crafted to turn strong businesses into stronger
+              digital brands.
+            </p>
             <a className="final-cta__button" href="mailto:hello@kreuweb.com">
-              <span>Start a project</span>
-              <span aria-hidden="true">→</span>
+              <span>Book a call</span>
+              <span aria-hidden="true">↗</span>
             </a>
+          </div>
+
+          <div className="final-cta__object" aria-hidden="true">
+            <div className="final-cta__screen">
+              <div className="mock-site__nav">
+                <span>KREU</span>
+                <i />
+                <i />
+              </div>
+              <div className="mock-site__hero">
+                <small>Digital direction / 2026</small>
+                <strong>Presence<br />with purpose.</strong>
+                <div className="mock-site__image" />
+              </div>
+            </div>
+            <div className="final-cta__plinth" />
           </div>
         </section>
 
@@ -83,7 +106,6 @@ export default function Home() {
                 <p>Navigation</p>
                 <a href="#work">Work</a>
                 <a href="#expertise">Services</a>
-                <a href="#process">Process</a>
                 <a href="#contact">Contact</a>
               </nav>
 

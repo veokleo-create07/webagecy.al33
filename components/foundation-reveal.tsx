@@ -248,62 +248,6 @@ export function FoundationReveal() {
         },
       );
 
-      const enginePhases = gsap.utils.toArray<HTMLElement>("[data-engine-phase]");
-      const engineSignals = gsap.utils.toArray<HTMLElement>("[data-engine-signal]");
-
-      gsap.set(enginePhases, { y: 14, opacity: 0 });
-      gsap.set(engineSignals, { opacity: 0, scale: 0.92 });
-      gsap.set(".engine-signal i", { scaleX: 0 });
-      gsap.set(".engine-structure", { scale: 0.86, opacity: 0, rotateX: 7 });
-      gsap.set(".engine-structure i", { scaleX: 0, scaleY: 0 });
-      gsap.set(".engine-layer", { y: 30, z: -70, opacity: 0, rotateY: -5 });
-      gsap.set(".engine-build", { opacity: 0 });
-      gsap.set(".engine-build i", { scaleX: 0, scaleY: 0 });
-      gsap.set(".engine-output", { scale: 0.88, opacity: 0, rotateX: 5 });
-      gsap.set(".engine-ready", { y: 18, opacity: 0 });
-
-      const engineTimeline = gsap.timeline({
-        defaults: { ease: "power2.inOut" },
-        scrollTrigger: {
-          trigger: ".kreu-engine",
-          start: "top top",
-          end: () => `+=${window.innerHeight * 4.15}`,
-          pin: ".kreu-engine__pin",
-          scrub: 0.85,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      engineTimeline
-        .fromTo(".kreu-engine__header", { y: 22, opacity: 0.3 }, { y: 0, opacity: 1, duration: 0.32 }, 0)
-        .to(enginePhases[0], { y: 0, opacity: 1, duration: 0.28 }, 0.12)
-        .to(engineSignals, { opacity: 1, scale: 1, duration: 0.46, stagger: 0.07 }, 0.18)
-        .to(".engine-signal i", { scaleX: 1, duration: 0.46, stagger: 0.06 }, 0.26)
-        .to(enginePhases[0], { y: -12, opacity: 0, duration: 0.24 }, 0.8)
-        .to(enginePhases[1], { y: 0, opacity: 1, duration: 0.28 }, 0.88)
-        .to(engineSignals, { x: 0, y: 0, scale: 0.72, opacity: 0.18, duration: 0.52 }, 0.9)
-        .to(".engine-structure", { scale: 1, opacity: 1, rotateX: 0, duration: 0.52 }, 0.96)
-        .to(".engine-structure i", { scaleX: 1, scaleY: 1, duration: 0.46, stagger: 0.05 }, 1.02)
-        .to(enginePhases[1], { y: -12, opacity: 0, duration: 0.24 }, 1.5)
-        .to(enginePhases[2], { y: 0, opacity: 1, duration: 0.28 }, 1.58)
-        .to(".engine-layer", { y: 0, z: 0, opacity: 1, rotateY: 0, duration: 0.6, stagger: 0.09 }, 1.62)
-        .to(".engine-core", { background: "rgba(241,239,232,0.055)", duration: 0.4 }, 1.78)
-        .to(enginePhases[2], { y: -12, opacity: 0, duration: 0.24 }, 2.2)
-        .to(enginePhases[3], { y: 0, opacity: 1, duration: 0.28 }, 2.28)
-        .to(".engine-build", { opacity: 1, duration: 0.28 }, 2.32)
-        .to(".engine-build i", { scaleX: 1, scaleY: 1, duration: 0.5, stagger: 0.06 }, 2.36)
-        .to(".engine-design", { scale: 1.035, rotateX: -1.5, duration: 0.52 }, 2.42)
-        .to(enginePhases[3], { y: -12, opacity: 0, duration: 0.24 }, 2.88)
-        .to(enginePhases[4], { y: 0, opacity: 1, duration: 0.28 }, 2.96)
-        .to([".engine-signals", ".engine-structure", ".engine-build"], { opacity: 0.08, duration: 0.48 }, 3)
-        .to(".engine-design", { scale: 0.92, opacity: 0.12, filter: "blur(5px)", duration: 0.5 }, 3.04)
-        .to(".engine-core", { scale: 0.84, opacity: 0, duration: 0.38 }, 3.08)
-        .to(".engine-output", { scale: 1, opacity: 1, rotateX: 0, duration: 0.62 }, 3.12)
-        .to(enginePhases[4], { y: -10, opacity: 0, duration: 0.25 }, 3.7)
-        .to(".kreu-engine__header", { y: -12, opacity: 0.18, duration: 0.35 }, 3.72)
-        .to(".engine-ready", { y: 0, opacity: 1, duration: 0.42 }, 3.78);
-
       gsap.fromTo(
         ".final-cta__atmosphere",
         { opacity: 0.12, scale: 1.055 },
@@ -319,6 +263,38 @@ export function FoundationReveal() {
           },
         },
       );
+
+      gsap.fromTo(
+        ".final-cta__roses",
+        { yPercent: 14, scale: 0.94, opacity: 0 },
+        {
+          yPercent: 0,
+          scale: 1,
+          opacity: 0.82,
+          ease: "power2.out",
+          scrollTrigger: { trigger: ".final-cta", start: "top 86%", end: "top 24%", scrub: 0.9 },
+        },
+      );
+
+      gsap.fromTo(
+        ".final-cta__object",
+        { y: 58, rotateX: 7, opacity: 0 },
+        {
+          y: 0,
+          rotateX: 0,
+          opacity: 1,
+          ease: "power2.out",
+          scrollTrigger: { trigger: ".final-cta", start: "top 78%", end: "top 18%", scrub: 0.85 },
+        },
+      );
+
+      gsap.to(".final-cta__screen", {
+        y: -7,
+        duration: 3.6,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
 
     });
 

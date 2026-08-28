@@ -6,7 +6,6 @@ import { ShimmerButton } from "@/components/ui/shimmer-button";
 const navigation = [
   { label: "Work", href: "#work" },
   { label: "Services", href: "#expertise" },
-  { label: "Process", href: "#process" },
 ];
 
 export function SiteHeader() {
@@ -14,6 +13,7 @@ export function SiteHeader() {
   const [isCompact, setIsCompact] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const [isOverFinalCta, setIsOverFinalCta] = useState(false);
   const firstMenuLink = useRef<HTMLAnchorElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
 
@@ -67,6 +67,30 @@ export function SiteHeader() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isMenuOpen]);
 
+  useEffect(() => {
+    const finalCta = document.querySelector<HTMLElement>(".final-cta");
+    if (!finalCta) return;
+
+    let frame = 0;
+    const update = () => {
+      const threshold = finalCta.offsetTop - window.innerHeight * 0.35;
+      setIsOverFinalCta(window.scrollY >= threshold);
+      frame = 0;
+    };
+    const handleScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
   const closeMenu = () => setIsMenuOpen(false);
   const goToContact = () => {
     closeMenu();
@@ -82,6 +106,7 @@ export function SiteHeader() {
       className={`site-header${isCompact ? " is-compact" : ""}${
         isMenuOpen ? " is-menu-open" : ""
       }${isScrolled ? " has-scrolled" : ""}${isReady ? " is-ready" : ""}`}
+      data-final-cta={isOverFinalCta ? "visible" : "hidden"}
     >
       <div className="glass-nav">
         <div className="glass-nav__topline">
