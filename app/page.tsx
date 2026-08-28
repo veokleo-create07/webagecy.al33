@@ -51,15 +51,12 @@ export default function Home() {
             <div className="final-cta__vignette" />
           </div>
 
-          <img
-            className="final-cta__roses"
-            src="/images/cta-roses.png"
-            alt=""
-            aria-hidden="true"
-          />
+          <div className="final-cta__botanicals" aria-hidden="true">
+            <img className="final-cta__roses final-cta__rose-growth" src="/images/cta-roses.png" alt="" />
+            <img className="final-cta__roses final-cta__rose-bloom" src="/images/cta-roses.png" alt="" />
+          </div>
 
-          <div className="final-cta__content" data-final-reveal>
-            <p className="final-cta__eyebrow">Ready to elevate your business?</p>
+          <div className="final-cta__content">
             <h2 id="contact-title">
               Premium websites that move businesses forward.
             </h2>
@@ -71,22 +68,6 @@ export default function Home() {
               <span>Book a call</span>
               <span aria-hidden="true">↗</span>
             </a>
-          </div>
-
-          <div className="final-cta__object" aria-hidden="true">
-            <div className="final-cta__screen">
-              <div className="mock-site__nav">
-                <span>KREU</span>
-                <i />
-                <i />
-              </div>
-              <div className="mock-site__hero">
-                <small>Digital direction / 2026</small>
-                <strong>Presence<br />with purpose.</strong>
-                <div className="mock-site__image" />
-              </div>
-            </div>
-            <div className="final-cta__plinth" />
           </div>
         </section>
 
