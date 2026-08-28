@@ -2,29 +2,7 @@ import { FoundationReveal } from "@/components/foundation-reveal";
 import { SiteHeader } from "@/components/site-header";
 import { SelectedWork } from "@/components/selected-work";
 import { Services } from "@/components/services";
-
-const processStages = [
-  {
-    title: "Discover",
-    description: "Understand the business, audience and ambition.",
-  },
-  {
-    title: "Define",
-    description: "Create the strategy and digital direction.",
-  },
-  {
-    title: "Design",
-    description: "Build the visual and interaction system.",
-  },
-  {
-    title: "Develop",
-    description: "Turn the experience into fast, scalable software.",
-  },
-  {
-    title: "Launch",
-    description: "Ship, measure and continuously improve.",
-  },
-];
+import { Process } from "@/components/process";
 
 export default function Home() {
   return (
@@ -66,29 +44,7 @@ export default function Home() {
 
         <Services />
 
-        <section className="process-section" id="process" aria-labelledby="process-title">
-          <header className="process-section__intro">
-            <p className="eyebrow">Our process</p>
-            <h2 id="process-title">
-              <span>From idea</span>
-              <span>to launch.</span>
-            </h2>
-          </header>
-
-          <div className="process-list">
-            {processStages.map((stage, index) => (
-              <article
-                className="process-stage"
-                data-process-stage
-                data-state={index === 0 ? "current" : "next"}
-                key={stage.title}
-              >
-                <h3>{stage.title}</h3>
-                <p>{stage.description}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+        <Process />
 
         <section className="final-cta" id="contact" aria-labelledby="contact-title">
           <div className="final-cta__atmosphere" aria-hidden="true">
