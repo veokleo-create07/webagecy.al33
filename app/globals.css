@@ -2080,61 +2080,111 @@ a:focus-visible {
   position: absolute;
   z-index: 3;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
   pointer-events: none;
+  perspective: 1100px;
+  transform-style: preserve-3d;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 28%, transparent 42%, transparent 58%, #000 72%, #000 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 28%, transparent 42%, transparent 58%, #000 72%, #000 100%);
+}
+
+.botanical-plant {
+  position: absolute;
+  bottom: -1%;
+  width: min(37vw, 38rem);
+  height: 102%;
+  overflow: visible;
+}
+
+.botanical-plant--left { left: -1.5%; }
+.botanical-plant--right { right: -1.5%; }
+
+.botanical-plant__sculpture,
+.botanical-flower {
+  transform-style: preserve-3d;
 }
 
 .botanical-path {
   fill: none;
-  stroke: url(#stem-green);
   stroke-linecap: round;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
 }
 
-.botanical-stem { stroke-width: 7; }
-.botanical-branch { stroke-width: 3.5; opacity: 0.88; }
+.botanical-stem__shadow,
+.botanical-branch__shadow { stroke: rgba(0, 12, 8, 0.58); }
+
+.sculptural-stem--left .botanical-stem__body,
+.sculptural-branch--left .botanical-branch__body { stroke: url(#left-stem-body); }
+.sculptural-stem--right .botanical-stem__body,
+.sculptural-branch--right .botanical-branch__body { stroke: url(#right-stem-body); }
+
+.botanical-stem__light,
+.botanical-branch__light {
+  stroke: rgba(154, 184, 143, 0.36);
+  transform: translate(-1px, -1px);
+}
 
 .botanical-leaf {
-  fill: url(#leaf-green);
   transform-box: fill-box;
+  transform-origin: 0% 55%;
+  transform-style: preserve-3d;
   will-change: transform, opacity;
 }
 
+.botanical-leaf__shadow { fill: rgba(0, 13, 9, 0.7); filter: blur(2px); transform: translate(4px, 7px); }
+.botanical-leaf--left .botanical-leaf__body { fill: url(#left-leaf-body); }
+.botanical-leaf--right .botanical-leaf__body { fill: url(#right-leaf-body); }
+.botanical-leaf__glaze { fill: rgba(183, 203, 156, 0.13); filter: blur(0.4px); }
+
 .botanical-leaf__vein {
   fill: none;
-  stroke: rgba(182, 211, 175, 0.34);
-  stroke-width: 1;
+  stroke: rgba(194, 214, 175, 0.3);
+  stroke-width: 0.85;
   vector-effect: non-scaling-stroke;
 }
 
 .botanical-bud {
-  fill: url(#petal-green);
-  stroke: rgba(155, 190, 151, 0.24);
-  stroke-width: 1;
   transform-box: fill-box;
+  transform-style: preserve-3d;
   will-change: transform, opacity;
 }
 
-.botanical-bloom { will-change: opacity; }
+.botanical-bud--left .botanical-bud__back,
+.botanical-bud--left .botanical-bud__front { fill: url(#left-petal); }
+.botanical-bud--right .botanical-bud__back,
+.botanical-bud--right .botanical-bud__front { fill: url(#right-petal); }
+.botanical-bud__back { filter: brightness(0.72); }
+.botanical-bud__front { filter: drop-shadow(0 5px 5px rgba(0,0,0,0.38)); }
+.botanical-bud__light { fill: rgba(220, 224, 186, 0.23); filter: blur(0.5px); }
+.botanical-bud__sepal { fill: #133d2b; }
 
 .botanical-petal {
-  fill: url(#petal-green);
-  stroke: rgba(172, 205, 166, 0.2);
-  stroke-width: 0.8;
   transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transform-style: preserve-3d;
   will-change: transform, opacity;
 }
 
-.botanical-bloom__core { fill: #173d2a; }
-.botanical-bloom__light { fill: rgba(184, 213, 176, 0.68); }
+.botanical-petal--left .botanical-petal__body { fill: url(#left-petal); }
+.botanical-petal--right .botanical-petal__body { fill: url(#right-petal); }
+.botanical-petal--left { filter: url(#left-petal-depth); }
+.botanical-petal--right { filter: url(#right-petal-depth); }
+.botanical-petal__fold { fill: rgba(203, 215, 176, 0.13); filter: blur(0.45px); }
+.botanical-petal__edge { fill: none; stroke: rgba(222, 225, 190, 0.19); stroke-width: 0.75; }
+.botanical-petal--left.botanical-petal--shade-1 { filter: url(#left-petal-depth) brightness(0.78) saturate(1.08); }
+.botanical-petal--left.botanical-petal--shade-2 { filter: url(#left-petal-depth) brightness(1.13); }
+.botanical-petal--left.botanical-petal--shade-3 { filter: url(#left-petal-depth) brightness(0.9) saturate(0.9); }
+.botanical-petal--right.botanical-petal--shade-1 { filter: url(#right-petal-depth) brightness(0.78) saturate(1.08); }
+.botanical-petal--right.botanical-petal--shade-2 { filter: url(#right-petal-depth) brightness(1.13); }
+.botanical-petal--right.botanical-petal--shade-3 { filter: url(#right-petal-depth) brightness(0.9) saturate(0.9); }
+.botanical-flower__shadow { fill: rgba(0, 12, 7, 0.66); filter: blur(12px); }
+.botanical-flower__core { fill: #09291c; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.55)); }
+.botanical-flower__core-light { fill: rgba(221, 225, 185, 0.56); filter: blur(0.7px); }
 
 .botanical-cta__content {
   position: relative;
   z-index: 8;
-  width: min(62vw, 58rem);
+  width: min(58vw, 58rem);
 }
 
 .site-footer {
