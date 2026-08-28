@@ -634,17 +634,9 @@ a:focus-visible {
   will-change: transform, opacity;
 }
 
-.selected-work__intro .eyebrow {
-  position: absolute;
-  top: clamp(7rem, 12vh, 9rem);
-  left: var(--space-page);
-  margin: 0;
-  opacity: 0;
-}
-
 .selected-work__intro h2 {
   max-width: 10ch;
-  margin: clamp(6rem, 15vh, 9rem) 0 0;
+  margin: clamp(5.75rem, 10vh, 7.5rem) 0 0;
   font-size: clamp(4rem, 8.2vw, 9rem);
   font-weight: 400;
   letter-spacing: -0.07em;
@@ -1720,7 +1712,7 @@ a:focus-visible {
 @media (max-width: 1024px) {
   .selected-work__intro h2 {
     max-width: 9ch;
-    margin-top: clamp(6.5rem, 15vh, 8.5rem);
+    margin-top: clamp(5.75rem, 10vh, 7rem);
     font-size: clamp(3.8rem, 11vw, 7rem);
   }
 
@@ -2106,14 +2098,9 @@ a:focus-visible {
     padding: 1.25rem;
   }
 
-  .selected-work__intro .eyebrow {
-    top: 6.25rem;
-    left: 1.25rem;
-  }
-
   .selected-work__intro h2 {
     max-width: 8.5ch;
-    margin-top: 7rem;
+    margin-top: 5.75rem;
     font-size: clamp(3.4rem, 16vw, 5.4rem);
     line-height: 0.86;
     text-align: center;

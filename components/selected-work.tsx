@@ -108,7 +108,6 @@ export function SelectedWork() {
     <section className="selected-work" id="work" aria-labelledby="work-title">
       <div className="selected-work__pin">
         <header className="selected-work__intro">
-          <p className="eyebrow">Selected work</p>
           <h2 id="work-title">Digital work with presence.</h2>
         </header>
 

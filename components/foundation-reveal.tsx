@@ -100,7 +100,6 @@ export function FoundationReveal() {
           const stages = panels.map((panel) => panel.querySelector<HTMLElement>(".project-stage"));
           const copies = panels.map((panel) => panel.querySelector<HTMLElement>(".project-copy"));
           const introTitle = document.querySelector<HTMLElement>(".selected-work__intro h2");
-          const introEyebrow = document.querySelector<HTMLElement>(".selected-work__intro .eyebrow");
 
           panels.forEach((panel, index) => {
             gsap.set(panel, { zIndex: panels.length - index, pointerEvents: index === 0 ? "auto" : "none" });
@@ -133,26 +132,25 @@ export function FoundationReveal() {
             .to(
               introTitle,
               {
-                x: () => -window.innerWidth * (isMobile ? 0.08 : 0.25),
-                y: () => -window.innerHeight * (isMobile ? 0.025 : 0.055),
-                scale: isMobile ? 0.58 : 0.46,
-                opacity: 0.78,
-                duration: 0.58,
+                x: () => -window.innerWidth * (isMobile ? 0.25 : 0.39),
+                y: () => -window.innerHeight * (isMobile ? 0.025 : 0.035),
+                scale: isMobile ? 0.25 : 0.18,
+                opacity: 0.76,
+                duration: 0.5,
                 transformOrigin: "center center",
               },
               0,
             )
-            .to(introEyebrow, { opacity: 1, duration: 0.3 }, 0.12)
-            .to(".project-gallery", { opacity: 1, duration: 0.38 }, 0.1)
+            .to(".project-gallery", { opacity: 1, duration: 0.34 }, 0.38)
             .to(
               stages[0],
-              { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.48 },
-              0.14,
+              { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.42 },
+              0.4,
             )
-            .to(copies[0], { y: 0, opacity: 1, duration: 0.34 }, 0.28);
+            .to(copies[0], { y: 0, opacity: 1, duration: 0.3 }, 0.54);
 
           for (let index = 1; index < panels.length; index += 1) {
-            const transitionAt = 0.62 + (index - 1) * 0.72;
+            const transitionAt = 0.86 + (index - 1) * 0.72;
 
             portfolioTimeline
               .set(panels[index], { pointerEvents: "auto" }, transitionAt)
