@@ -207,101 +207,64 @@ export function FoundationReveal() {
         },
       );
 
-      const serviceItems = gsap.utils.toArray<HTMLElement>("[data-service-item]");
-      const serviceVisuals = gsap.utils.toArray<HTMLElement>(".service-visual");
+      const workflowMedia = gsap.matchMedia();
 
-      gsap.set(serviceItems, { y: 28, opacity: 0 });
-      gsap.set(serviceVisuals, { scale: 0.94, rotateZ: 0.7, opacity: 0, filter: "blur(8px)" });
-      gsap.set(serviceItems[0], { y: 0, opacity: 1 });
-      gsap.set(serviceVisuals[0], { scale: 1, rotateZ: 0, opacity: 1, filter: "blur(0px)" });
-      gsap.set(".services__closing", { y: 26, opacity: 0, pointerEvents: "none" });
-      gsap.set(".web-layer", { xPercent: 8, yPercent: -5, opacity: 0.16 });
-      gsap.set(".search-line", { scaleX: 0 });
-      gsap.set([".design-rule", ".design-grid"], { scaleX: 0, opacity: 0.12 });
-      gsap.set(".design-type", { scale: 0.9, opacity: 0.25, transformOrigin: "left top" });
-      gsap.set(".system-line", { scaleX: 0 });
-      gsap.set(".system-node", { scale: 0.68, opacity: 0.18 });
+      workflowMedia.add(
+        { wide: "(min-width: 1025px)", narrow: "(max-width: 1024px)" },
+        (workflowContext) => {
+          const isNarrow = Boolean(workflowContext.conditions?.narrow);
+          const nodes = gsap.utils.toArray<HTMLElement>("[data-workflow-node]");
+          const connectors = gsap.utils.toArray<HTMLElement>("[data-workflow-connector]");
+          const flowLines = connectors.map((connector) => connector.querySelector<HTMLElement>("span"));
 
-      const servicesTimeline = gsap.timeline({
-        defaults: { ease: "power2.inOut" },
-        scrollTrigger: {
-          trigger: ".services",
-          start: "top top",
-          end: () => `+=${window.innerHeight * 3.15}`,
-          pin: ".services__pin",
-          scrub: 0.85,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      });
+          gsap.set(nodes, { opacity: 0.22, scale: 0.96, y: 8 });
+          gsap.set(flowLines, {
+            scaleX: isNarrow ? 1 : 0,
+            scaleY: isNarrow ? 0 : 1,
+            transformOrigin: isNarrow ? "center top" : "left center",
+          });
 
-      servicesTimeline.fromTo(
-        ".services__header",
-        { y: 18, opacity: 0.35 },
-        { y: 0, opacity: 1, duration: 0.32 },
-        0,
-      );
+          const servicesTimeline = gsap.timeline({
+            defaults: { ease: "power2.inOut" },
+            scrollTrigger: {
+              trigger: ".services",
+              start: "top top",
+              end: () => `+=${window.innerHeight * (isNarrow ? 3 : 2.55)}`,
+              pin: ".services__pin",
+              scrub: 0.8,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+            },
+          });
 
-      servicesTimeline.to(
-        ".web-layer",
-        { xPercent: 0, yPercent: 0, opacity: 1, duration: 0.5, stagger: 0.06 },
-        0.08,
-      );
+          servicesTimeline
+            .fromTo(".services__header", { y: 20, opacity: 0.3 }, { y: 0, opacity: 1, duration: 0.34 }, 0)
+            .to(nodes[0], { opacity: 1, scale: 1, y: 0, duration: 0.3 }, 0.12);
 
-      for (let index = 1; index < serviceItems.length; index += 1) {
-        const transitionAt = 0.48 + (index - 1) * 0.68;
+          connectors.forEach((_, index) => {
+            const activationAt = 0.42 + index * 0.48;
+            servicesTimeline
+              .to(
+                flowLines[index],
+                isNarrow
+                  ? { scaleY: 1, duration: 0.34, ease: "power2.out" }
+                  : { scaleX: 1, duration: 0.34, ease: "power2.out" },
+                activationAt,
+              )
+              .to(
+                nodes[index + 1],
+                { opacity: 1, scale: 1, y: 0, duration: 0.34 },
+                activationAt + 0.2,
+              );
+          });
 
-        servicesTimeline
-          .to(serviceItems[index - 1], { y: -22, opacity: 0, duration: 0.28 }, transitionAt)
-          .to(
-            serviceVisuals[index - 1],
-            { xPercent: -5, scale: 0.96, rotateZ: -0.6, opacity: 0, filter: "blur(7px)", duration: 0.34 },
-            transitionAt,
-          )
-          .to(serviceItems[index], { y: 0, opacity: 1, duration: 0.38 }, transitionAt + 0.12)
-          .to(
-            serviceVisuals[index],
-            { xPercent: 0, scale: 1, rotateZ: 0, opacity: 1, filter: "blur(0px)", duration: 0.46 },
-            transitionAt + 0.06,
-          );
-
-        if (index === 1) {
           servicesTimeline.to(
-            ".search-line",
-            { scaleX: 1, duration: 0.42, stagger: 0.08, ease: "power2.out" },
-            transitionAt + 0.14,
+            ".services__header",
+            { y: -8, opacity: 0.78, duration: 0.36 },
+            2.25,
           );
-        }
-
-        if (index === 2) {
-          servicesTimeline
-            .to(".design-type", { scale: 1, opacity: 1, duration: 0.4 }, transitionAt + 0.12)
-            .to(
-              [".design-rule", ".design-grid"],
-              { scaleX: 1, opacity: 1, duration: 0.4, stagger: 0.07 },
-              transitionAt + 0.16,
-            );
-        }
-
-        if (index === 3) {
-          servicesTimeline
-            .to(".system-line", { scaleX: 1, duration: 0.44, stagger: 0.08 }, transitionAt + 0.1)
-            .to(
-              ".system-node",
-              { scale: 1, opacity: 1, duration: 0.36, stagger: 0.06 },
-              transitionAt + 0.16,
-            );
-        }
-      }
-
-      servicesTimeline
-        .to(".services__stage", { y: -18, opacity: 0, duration: 0.36 }, 2.58)
-        .to(".services__header", { y: -12, opacity: 0.24, duration: 0.36 }, 2.58)
-        .to(
-          ".services__closing",
-          { y: 0, opacity: 1, pointerEvents: "auto", duration: 0.48 },
-          2.72,
-        );
+        },
+      );
 
       gsap.fromTo(
         ".process-section__intro",

@@ -1484,6 +1484,140 @@ a:focus-visible {
 .services__cta span:last-child { transition: transform 300ms var(--ease-out); }
 .services__cta:hover span:last-child { transform: translate(0.15rem, -0.15rem); }
 
+.services__header {
+  width: min(100%, 72rem);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 0;
+  text-align: center;
+}
+
+.services__header h2 {
+  max-width: 12ch;
+  font-size: clamp(4rem, 8.5vw, 9.5rem);
+  line-height: 0.83;
+  text-wrap: balance;
+}
+
+.services__header p {
+  max-width: 48rem;
+  margin: clamp(1.8rem, 3.5vh, 3rem) auto 0;
+  font-size: clamp(1rem, 1.35vw, 1.22rem);
+  text-align: center;
+}
+
+.services__header .services__cta {
+  margin-top: clamp(1.75rem, 3vh, 2.5rem);
+}
+
+.workflow {
+  position: absolute;
+  right: clamp(2rem, 5vw, 6rem);
+  bottom: clamp(4rem, 10vh, 7rem);
+  left: clamp(2rem, 5vw, 6rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.workflow__step {
+  display: contents;
+}
+
+.workflow-node {
+  position: relative;
+  width: clamp(7.5rem, 10vw, 11rem);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 1.25rem;
+  text-align: center;
+  will-change: transform, opacity;
+}
+
+.workflow-node i {
+  position: relative;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 0.32rem rgba(241, 239, 232, 0.055);
+}
+
+.workflow-node i::after {
+  position: absolute;
+  inset: -0.72rem;
+  border: 1px solid rgba(241, 239, 232, 0.16);
+  border-radius: 50%;
+  content: "";
+}
+
+.workflow-node h3,
+.workflow-node p {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(0.78rem, 0.9vw, 0.95rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.workflow-connector {
+  position: relative;
+  width: clamp(2.5rem, 5vw, 7rem);
+  height: 1px;
+  margin: 0 clamp(0.4rem, 1vw, 1.2rem) 2.35rem;
+  overflow: visible;
+  background: rgba(241, 239, 232, 0.12);
+}
+
+.workflow-connector span {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: rgba(241, 239, 232, 0.68);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+.workflow-connector span::after {
+  position: absolute;
+  top: 50%;
+  right: -0.15rem;
+  width: 0.3rem;
+  height: 0.3rem;
+  border-radius: 50%;
+  background: var(--color-text);
+  content: "";
+  transform: translateY(-50%);
+}
+
+.workflow-node--outcome {
+  width: clamp(9rem, 13vw, 14rem);
+}
+
+.workflow-node--outcome i {
+  width: 1.2rem;
+  height: 1.2rem;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px rgba(241, 239, 232, 0.7), 0 0 0 0.5rem rgba(241, 239, 232, 0.04);
+}
+
+.workflow-node--outcome i::before {
+  position: absolute;
+  inset: 0.28rem;
+  border-radius: 50%;
+  background: var(--color-text);
+  content: "";
+}
+
+.workflow-node--outcome p {
+  font-size: clamp(0.9rem, 1.05vw, 1.05rem);
+}
+
 .process-section {
   position: relative;
   left: 50%;
@@ -1876,6 +2010,51 @@ a:focus-visible {
   .service-item h3 {
     font-size: clamp(4rem, 8.5vw, 6.5rem);
   }
+
+  .services__header h2 {
+    font-size: clamp(4rem, 10vw, 7rem);
+  }
+
+  .workflow {
+    top: 46%;
+    right: clamp(1.5rem, 5vw, 4rem);
+    bottom: 2rem;
+    left: clamp(1.5rem, 5vw, 4rem);
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .workflow-node {
+    width: 100%;
+    align-items: center;
+    flex-direction: row;
+    gap: 1.2rem;
+    text-align: left;
+  }
+
+  .workflow-node h3,
+  .workflow-node p {
+    font-size: clamp(0.82rem, 2vw, 1rem);
+  }
+
+  .workflow-connector {
+    width: 1px;
+    height: clamp(1.5rem, 3.5vh, 2.6rem);
+    margin: 0.35rem 0 0.35rem 0.35rem;
+    background: rgba(241, 239, 232, 0.12);
+  }
+
+  .workflow-connector span {
+    transform-origin: center top;
+  }
+
+  .workflow-connector span::after {
+    top: auto;
+    right: auto;
+    bottom: -0.15rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 
 @media (max-width: 760px) {
@@ -1885,6 +2064,7 @@ a:focus-visible {
 
   .services__header {
     display: block;
+    text-align: center;
   }
 
   .services__header h2 {
@@ -1895,6 +2075,14 @@ a:focus-visible {
     max-width: 23rem;
     margin-top: 1.4rem;
     font-size: 0.95rem;
+  }
+
+  .services__header .services__cta {
+    margin-top: 1.5rem;
+  }
+
+  .workflow {
+    top: 48%;
   }
 
   .services__stage {
@@ -2516,6 +2704,14 @@ a:focus-visible {
     height: auto;
     min-height: 100svh;
     overflow: visible;
+  }
+
+  .workflow {
+    position: relative;
+    inset: auto;
+    min-height: 28rem;
+    margin-top: 5rem;
+    padding-bottom: 5rem;
   }
 
   .services__stage {
