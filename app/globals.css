@@ -2109,6 +2109,58 @@ a:focus-visible {
   transform: scale(0.74);
 }
 
+.bloom-cta__rose,
+.bloom-cta__fallback {
+  position: absolute;
+  z-index: 3;
+  bottom: -5%;
+  height: 92vh;
+  pointer-events: none;
+  object-fit: contain;
+  object-position: bottom;
+  filter: drop-shadow(0 1.6rem 3.2rem rgba(0, 0, 0, 0.65));
+  will-change: transform, opacity;
+}
+
+.bloom-cta__rose {
+  width: 42vw;
+  opacity: 0;
+}
+
+.bloom-cta__rose--left { left: -5%; }
+.bloom-cta__rose--right { right: -5%; transform: scaleX(-1); }
+
+.bloom-cta__fallback {
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  object-fit: fill;
+  transform-origin: center bottom;
+}
+
+.bloom-cta__fallback[data-active="true"] { opacity: 0.9; }
+
+.bloom-cta__content {
+  position: relative;
+  z-index: 10;
+}
+
+.bloom-cta__eyebrow {
+  margin: 0 0 clamp(1.5rem, 3vh, 2rem);
+  color: rgba(255, 255, 255, 0.45);
+  font-size: clamp(0.78rem, 1vw, 0.94rem);
+  letter-spacing: -0.001em;
+}
+
+.bloom-cta h2 {
+  max-width: 12ch;
+  font-size: clamp(3.6rem, 7.2vw, 8rem);
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+}
+
 .final-cta__object {
   position: absolute;
   z-index: 5;

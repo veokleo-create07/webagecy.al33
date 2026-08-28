@@ -2,6 +2,7 @@ import { FoundationReveal } from "@/components/foundation-reveal";
 import { SiteHeader } from "@/components/site-header";
 import { SelectedWork } from "@/components/selected-work";
 import { Services } from "@/components/services";
+import { BloomCTA } from "@/components/bloom-cta";
 
 export default function Home() {
   return (
@@ -43,33 +44,7 @@ export default function Home() {
 
         <Services />
 
-        <section className="final-cta" id="contact" aria-labelledby="contact-title">
-          <div className="final-cta__atmosphere" aria-hidden="true">
-            <div className="final-cta__light" />
-            <div className="final-cta__depth" />
-            <div className="final-cta__grain" />
-            <div className="final-cta__vignette" />
-          </div>
-
-          <div className="final-cta__botanicals" aria-hidden="true">
-            <img className="final-cta__roses final-cta__rose-growth" src="/images/cta-roses.png" alt="" />
-            <img className="final-cta__roses final-cta__rose-bloom" src="/images/cta-roses.png" alt="" />
-          </div>
-
-          <div className="final-cta__content">
-            <h2 id="contact-title">
-              Premium websites that move businesses forward.
-            </h2>
-            <p className="final-cta__subline">
-              Strategy, design and development crafted to turn strong businesses into stronger
-              digital brands.
-            </p>
-            <a className="final-cta__button" href="mailto:hello@kreuweb.com">
-              <span>Book a call</span>
-              <span aria-hidden="true">↗</span>
-            </a>
-          </div>
-        </section>
+        <BloomCTA />
 
         <footer className="site-footer">
           <div className="site-footer__main">

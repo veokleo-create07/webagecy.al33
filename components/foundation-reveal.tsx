@@ -248,67 +248,6 @@ export function FoundationReveal() {
         },
       );
 
-      gsap.fromTo(
-        ".final-cta__atmosphere",
-        { opacity: 0.12, scale: 1.055 },
-        {
-          opacity: 1,
-          scale: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".final-cta",
-            start: "top 92%",
-            end: "top 28%",
-            scrub: 0.9,
-          },
-        },
-      );
-
-      gsap.set(".final-cta__rose-growth", {
-        clipPath: "inset(100% 0 0)",
-        scaleX: 0.9,
-        opacity: 0,
-        transformOrigin: "center bottom",
-      });
-      gsap.set(".final-cta__rose-bloom", { scale: 0.72, opacity: 0, transformOrigin: "center 58%" });
-
-      const finalCtaTimeline = gsap.timeline({
-        defaults: { ease: "power2.inOut" },
-        scrollTrigger: {
-          trigger: ".final-cta",
-          start: "top top",
-          end: () => `+=${window.innerHeight * 1.05}`,
-          pin: true,
-          scrub: 0.85,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      finalCtaTimeline
-        .to(
-          ".final-cta__rose-growth",
-          { clipPath: "inset(0% 0 0)", scaleX: 1, opacity: 0.9, duration: 0.68 },
-          0,
-        )
-        .fromTo(
-          ".final-cta__content",
-          { y: 18, opacity: 0.62 },
-          { y: 0, opacity: 1, duration: 0.42 },
-          0.12,
-        )
-        .to(".final-cta__rose-bloom", { scale: 1, opacity: 0.82, duration: 0.44, ease: "power3.out" }, 0.52)
-        .to(".final-cta__light", { scale: 1.06, opacity: 0.92, duration: 0.36 }, 0.62);
-
-      gsap.to(".final-cta__botanicals", {
-        xPercent: 0.28,
-        rotate: 0.12,
-        duration: 4.8,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-
     });
 
     const hero = document.querySelector<HTMLElement>(".hero");
