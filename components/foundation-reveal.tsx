@@ -202,82 +202,106 @@ export function FoundationReveal() {
               );
             }
           }
+
+          portfolioTimeline.to(introTitle, { opacity: 0, duration: 0.18 }, 3.25);
         },
       );
 
-      gsap.to([".project-gallery", ".selected-work__intro"], {
-        yPercent: -7,
-        scale: 0.975,
-        opacity: 0.08,
-        ease: "none",
+      const serviceItems = gsap.utils.toArray<HTMLElement>("[data-service-item]");
+      const serviceVisuals = gsap.utils.toArray<HTMLElement>(".service-visual");
+
+      gsap.set(serviceItems, { y: 28, opacity: 0 });
+      gsap.set(serviceVisuals, { scale: 0.94, rotateZ: 0.7, opacity: 0, filter: "blur(8px)" });
+      gsap.set(serviceItems[0], { y: 0, opacity: 1 });
+      gsap.set(serviceVisuals[0], { scale: 1, rotateZ: 0, opacity: 1, filter: "blur(0px)" });
+      gsap.set(".services__closing", { y: 26, opacity: 0, pointerEvents: "none" });
+      gsap.set(".web-layer", { xPercent: 8, yPercent: -5, opacity: 0.16 });
+      gsap.set(".search-line", { scaleX: 0 });
+      gsap.set([".design-rule", ".design-grid"], { scaleX: 0, opacity: 0.12 });
+      gsap.set(".design-type", { scale: 0.9, opacity: 0.25, transformOrigin: "left top" });
+      gsap.set(".system-line", { scaleX: 0 });
+      gsap.set(".system-node", { scale: 0.68, opacity: 0.18 });
+
+      const servicesTimeline = gsap.timeline({
+        defaults: { ease: "power2.inOut" },
         scrollTrigger: {
-          trigger: ".perception-section",
-          start: "top bottom",
-          end: "top 38%",
+          trigger: ".services",
+          start: "top top",
+          end: () => `+=${window.innerHeight * 3.15}`,
+          pin: ".services__pin",
           scrub: 0.85,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
         },
       });
 
-      gsap.fromTo(
-        ".perception-section__content",
-        { y: 64, scale: 0.975, opacity: 0.08, clipPath: "inset(10% 0% 0% 0%)" },
-        {
-          y: 0,
-          scale: 1,
-          opacity: 1,
-          clipPath: "inset(0% 0% 0% 0%)",
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".perception-section",
-            start: "top 88%",
-            end: "center 54%",
-            scrub: 0.8,
-          },
-        },
+      servicesTimeline.fromTo(
+        ".services__header",
+        { y: 18, opacity: 0.35 },
+        { y: 0, opacity: 1, duration: 0.32 },
+        0,
       );
 
-      gsap.to(".perception-section__content", {
-        y: -54,
-        scale: 0.985,
-        opacity: 0.16,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".perception-section",
-          start: "58% center",
-          end: "bottom 12%",
-          scrub: 0.85,
-        },
-      });
-
-      gsap.fromTo(
-        ".foundation-section:first-child",
-        { y: 58, opacity: 0.16, clipPath: "inset(8% 0% 0% 0%)" },
-        {
-          y: 0,
-          opacity: 1,
-          clipPath: "inset(0% 0% 0% 0%)",
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".section-flow",
-            start: "top 88%",
-            end: "top 35%",
-            scrub: 0.8,
-          },
-        },
+      servicesTimeline.to(
+        ".web-layer",
+        { xPercent: 0, yPercent: 0, opacity: 1, duration: 0.5, stagger: 0.06 },
+        0.08,
       );
 
-      gsap.to(".foundation-section:last-child", {
-        y: -42,
-        scale: 0.99,
-        opacity: 0.18,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".process-section",
-          start: "top bottom",
-          end: "top 38%",
-          scrub: 0.8,
-        },
-      });
+      for (let index = 1; index < serviceItems.length; index += 1) {
+        const transitionAt = 0.48 + (index - 1) * 0.68;
+
+        servicesTimeline
+          .to(serviceItems[index - 1], { y: -22, opacity: 0, duration: 0.28 }, transitionAt)
+          .to(
+            serviceVisuals[index - 1],
+            { xPercent: -5, scale: 0.96, rotateZ: -0.6, opacity: 0, filter: "blur(7px)", duration: 0.34 },
+            transitionAt,
+          )
+          .to(serviceItems[index], { y: 0, opacity: 1, duration: 0.38 }, transitionAt + 0.12)
+          .to(
+            serviceVisuals[index],
+            { xPercent: 0, scale: 1, rotateZ: 0, opacity: 1, filter: "blur(0px)", duration: 0.46 },
+            transitionAt + 0.06,
+          );
+
+        if (index === 1) {
+          servicesTimeline.to(
+            ".search-line",
+            { scaleX: 1, duration: 0.42, stagger: 0.08, ease: "power2.out" },
+            transitionAt + 0.14,
+          );
+        }
+
+        if (index === 2) {
+          servicesTimeline
+            .to(".design-type", { scale: 1, opacity: 1, duration: 0.4 }, transitionAt + 0.12)
+            .to(
+              [".design-rule", ".design-grid"],
+              { scaleX: 1, opacity: 1, duration: 0.4, stagger: 0.07 },
+              transitionAt + 0.16,
+            );
+        }
+
+        if (index === 3) {
+          servicesTimeline
+            .to(".system-line", { scaleX: 1, duration: 0.44, stagger: 0.08 }, transitionAt + 0.1)
+            .to(
+              ".system-node",
+              { scale: 1, opacity: 1, duration: 0.36, stagger: 0.06 },
+              transitionAt + 0.16,
+            );
+        }
+      }
+
+      servicesTimeline
+        .to(".services__stage", { y: -18, opacity: 0, duration: 0.36 }, 2.58)
+        .to(".services__header", { y: -12, opacity: 0.24, duration: 0.36 }, 2.58)
+        .to(
+          ".services__closing",
+          { y: 0, opacity: 1, pointerEvents: "auto", duration: 0.48 },
+          2.72,
+        );
 
       gsap.fromTo(
         ".process-section__intro",

@@ -1,21 +1,7 @@
 import { FoundationReveal } from "@/components/foundation-reveal";
 import { SiteHeader } from "@/components/site-header";
 import { SelectedWork } from "@/components/selected-work";
-
-const foundations = [
-  {
-    id: "expertise",
-    eyebrow: "Expertise",
-    title: "Strategy. Design. Technology.",
-    note: "One senior team, from the first question to the final interaction.",
-  },
-  {
-    id: "studio",
-    eyebrow: "The studio",
-    title: "Small by design. Serious about the work.",
-    note: "An independent web agency partnering closely with ambitious people.",
-  },
-];
+import { Services } from "@/components/services";
 
 const processStages = [
   {
@@ -78,38 +64,7 @@ export default function Home() {
 
         <SelectedWork />
 
-        <section className="perception-section" aria-labelledby="perception-title">
-          <div className="perception-section__content">
-            <h2 id="perception-title">
-              <span>We don&apos;t just build websites.</span>
-              <span>We build perception.</span>
-            </h2>
-            <p>
-              Your website shapes how people see your business before they ever
-              speak to you. We make sure that first impression carries the right
-              weight.
-            </p>
-          </div>
-        </section>
-
-        <div className="section-flow">
-          {foundations.map((section) => (
-            <section
-              className="foundation-section"
-              id={section.id}
-              key={section.id}
-              aria-labelledby={`${section.id}-title`}
-            >
-              <p className="eyebrow" data-reveal>
-                {section.eyebrow}
-              </p>
-              <div className="foundation-section__body" data-reveal>
-                <h2 id={`${section.id}-title`}>{section.title}</h2>
-                <p>{section.note}</p>
-              </div>
-            </section>
-          ))}
-        </div>
+        <Services />
 
         <section className="process-section" id="process" aria-labelledby="process-title">
           <header className="process-section__intro">
