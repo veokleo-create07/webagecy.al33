@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SelectedWork } from "@/components/selected-work";
 import { Services } from "@/components/services";
 import { FinalCTA } from "@/components/digital-matter-cta";
+import Footer1 from "@/components/ui/footer-section-1";
 
 export default function Home() {
   return (
@@ -46,46 +47,7 @@ export default function Home() {
 
         <FinalCTA />
 
-        <footer className="site-footer">
-          <div className="site-footer__note">
-            <span className="site-footer__fold" aria-hidden="true" />
-            <div className="site-footer__main">
-              <div className="site-footer__identity">
-                <p className="site-footer__wordmark">KREU WEB</p>
-                <p className="site-footer__availability"><span aria-hidden="true" />Currently booking Q4 projects</p>
-                <p className="site-footer__statement">
-                  <span>Web design.</span>
-                  <span>Development.</span>
-                  <span>Digital presence.</span>
-                </p>
-              </div>
-
-              <div className="site-footer__links">
-                <nav aria-label="Footer navigation">
-                  <a href="#work">Work</a>
-                  <a href="#expertise">Services</a>
-                  <a href="#contact">Contact</a>
-                </nav>
-
-                <nav aria-label="Social links">
-                  <p>Connect</p>
-                  <a href="https://www.instagram.com/" rel="noreferrer" target="_blank">
-                    Instagram
-                  </a>
-                </nav>
-
-                <div>
-                  <p>Say hello</p>
-                  <a href="mailto:hello@kreuweb.com">hello@kreuweb.com</a>
-                </div>
-              </div>
-            </div>
-
-            <div className="site-footer__bottom">
-              <p>© 2026 Kreu Web. All rights reserved.</p>
-            </div>
-          </div>
-        </footer>
+        <Footer1 />
       </div>
     </main>
   );
