@@ -117,29 +117,172 @@ export function FinalCTA() {
     if (!section || !content || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     gsap.registerPlugin(ScrollTrigger);
     const context = gsap.context(() => {
-      const paths = gsap.utils.toArray<SVGPathElement>("[data-growth-path]");
-      const stems = paths.filter(path => path.classList.contains("botanical-stem"));
-      const branchPaths = paths.filter(path => path.classList.contains("botanical-branch"));
-      const branches = gsap.utils.toArray<SVGGElement>("[data-branch-group]");
-      const leaves = gsap.utils.toArray<SVGGElement>("[data-leaf]");
-      const buds = gsap.utils.toArray<SVGGElement>("[data-bud]");
-      const petals = gsap.utils.toArray<SVGGElement>("[data-petal]");
-      paths.forEach(path => { const length = path.getTotalLength(); gsap.set(path, { strokeDasharray: length, strokeDashoffset: length }); });
-      gsap.set(branches, { opacity: .35 });
-      gsap.set(leaves, { scale: 0, opacity: 0, rotateX: -58, rotateY: 24, transformOrigin: "0% 55%", transformBox: "fill-box" });
-      gsap.set(buds, { scale: 0, opacity: 0, rotate: -18, transformOrigin: "50% 100%", transformBox: "fill-box" });
-      petals.forEach((petal, index) => gsap.set(petal, { scale: .05, opacity: 0, rotateX: Number(petal.dataset.rx) - 68, rotateY: Number(petal.dataset.ry) * .45, rotateZ: Number(petal.dataset.rz) + (index % 2 ? 13 : -13), transformOrigin: "50% 100%", transformBox: "fill-box" }));
-      gsap.set(".botanical-flower__core, .botanical-flower__core-light, .botanical-flower__shadow", { scale: 0, opacity: 0, transformOrigin: "center" });
-      gsap.set(content, { y: 18, opacity: .68, scale: .98 });
-      const timeline = gsap.timeline({ defaults: { ease: "power2.inOut" }, scrollTrigger: { trigger: section, start: "top top", end: () => `+=${window.innerHeight * 1.08}`, scrub: .62, pin: true, anticipatePin: 1, invalidateOnRefresh: true } });
-      timeline.to(stems, { strokeDashoffset: 0, duration: .25, stagger: .006, ease: "none" }, 0)
-        .to(branches, { opacity: 1, duration: .06 }, .24).to(branchPaths, { strokeDashoffset: 0, duration: .21, stagger: .008, ease: "none" }, .24)
-        .to(leaves, { scale: 1, opacity: 1, rotateX: 0, rotateY: 0, duration: .25, stagger: .012, ease: "back.out(1.15)" }, .31)
-        .to(buds, { scale: 1, opacity: 1, rotate: 0, duration: .23, stagger: .025, ease: "back.out(1.35)" }, .47)
-        .to(petals, { scale: 1, opacity: 1, rotateX: 0, rotateY: 0, rotateZ: 0, duration: .3, stagger: .008, ease: "back.out(1.4)" }, .68)
-        .to(".botanical-flower__shadow", { scale: 1, opacity: .52, duration: .17 }, .72)
-        .to(".botanical-flower__core, .botanical-flower__core-light", { scale: 1, opacity: 1, duration: .14, stagger: .01 }, .84)
-        .to(content, { y: 0, opacity: 1, scale: 1, duration: .34 }, .37);
+      const plants = gsap.utils.toArray<SVGSVGElement>(".botanical-plant");
+      const pathLengths = new Map<SVGPathElement, number>();
+      const clamp = gsap.utils.clamp(0, 1);
+      const smooth = (value: number) => value * value * (3 - 2 * value);
+      const range = (progress: number, start: number, end: number) =>
+        smooth(clamp((progress - start) / (end - start)));
+      const breathe = (value: number, amount = 0.035) =>
+        value + Math.sin(value * Math.PI) * amount;
+
+      const configs = [
+        {
+          branch: [.24, .37, .5, .63],
+          leaf: [.22, .29, .38, .45, .52, .59, .65],
+          bud: [.47, .64],
+          flower: [.71, .56],
+          phase: 0,
+        },
+        {
+          branch: [.22, .35, .49, .61],
+          leaf: [.2, .28, .36, .44, .51, .58, .64],
+          bud: [.45, .62],
+          flower: [.69, .58],
+          phase: .85,
+        },
+      ];
+
+      const plantState = plants.map((plant, plantIndex) => {
+        const stems = Array.from(plant.querySelectorAll<SVGPathElement>(".botanical-stem"));
+        const branches = Array.from(plant.querySelectorAll<SVGGElement>("[data-branch-group]"));
+        const leaves = Array.from(plant.querySelectorAll<SVGGElement>("[data-leaf]"));
+        const buds = Array.from(plant.querySelectorAll<SVGGElement>("[data-bud]"));
+        const flowers = Array.from(plant.querySelectorAll<SVGGElement>("[data-flower]"));
+        const sculpture = plant.querySelector<SVGGElement>(".botanical-plant__sculpture");
+
+        [...stems, ...branches.flatMap(branch => Array.from(branch.querySelectorAll<SVGPathElement>("[data-growth-path]")))].forEach(path => {
+          const length = path.getTotalLength();
+          pathLengths.set(path, length);
+          gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+        });
+
+        leaves.forEach(leaf => gsap.set(leaf, {
+          scale: .03,
+          opacity: 0,
+          rotateX: -72,
+          rotateY: plantIndex ? -28 : 28,
+          clipPath: "inset(100% 0 0 0)",
+          transformOrigin: "0% 55%",
+          transformBox: "fill-box",
+        }));
+        buds.forEach(bud => gsap.set(bud, {
+          scaleX: .24,
+          scaleY: .18,
+          opacity: 0,
+          rotate: plantIndex ? 15 : -15,
+          transformOrigin: "50% 100%",
+          transformBox: "fill-box",
+        }));
+        flowers.forEach(flower => {
+          const flowerPetals = Array.from(flower.querySelectorAll<SVGGElement>("[data-petal]"));
+          flowerPetals.forEach((petal, petalIndex) => gsap.set(petal, {
+            scale: .04,
+            opacity: 0,
+            rotateX: Number(petal.dataset.rx) - 74,
+            rotateY: Number(petal.dataset.ry) * .55,
+            rotateZ: Number(petal.dataset.rz) + (petalIndex % 2 ? 16 : -14),
+            transformOrigin: "50% 100%",
+            transformBox: "fill-box",
+          }));
+          gsap.set(flower.querySelectorAll(".botanical-flower__core, .botanical-flower__core-light, .botanical-flower__shadow"), {
+            scale: 0,
+            opacity: 0,
+            transformOrigin: "center",
+          });
+        });
+        return { stems, branches, leaves, buds, flowers, sculpture, config: configs[plantIndex] };
+      });
+
+      const drawPath = (path: SVGPathElement, amount: number) => {
+        const length = pathLengths.get(path) ?? 0;
+        path.style.strokeDashoffset = String(length * (1 - amount));
+      };
+
+      const render = (progress: number) => {
+        plantState.forEach(({ stems, branches, leaves, buds, flowers, sculpture, config }, plantIndex) => {
+          const stemGrowth = range(progress, 0, .74);
+          stems.forEach(path => drawPath(path, stemGrowth));
+
+          branches.forEach((branch, branchIndex) => {
+            const branchGrowth = range(progress, config.branch[branchIndex], config.branch[branchIndex] + .2);
+            branch.querySelectorAll<SVGPathElement>("[data-growth-path]").forEach(path => drawPath(path, branchGrowth));
+            branch.style.opacity = String(.25 + branchGrowth * .75);
+          });
+
+          leaves.forEach((leaf, leafIndex) => {
+            const leafGrowth = range(progress, config.leaf[leafIndex], config.leaf[leafIndex] + .2);
+            const lag = Math.sin(leafGrowth * Math.PI) * (leafIndex % 2 ? -4 : 4);
+            gsap.set(leaf, {
+              scale: .03 + leafGrowth * .97,
+              opacity: leafGrowth,
+              rotateX: -72 * (1 - leafGrowth),
+              rotateY: (plantIndex ? -28 : 28) * (1 - leafGrowth) + lag,
+              clipPath: `inset(${(1 - leafGrowth) * 100}% 0 0 0)`,
+            });
+          });
+
+          buds.forEach((bud, budIndex) => {
+            const budGrowth = range(progress, config.bud[budIndex], config.bud[budIndex] + .22);
+            gsap.set(bud, {
+              scaleX: .24 + budGrowth * .76,
+              scaleY: .18 + budGrowth * .82,
+              opacity: budGrowth,
+              rotate: (plantIndex ? 15 : -15) * (1 - budGrowth),
+            });
+          });
+
+          flowers.forEach((flower, flowerIndex) => {
+            const flowerStart = config.flower[flowerIndex];
+            const flowerPetals = Array.from(flower.querySelectorAll<SVGGElement>("[data-petal]"));
+            flowerPetals.forEach((petal, petalIndex) => {
+              const layerOffset = petalIndex < 10 ? 0 : petalIndex < 16 ? .035 : .07;
+              const irregularOffset = (petalIndex % 3) * .004;
+              const open = range(progress, flowerStart + layerOffset + irregularOffset, flowerStart + .25 + layerOffset);
+              const organicOpen = breathe(open, petalIndex < 10 ? .045 : .028);
+              gsap.set(petal, {
+                scale: .04 + organicOpen * .96,
+                opacity: open,
+                rotateX: (Number(petal.dataset.rx) - 74) * (1 - open),
+                rotateY: Number(petal.dataset.ry) * .55 * (1 - open),
+                rotateZ: (Number(petal.dataset.rz) + (petalIndex % 2 ? 16 : -14)) * (1 - open),
+              });
+            });
+            const centerGrowth = range(progress, flowerStart + .11, flowerStart + .27);
+            gsap.set(flower.querySelector(".botanical-flower__shadow"), { scale: centerGrowth, opacity: centerGrowth * .52 });
+            gsap.set(flower.querySelectorAll(".botanical-flower__core, .botanical-flower__core-light"), { scale: centerGrowth, opacity: centerGrowth });
+          });
+
+          if (sculpture) {
+            const sway = Math.sin(progress * Math.PI * 1.7 + config.phase) * .32 * stemGrowth;
+            gsap.set(sculpture, { rotate: sway, x: Math.sin(progress * Math.PI + config.phase) * 1.4 * stemGrowth, transformOrigin: "50% 100%" });
+          }
+        });
+
+        const contentGrowth = range(progress, .2, .62);
+        gsap.set(content, {
+          y: 18 * (1 - contentGrowth),
+          opacity: .68 + contentGrowth * .32,
+          scale: .98 + contentGrowth * .02,
+        });
+      };
+
+      const state = { progress: 0 };
+      render(0);
+      gsap.to(state, {
+        progress: 1,
+        ease: "none",
+        onUpdate: () => render(state.progress),
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: () => `+=${window.innerHeight * 1.08}`,
+          scrub: .62,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
     }, section);
     return () => context.revert();
   }, []);
