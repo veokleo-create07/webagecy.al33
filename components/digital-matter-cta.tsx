@@ -186,6 +186,7 @@ export function FinalCTA() {
       </div>
       <DigitalMatter />
       <div ref={contentRef} className="final-cta__content matter-cta__content">
+        <p className="matter-cta__eyebrow">Ready to build?</p>
         <h2 id="contact-title">Premium websites that move businesses forward.</h2>
         <p className="final-cta__subline">Strategy, design and development crafted to turn strong businesses into stronger digital brands.</p>
         <a className="final-cta__button" href="mailto:hello@kreuweb.com"><span>Book a call</span><span aria-hidden="true">↗</span></a>
