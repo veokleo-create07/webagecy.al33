@@ -18,14 +18,30 @@ export function SiteHeader() {
   const menuButton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    let secondFrame = 0;
-    const firstFrame = window.requestAnimationFrame(() => {
-      secondFrame = window.requestAnimationFrame(() => setIsReady(true));
-    });
+    const mobile = window.matchMedia("(max-width: 767px)");
+    let frame = 0;
+    let timeout = 0;
+
+    const prepare = () => {
+      window.clearTimeout(timeout);
+      window.cancelAnimationFrame(frame);
+      if (mobile.matches) {
+        setIsReady(true);
+        return;
+      }
+      setIsReady(false);
+      timeout = window.setTimeout(() => {
+        frame = window.requestAnimationFrame(() => setIsReady(true));
+      }, 140);
+    };
+
+    prepare();
+    mobile.addEventListener("change", prepare);
 
     return () => {
-      window.cancelAnimationFrame(firstFrame);
-      if (secondFrame) window.cancelAnimationFrame(secondFrame);
+      mobile.removeEventListener("change", prepare);
+      window.clearTimeout(timeout);
+      window.cancelAnimationFrame(frame);
     };
   }, []);
 
@@ -35,7 +51,8 @@ export function SiteHeader() {
 
     const updateNavigation = () => {
       const currentY = window.scrollY;
-      setIsCompact(currentY > 72 && currentY > previousY);
+      const richMotion = window.matchMedia("(min-width: 768px) and (hover: hover) and (pointer: fine)").matches;
+      setIsCompact(richMotion && currentY > 72 && currentY > previousY + 1);
       setIsScrolled(currentY > 32);
       previousY = currentY;
       frame = 0;
@@ -70,25 +87,12 @@ export function SiteHeader() {
   useEffect(() => {
     const finalCta = document.querySelector<HTMLElement>(".final-cta");
     if (!finalCta) return;
-
-    let frame = 0;
-    const update = () => {
-      const threshold = finalCta.offsetTop - window.innerHeight * 0.35;
-      setIsOverFinalCta(window.scrollY >= threshold);
-      frame = 0;
-    };
-    const handleScroll = () => {
-      if (!frame) frame = window.requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
+    const observer = new IntersectionObserver(
+      entries => setIsOverFinalCta(entries.some(entry => entry.isIntersecting)),
+      { rootMargin: "0px 0px -28% 0px", threshold: .01 },
+    );
+    observer.observe(finalCta);
+    return () => observer.disconnect();
   }, []);
 
   const closeMenu = () => setIsMenuOpen(false);

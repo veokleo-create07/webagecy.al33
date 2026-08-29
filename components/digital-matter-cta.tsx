@@ -36,6 +36,12 @@ const fragments: Fragment[] = [
 
 const clamp = gsap.utils.clamp(0, 1);
 const ease = (value: number) => value * value * (3 - 2 * value);
+const ctaConfig = {
+  desktop: { distance: .88, rotation: 1, depth: 1, blur: 2.1, from: 1, arc: 1 },
+  tablet: { distance: .7, rotation: .55, depth: .45, blur: 1, from: .82, arc: .65 },
+  mobile: { distance: .54, rotation: .22, depth: .12, blur: .35, from: .68, arc: .35 },
+} as const;
+const mobileFragments = new Set([0, 1, 2, 4, 7, 8, 9, 11]);
 
 function GlassFragment({ fragment, index }: { fragment: Fragment; index: number }) {
   return (
@@ -63,73 +69,87 @@ export function FinalCTA() {
     if (!section || !content) return;
 
     gsap.registerPlugin(ScrollTrigger);
+    const media = gsap.matchMedia();
     const context = gsap.context(() => {
-      const elements = gsap.utils.toArray<HTMLElement>("[data-magnetic-fragment]");
-      const arcs = gsap.utils.toArray<SVGPathElement>(".magnetic-field__arcs path");
-      const arcLengths = arcs.map(path => path.getTotalLength());
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const state = { progress: reduced ? 1 : 0 };
-
-      const render = (progress: number) => {
-        section.style.setProperty("--magnetic-progress", String(progress));
-        section.style.setProperty("--magnetic-glow", String(.025 + progress * .045));
-        const mobile = window.innerWidth < 768;
-        elements.forEach((element, index) => {
-          const spec = fragments[index];
-          const local = ease(clamp((progress - spec.start) / (1 - spec.start)));
-          const finalX = spec.final[0] * (mobile ? 1.08 : 1);
-          const finalY = spec.final[1] * (mobile ? .94 : 1);
-          const x = gsap.utils.interpolate(spec.from[0], finalX, local);
-          const y = gsap.utils.interpolate(spec.from[1], finalY, local) + Math.sin(local * Math.PI) * spec.arc;
-          const bend = Math.sin(local * Math.PI * 1.15 + index * .73) * (1 - local) * 2.2;
-          const blur = (1 - local) * (mobile ? .7 : 2.1);
-          const depth = spec.depth * local - (1 - local) * 120;
-          element.style.opacity = String((.012 + local * spec.opacity) * (mobile && spec.quiet ? 0 : 1));
-          element.style.filter = `blur(${blur}px)`;
-          element.style.transform = `translate3d(${x}vw, ${y}vh, ${depth}px) rotateX(${spec.rotation[0] + (1 - local) * 42}deg) rotateY(${spec.rotation[1] + (1 - local) * bend * 6}deg) rotateZ(${spec.rotation[2] + bend}deg) scale(${.54 + local * .46})`;
-        });
-
-        arcs.forEach((path, index) => {
-          const local = ease(clamp((progress - .08 - index * .025) / .74));
-          path.style.strokeDasharray = String(arcLengths[index]);
-          path.style.strokeDashoffset = String(arcLengths[index] * (1 - local));
-          path.style.opacity = String(local * (mobile ? .18 : .28));
-        });
-
-        const clarity = ease(clamp((progress - .1) / .7));
-        gsap.set(content, {
-          opacity: .5 + clarity * .5,
-          y: 16 * (1 - clarity),
-          scale: .987 + clarity * .013,
-        });
-      };
-
-      render(state.progress);
-      if (reduced) return;
-
-      gsap.to(state, {
-        progress: 1,
-        ease: "none",
-        onUpdate: () => render(state.progress),
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: () => `+=${window.innerHeight * .92}`,
-          scrub: .68,
-          pin: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onRefresh: self => render(self.progress),
+      media.add(
+        {
+          desktop: "(min-width: 1025px)",
+          tablet: "(min-width: 768px) and (max-width: 1024px)",
+          mobile: "(max-width: 767px)",
         },
-      });
+        match => {
+          const mode = match.conditions?.desktop ? "desktop" : match.conditions?.tablet ? "tablet" : "mobile";
+          const config = ctaConfig[mode];
+          const elements = gsap.utils.toArray<HTMLElement>("[data-magnetic-fragment]");
+          const arcs = gsap.utils.toArray<SVGPathElement>(".magnetic-field__arcs path");
+          const arcLengths = arcs.map(path => path.getTotalLength());
+          const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          const state = { progress: reduced ? 1 : 0 };
+
+          const render = (progress: number) => {
+            section.style.setProperty("--magnetic-progress", String(progress));
+            section.style.setProperty("--magnetic-glow", String(.025 + progress * .045));
+            elements.forEach((element, index) => {
+              const spec = fragments[index];
+              const visible = mode === "desktop" || (mode === "tablet" ? !spec.quiet : mobileFragments.has(index));
+              if (!visible) {
+                element.style.opacity = "0";
+                return;
+              }
+              const local = ease(clamp((progress - spec.start) / (1 - spec.start)));
+              const edge = mode === "mobile" ? 1.08 : 1;
+              const finalX = spec.final[0] * edge;
+              const finalY = spec.final[1] * (mode === "mobile" ? .92 : 1);
+              const x = gsap.utils.interpolate(spec.from[0] * config.from, finalX, local);
+              const y = gsap.utils.interpolate(spec.from[1] * config.from, finalY, local) + Math.sin(local * Math.PI) * spec.arc * config.arc;
+              const bend = Math.sin(local * Math.PI * 1.15 + index * .73) * (1 - local) * 2.2 * config.rotation;
+              const depth = (spec.depth * local - (1 - local) * 90) * config.depth;
+              element.style.opacity = String(.01 + local * spec.opacity * (mode === "mobile" ? .72 : 1));
+              element.style.filter = `blur(${(1 - local) * config.blur}px)`;
+              element.style.transform = `translate3d(${x}vw, ${y}vh, ${depth}px) rotateX(${(spec.rotation[0] + (1 - local) * 38) * config.rotation}deg) rotateY(${spec.rotation[1] * config.rotation + bend * 5}deg) rotateZ(${spec.rotation[2] * config.rotation + bend}deg) scale(${.62 + local * .38})`;
+            });
+
+            arcs.forEach((path, index) => {
+              const local = ease(clamp((progress - .08 - index * .025) / .74));
+              path.style.strokeDasharray = String(arcLengths[index]);
+              path.style.strokeDashoffset = String(arcLengths[index] * (1 - local));
+              path.style.opacity = String(local * (mode === "desktop" ? .28 : mode === "tablet" ? .2 : .12));
+            });
+
+            const clarity = ease(clamp((progress - .08) / .7));
+            gsap.set(content, { opacity: .58 + clarity * .42, y: 12 * (1 - clarity), scale: .99 + clarity * .01 });
+          };
+
+          render(state.progress);
+          if (reduced) return;
+          gsap.to(state, {
+            progress: 1,
+            ease: "none",
+            onUpdate: () => render(state.progress),
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: () => `+=${window.innerHeight * config.distance}`,
+              scrub: mode === "mobile" ? .45 : .65,
+              pin: true,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+              onRefresh: self => render(self.progress),
+            },
+          });
+        },
+      );
     }, section);
 
-    return () => context.revert();
+    return () => {
+      media.revert();
+      context.revert();
+    };
   }, []);
 
   const handleFieldParallax = (event: PointerEvent<HTMLElement>) => {
     const field = fieldRef.current;
-    if (!field || window.innerWidth < 768) return;
+    if (!field || !window.matchMedia("(min-width: 1025px) and (hover: hover) and (pointer: fine)").matches) return;
     const x = (event.clientX / window.innerWidth - .5) * 7;
     const y = (event.clientY / window.innerHeight - .5) * 5;
     field.style.setProperty("--field-x", `${x}px`);
