@@ -8,19 +8,16 @@
     "start": "next start"
   },
   "dependencies": {
-    "@react-three/fiber": "^9.7.0",
     "gsap": "latest",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest",
-    "three": "^0.185.1"
+    "react-dom": "latest"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "latest",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "@types/three": "^0.185.4",
     "tailwindcss": "latest",
     "typescript": "latest"
   }

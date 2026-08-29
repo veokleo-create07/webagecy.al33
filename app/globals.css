@@ -2315,6 +2315,208 @@ a:focus-visible {
 .glass-city-fallback__left { left: -7%; transform: perspective(700px) rotateY(24deg); }
 .glass-city-fallback__right { right: -7%; transform: perspective(700px) rotateY(-24deg); }
 
+.magnetic-cta {
+  --magnetic-progress: 0;
+  --magnetic-glow: 0.025;
+  overflow: hidden;
+  isolation: isolate;
+  background: #080908;
+}
+
+.magnetic-cta__atmosphere,
+.magnetic-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.magnetic-cta__atmosphere {
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 34% 30% at 50% 48%, rgba(232, 228, 216, var(--magnetic-glow)), transparent 72%),
+    radial-gradient(ellipse 82% 55% at 50% 112%, rgba(106, 109, 105, 0.055), transparent 72%),
+    linear-gradient(180deg, #090a09 0%, #070807 67%, #0b0c0b 100%);
+}
+
+.magnetic-field {
+  --field-x: 0px;
+  --field-y: 0px;
+  z-index: 2;
+  overflow: hidden;
+  perspective: 1250px;
+  transform: translate3d(var(--field-x), var(--field-y), 0);
+  transition: transform 900ms var(--ease-out);
+  -webkit-mask-image: radial-gradient(ellipse 34% 43% at 50% 50%, transparent 0 56%, #000 76%);
+  mask-image: radial-gradient(ellipse 34% 43% at 50% 50%, transparent 0 56%, #000 76%);
+}
+
+.magnetic-field__depth {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.magnetic-field__arcs {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.magnetic-field__arcs path {
+  fill: none;
+  stroke: rgba(237, 236, 229, 0.34);
+  stroke-width: 0.7;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+}
+
+.magnetic-fragment {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: clamp(6rem, 11vw, 12rem);
+  height: clamp(3.8rem, 7vw, 7.6rem);
+  opacity: 0;
+  transform-origin: center;
+  transform-style: preserve-3d;
+  will-change: transform, opacity, filter;
+}
+
+.magnetic-fragment--strip {
+  width: clamp(8rem, 16vw, 18rem);
+  height: clamp(0.42rem, 0.75vw, 0.8rem);
+}
+
+.magnetic-fragment--shard {
+  width: clamp(2.1rem, 3.8vw, 4.2rem);
+  height: clamp(7rem, 13vw, 14rem);
+  clip-path: polygon(18% 0, 100% 9%, 73% 100%, 0 82%);
+}
+
+.magnetic-fragment--frame {
+  width: clamp(7rem, 12vw, 13.5rem);
+  height: clamp(5.5rem, 10vw, 11rem);
+  padding: 0.65rem;
+}
+
+.magnetic-fragment__surface {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(241, 240, 233, 0.12);
+  border-radius: 0.28rem;
+  background:
+    linear-gradient(122deg, rgba(255,255,255,0.115), transparent 27%, transparent 68%, rgba(255,255,255,0.026)),
+    rgba(55, 59, 57, 0.105);
+  box-shadow:
+    0 1.7rem 4.5rem rgba(0,0,0,0.31),
+    inset 0 1px rgba(255,255,255,0.16),
+    inset 0 -1px rgba(0,0,0,0.38),
+    0 0 0 0.5px rgba(255,255,255,0.025);
+  backdrop-filter: blur(5px) saturate(115%);
+  -webkit-backdrop-filter: blur(5px) saturate(115%);
+}
+
+.magnetic-fragment--strip .magnetic-fragment__surface {
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(240,239,232,0.16) 24%, rgba(255,255,255,0.045) 74%, transparent);
+}
+
+.magnetic-fragment--shard .magnetic-fragment__surface {
+  border-radius: 0;
+  background: linear-gradient(142deg, rgba(255,255,255,0.15), rgba(70,74,72,0.07) 38%, rgba(255,255,255,0.025));
+}
+
+.magnetic-fragment--frame .magnetic-fragment__surface {
+  background: linear-gradient(135deg, rgba(255,255,255,0.075), transparent 37%);
+  box-shadow: inset 0 0 0 0.55rem rgba(7,8,7,0.72), inset 0 1px rgba(255,255,255,0.17), 0 2rem 4rem rgba(0,0,0,0.24);
+}
+
+.magnetic-fragment__trace {
+  position: absolute;
+  top: 20%;
+  right: 13%;
+  bottom: 20%;
+  left: 13%;
+  border-top: 1px solid rgba(242,240,232,0.18);
+  border-bottom: 1px solid rgba(242,240,232,0.07);
+}
+
+.magnetic-fragment__trace::before,
+.magnetic-fragment__trace::after {
+  position: absolute;
+  top: 31%;
+  left: 0;
+  width: 64%;
+  height: 1px;
+  background: rgba(242,240,232,0.1);
+  content: "";
+}
+
+.magnetic-fragment__trace::after {
+  top: 67%;
+  width: 38%;
+  opacity: 0.65;
+}
+
+.magnetic-cta__content {
+  position: relative;
+  z-index: 8;
+  width: min(76vw, 72rem);
+}
+
+.magnetic-cta__content h2 {
+  max-width: 12.5ch;
+  font-size: clamp(3.6rem, 6.7vw, 7.5rem);
+  font-weight: 400;
+  letter-spacing: -0.068em;
+  line-height: 0.88;
+}
+
+.magnetic-cta__button {
+  --lens-x: 50%;
+  --lens-y: 20%;
+  min-height: 4.1rem;
+  padding-inline: 1.55rem;
+  border: 1px solid rgba(241, 239, 232, 0.1);
+  background: rgba(39, 42, 40, 0.18);
+  box-shadow:
+    0 1.2rem 3.2rem rgba(0,0,0,0.34),
+    inset 0 1px rgba(255,255,255,0.18),
+    inset 0 -1px rgba(0,0,0,0.5),
+    inset 1px 0 rgba(255,255,255,0.045);
+  backdrop-filter: blur(15px) saturate(120%) contrast(1.06);
+  -webkit-backdrop-filter: blur(15px) saturate(120%) contrast(1.06);
+}
+
+.magnetic-cta__button::before {
+  background:
+    radial-gradient(circle at var(--lens-x) var(--lens-y), rgba(255,255,255,0.18), transparent 25%),
+    linear-gradient(112deg, rgba(255,255,255,0.085), transparent 32%, transparent 69%, rgba(255,255,255,0.025));
+  opacity: 0.74;
+}
+
+.magnetic-cta__button::after {
+  top: -42%;
+  left: calc(var(--lens-x) - 16%);
+  width: 32%;
+  height: 88%;
+  background: rgba(255,255,255,0.07);
+  filter: blur(14px);
+}
+
+.magnetic-cta__button:hover {
+  background: rgba(49, 52, 50, 0.23);
+  transform: translateY(-1px) scale(1.018);
+}
+
+.magnetic-cta__button:active {
+  transform: translateY(1px) scale(0.982);
+}
+
 .site-footer {
   padding: clamp(7rem, 12vw, 12rem) 0 2rem;
   border-top: 1px solid var(--color-line);
@@ -3139,6 +3341,52 @@ a:focus-visible {
   .city-cta__scene {
     right: -10%;
     left: -10%;
+  }
+
+  .magnetic-cta__content {
+    width: min(88vw, 34rem);
+  }
+
+  .magnetic-cta__content h2 {
+    max-width: 12ch;
+    font-size: clamp(3rem, 11.2vw, 4.7rem);
+    line-height: 0.9;
+  }
+
+  .magnetic-field {
+    perspective: 800px;
+    -webkit-mask-image: radial-gradient(ellipse 42% 45% at 50% 50%, transparent 0 57%, #000 79%);
+    mask-image: radial-gradient(ellipse 42% 45% at 50% 50%, transparent 0 57%, #000 79%);
+  }
+
+  .magnetic-fragment {
+    width: clamp(4.6rem, 22vw, 7rem);
+    height: clamp(3rem, 14vw, 5rem);
+  }
+
+  .magnetic-fragment--strip {
+    width: clamp(6rem, 32vw, 10rem);
+    height: 0.45rem;
+  }
+
+  .magnetic-fragment--shard {
+    width: clamp(1.6rem, 7vw, 2.6rem);
+    height: clamp(5rem, 25vw, 8rem);
+  }
+
+  .magnetic-fragment--frame {
+    width: clamp(5.2rem, 24vw, 8rem);
+    height: clamp(4rem, 19vw, 6rem);
+  }
+
+  .magnetic-fragment__surface {
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    box-shadow: inset 0 1px rgba(255,255,255,0.13), 0 1rem 2.5rem rgba(0,0,0,0.22);
+  }
+
+  .magnetic-field__arcs path {
+    stroke-width: 0.55;
   }
 
   .final-cta__subline {
