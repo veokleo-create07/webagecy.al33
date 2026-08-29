@@ -39,7 +39,10 @@ export default function Footer1() {
         className="mx-auto mb-14 flex w-full max-w-[1440px] flex-col items-center gap-9 px-5 text-center sm:mb-16 sm:gap-10 sm:px-8"
       >
         <motion.div variants={itemVariants} className="flex flex-col items-center">
-          <p className="whitespace-nowrap text-[clamp(3.2rem,10.5vw,10rem)] font-normal leading-[0.78] tracking-[-0.075em] text-[#f2f0e9]">
+          <p
+            className="whitespace-nowrap text-[clamp(3.2rem,10.5vw,10rem)] font-normal leading-[0.82] tracking-[-0.067em] text-[#f2f0e9]"
+            style={{ fontFamily: '"Aspekta", var(--font-inter-tight), "Arial Narrow", Arial, sans-serif' }}
+          >
             KREU WEB
           </p>
           <p className="mt-7 text-[0.72rem] font-normal uppercase tracking-[0.12em] text-white/35 sm:mt-9">
