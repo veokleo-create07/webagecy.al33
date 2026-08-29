@@ -50,23 +50,24 @@ export default function Home() {
           <div className="site-footer__main">
             <div className="site-footer__identity">
               <p className="site-footer__wordmark">KREU WEB</p>
+              <p className="site-footer__availability"><span aria-hidden="true" />Currently booking Q4 projects</p>
               <p className="site-footer__statement">
                 <span>Web design.</span>
                 <span>Development.</span>
-                <span>Digital experiences.</span>
+                <span>Digital presence.</span>
               </p>
             </div>
 
             <div className="site-footer__links">
               <nav aria-label="Footer navigation">
-                <p>Navigation</p>
+                <p>Explore</p>
                 <a href="#work">Work</a>
                 <a href="#expertise">Services</a>
                 <a href="#contact">Contact</a>
               </nav>
 
               <nav aria-label="Social links">
-                <p>Social</p>
+                <p>Connect</p>
                 <a href="https://www.instagram.com/" rel="noreferrer" target="_blank">
                   Instagram
                 </a>
@@ -76,13 +77,16 @@ export default function Home() {
               </nav>
 
               <div>
-                <p>Contact</p>
-                <a href="mailto:hello@kreuweb.com">Email</a>
+                <p>Say hello</p>
+                <a href="mailto:hello@kreuweb.com">hello@kreuweb.com</a>
               </div>
             </div>
           </div>
 
-          <p className="site-footer__copyright">© 2026 Kreu Web</p>
+          <div className="site-footer__bottom">
+            <p>© 2026 Kreu Web. All rights reserved.</p>
+            <p>Built in Kosovo &amp; Albania</p>
+          </div>
         </footer>
       </div>
     </main>
