@@ -2769,7 +2769,7 @@ a:focus-visible {
   .project-stage {
     width: 90vw;
     height: min(57svh, 58vw);
-    margin-top: 5svh;
+    margin-top: 7svh;
   }
 
   .project-copy {
@@ -3007,7 +3007,7 @@ a:focus-visible {
   }
 
   .site-header:not(.is-ready) {
-    width: calc(100% - 1.5rem);
+    width: min(15.5rem, calc(100% - 1.5rem));
   }
 
   .site-header:not(.is-ready) .menu-toggle {
@@ -3335,10 +3335,11 @@ a:focus-visible {
   }
 
   .selected-work__intro h2 {
-    max-width: 8.5ch;
-    margin-top: 5.75rem;
-    font-size: clamp(3.4rem, 16vw, 5.4rem);
-    line-height: 0.86;
+    width: min(300px, calc(100vw - 2.5rem));
+    max-width: 300px;
+    margin-top: 5.25rem;
+    font-size: clamp(2.9rem, 13vw, 4.25rem);
+    line-height: 0.9;
     text-align: center;
   }
 
@@ -3358,7 +3359,7 @@ a:focus-visible {
   .project-stage {
     width: 90vw;
     height: min(48svh, 105vw);
-    margin-top: 1svh;
+    margin-top: 5svh;
     filter: drop-shadow(0 1.5rem 2.4rem rgba(0, 0, 0, 0.32));
   }
 

@@ -140,7 +140,7 @@ export function FoundationReveal() {
         timeline
           .to(title, {
             x: () => mode === "desktop" ? -Math.min(window.innerWidth * .28, 400) : mode === "tablet" ? -Math.min(window.innerWidth * .19, 190) : 0,
-            y: () => -window.innerHeight * (mode === "desktop" ? .075 : mode === "tablet" ? .065 : .055),
+            y: () => -window.innerHeight * (mode === "desktop" ? .075 : mode === "tablet" ? .065 : .11),
             scale: mode === "desktop" ? .26 : mode === "tablet" ? .32 : .38,
             opacity: .76,
             duration: .48,

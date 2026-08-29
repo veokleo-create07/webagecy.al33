@@ -26,7 +26,10 @@ export function SiteHeader() {
       window.clearTimeout(timeout);
       window.cancelAnimationFrame(frame);
       if (mobile.matches) {
-        setIsReady(true);
+        setIsReady(false);
+        timeout = window.setTimeout(() => {
+          frame = window.requestAnimationFrame(() => setIsReady(true));
+        }, 780);
         return;
       }
       setIsReady(false);
