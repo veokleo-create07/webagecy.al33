@@ -2,7 +2,7 @@ import { FoundationReveal } from "@/components/foundation-reveal";
 import { SiteHeader } from "@/components/site-header";
 import { SelectedWork } from "@/components/selected-work";
 import { Services } from "@/components/services";
-import { FinalCTA } from "@/components/botanical-growth";
+import { FinalCTA } from "@/components/digital-matter-cta";
 
 export default function Home() {
   return (
