@@ -130,7 +130,6 @@ export function SiteHeader() {
         <div className="glass-nav__topline">
           <a className="wordmark" href="#top" aria-label="KREU WEB, home" onClick={closeMenu}>
             <span className={styles.mark} aria-hidden="true"><img src="/brand/kreu-liquid-mark.png" alt="" width="690" height="387" /></span>
-            <span>KREU WEB</span>
           </a>
 
           <nav className="site-nav site-nav--desktop" aria-label="Primary navigation">
