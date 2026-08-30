@@ -119,13 +119,18 @@
   .header :global(.glass-nav) { border-radius: 2.2rem; }
   .header:global(.site-header.is-menu-open) :global(.glass-nav) { border-radius: 2rem; background-color: rgb(20 24 26 / .79); }
   .header :global(.glass-nav__topline), .header:global(.is-compact) :global(.glass-nav__topline) { min-height: 4rem; padding: .45rem .5rem .45rem .75rem; }
-  .header :global(.wordmark) { gap: .3rem; font-size: .75rem; }
+  .header :global(.wordmark) { min-height: 44px; gap: .3rem; font-size: .75rem; }
   .mark { width: 50px; height: 34px; }
   .mark img { width: 66px; left: -10px; top: -15px; }
   .header :global(.header-shimmer) { display: none; }
   .header :global(.menu-toggle) { min-height: 3.05rem; padding-inline: 1rem; font-size: .72rem; text-transform: uppercase; gap: .7rem; }
   .header :global(.mobile-menu__shimmer) { display: flex; min-height: 3.6rem; margin-bottom: .2rem; }
   .header :global(.mobile-menu__shimmer) .controlLabel { width: 100%; }
+  .header:global(.is-menu-open) :global(.mobile-menu nav) {
+    max-height: calc(100svh - 6rem);
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+  }
 }
 @supports not (backdrop-filter: blur(1px)) {
   .header :global(.glass-nav) { background-color: #1c2227; }

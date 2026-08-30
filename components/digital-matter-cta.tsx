@@ -39,7 +39,7 @@ const ease = (value: number) => value * value * (3 - 2 * value);
 const ctaConfig = {
   desktop: { distance: .88, rotation: 1, depth: 1, blur: 2.1, from: 1, arc: 1 },
   tablet: { distance: .7, rotation: .55, depth: .45, blur: 1, from: .82, arc: .65 },
-  mobile: { distance: .54, rotation: .22, depth: .12, blur: .35, from: .68, arc: .35 },
+  mobile: { distance: .54, rotation: .22, depth: .12, blur: 0, from: .68, arc: .35 },
 } as const;
 const mobileFragments = new Set([0, 1, 2, 4, 7, 8, 9, 11]);
 
@@ -76,6 +76,8 @@ export function FinalCTA() {
           desktop: "(min-width: 1025px)",
           tablet: "(min-width: 768px) and (max-width: 1024px)",
           mobile: "(max-width: 767px)",
+          short: "(max-height: 700px)",
+          reduced: "(prefers-reduced-motion: reduce)",
         },
         match => {
           const mode = match.conditions?.desktop ? "desktop" : match.conditions?.tablet ? "tablet" : "mobile";
@@ -83,7 +85,9 @@ export function FinalCTA() {
           const elements = gsap.utils.toArray<HTMLElement>("[data-magnetic-fragment]");
           const arcs = gsap.utils.toArray<SVGPathElement>(".magnetic-field__arcs path");
           const arcLengths = arcs.map(path => path.getTotalLength());
-          const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          const reduced = match.conditions?.reduced;
+          const shouldPin = mode === "desktop" || !match.conditions?.short;
+          let sceneHeight = section.clientHeight;
           const state = { progress: reduced ? 1 : 0 };
 
           const render = (progress: number) => {
@@ -105,8 +109,8 @@ export function FinalCTA() {
               const bend = Math.sin(local * Math.PI * 1.15 + index * .73) * (1 - local) * 2.2 * config.rotation;
               const depth = (spec.depth * local - (1 - local) * 90) * config.depth;
               element.style.opacity = String(.01 + local * spec.opacity * (mode === "mobile" ? .72 : 1));
-              element.style.filter = `blur(${(1 - local) * config.blur}px)`;
-              element.style.transform = `translate3d(${x}vw, ${y}vh, ${depth}px) rotateX(${(spec.rotation[0] + (1 - local) * 38) * config.rotation}deg) rotateY(${spec.rotation[1] * config.rotation + bend * 5}deg) rotateZ(${spec.rotation[2] * config.rotation + bend}deg) scale(${.62 + local * .38})`;
+              element.style.filter = config.blur ? `blur(${(1 - local) * config.blur}px)` : "none";
+              element.style.transform = `translate3d(${x}vw, ${y * sceneHeight / 100}px, ${depth}px) rotateX(${(spec.rotation[0] + (1 - local) * 38) * config.rotation}deg) rotateY(${spec.rotation[1] * config.rotation + bend * 5}deg) rotateZ(${spec.rotation[2] * config.rotation + bend}deg) scale(${.62 + local * .38})`;
             });
 
             arcs.forEach((path, index) => {
@@ -128,13 +132,13 @@ export function FinalCTA() {
             onUpdate: () => render(state.progress),
             scrollTrigger: {
               trigger: section,
-              start: "top top",
-              end: () => `+=${window.innerHeight * config.distance}`,
+              start: shouldPin ? "top top" : "top 70%",
+              end: shouldPin ? () => `+=${section.clientHeight * config.distance}` : "bottom bottom",
               scrub: mode === "mobile" ? .45 : .65,
-              pin: true,
+              pin: shouldPin,
               anticipatePin: 1,
               invalidateOnRefresh: true,
-              onRefresh: self => render(self.progress),
+              onRefresh: () => { sceneHeight = section.clientHeight; render(state.progress); },
             },
           });
         },
@@ -149,7 +153,7 @@ export function FinalCTA() {
 
   const handleFieldParallax = (event: PointerEvent<HTMLElement>) => {
     const field = fieldRef.current;
-    if (!field || !window.matchMedia("(min-width: 1025px) and (hover: hover) and (pointer: fine)").matches) return;
+    if (!field || !window.matchMedia("(min-width: 1025px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return;
     const x = (event.clientX / window.innerWidth - .5) * 7;
     const y = (event.clientY / window.innerHeight - .5) * 5;
     field.style.setProperty("--field-x", `${x}px`);
@@ -158,7 +162,7 @@ export function FinalCTA() {
 
   const handleLens = (event: PointerEvent<HTMLAnchorElement>) => {
     const button = buttonRef.current;
-    if (!button) return;
+    if (!button || event.pointerType !== "mouse" || !window.matchMedia("(min-width: 1025px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return;
     const bounds = button.getBoundingClientRect();
     button.style.setProperty("--lens-x", `${((event.clientX - bounds.left) / bounds.width) * 100}%`);
     button.style.setProperty("--lens-y", `${((event.clientY - bounds.top) / bounds.height) * 100}%`);
@@ -189,7 +193,7 @@ export function FinalCTA() {
         </div>
       </div>
 
-      <div ref={contentRef} className="final-cta__content magnetic-cta__content" data-final-reveal>
+      <div ref={contentRef} className="final-cta__content magnetic-cta__content">
         <p className="final-cta__eyebrow">Ready to build?</p>
         <h2 id="contact-title">Premium websites that move businesses forward.</h2>
         <p className="final-cta__subline">Strategy, design and development crafted to turn strong businesses into stronger digital brands.</p>

@@ -45,7 +45,7 @@ export default function Footer1() {
           >
             KREU WEB
           </p>
-          <p className="mt-7 text-[0.72rem] font-normal uppercase tracking-[0.12em] text-white/35 sm:mt-9">
+          <p className="mt-7 text-[0.8rem] font-normal uppercase tracking-[0.09em] text-white/55 sm:mt-9 sm:text-[0.72rem] sm:tracking-[0.12em] sm:text-white/35">
             Web design · Development · Digital presence
           </p>
         </motion.div>
@@ -59,7 +59,7 @@ export default function Footer1() {
             <motion.a
               key={item.label}
               href={item.href}
-              className="group relative overflow-hidden rounded-full px-4 py-2.5 text-white/62 transition-colors duration-300 hover:text-[#f2f0e9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/45"
+              className="group relative min-h-11 overflow-hidden rounded-full px-4 py-2.5 text-white/62 transition-colors duration-300 hover:text-[#f2f0e9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/45"
               whileHover={reduceMotion ? undefined : { y: -2 }}
               whileTap={reduceMotion ? undefined : { scale: .97 }}
             >
@@ -79,25 +79,21 @@ export default function Footer1() {
           <SocialCloud />
           <a
             href="mailto:hello@kreuweb.com"
-            className="text-sm text-white/42 transition-colors duration-300 hover:text-white/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/45"
+            className="text-sm text-white/60 sm:text-white/42 transition-colors duration-300 hover:text-white/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/45"
           >
             hello@kreuweb.com
           </a>
         </motion.div>
       </motion.div>
 
-      <motion.div
+      <div
         aria-hidden="true"
         className="h-12 w-full border-y border-white/10 bg-[repeating-linear-gradient(315deg,rgba(242,240,233,0.16)_0,rgba(242,240,233,0.16)_1px,transparent_0,transparent_50%)] opacity-55"
         style={{ backgroundSize: "10px 10px" }}
-        initial={{ backgroundPositionX: "0%" }}
-        whileInView={{ backgroundPositionX: reduceMotion ? "0%" : "100%" }}
-        viewport={{ once: true }}
-        transition={{ ease: "linear", duration: reduceMotion ? 0 : 20 }}
       />
 
       <motion.div
-        className="mx-auto mt-8 flex w-full max-w-[1440px] flex-col items-center justify-between gap-3 px-5 text-center text-[0.72rem] tracking-[0.025em] text-white/32 sm:flex-row sm:px-8 sm:text-left"
+        className="mx-auto mt-8 flex w-full max-w-[1440px] flex-col items-center justify-between gap-3 px-5 text-center text-[0.8rem] tracking-[0.025em] text-white/55 sm:flex-row sm:px-8 sm:text-left sm:text-[0.72rem] sm:text-white/32"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}

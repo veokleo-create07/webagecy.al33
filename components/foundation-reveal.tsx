@@ -20,12 +20,16 @@ export function FoundationReveal() {
     const light = document.querySelector<HTMLElement>(".hero__light");
     const imageListeners: Array<{ image: HTMLImageElement; handler: () => void }> = [];
     let refreshFrame = 0;
+    let refreshTimer = 0;
     let isActive = true;
 
     const refresh = () => {
       if (!isActive) return;
-      cancelAnimationFrame(refreshFrame);
-      refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
+      window.clearTimeout(refreshTimer);
+      refreshTimer = window.setTimeout(() => {
+        cancelAnimationFrame(refreshFrame);
+        refreshFrame = requestAnimationFrame(() => { if (isActive) ScrollTrigger.refresh(); });
+      }, 120);
     };
 
     if (reduceMotion) {
@@ -36,6 +40,7 @@ export function FoundationReveal() {
       return () => {
         isActive = false;
         cancelAnimationFrame(refreshFrame);
+        window.clearTimeout(refreshTimer);
       };
     }
 
@@ -108,9 +113,10 @@ export function FoundationReveal() {
           defaults: { ease: "power2.inOut" },
           scrollTrigger: {
             trigger: ".services",
-            start: "top top",
-            end: () => `+=${window.innerHeight * config.distance}`,
-            pin: ".services__pin",
+            // A flowing layout avoids clipping tall copy and pin jumps on touch screens.
+            start: config.vertical ? "top 65%" : "top top",
+            end: config.vertical ? "bottom 85%" : () => `+=${window.innerHeight * config.distance}`,
+            pin: config.vertical ? false : ".services__pin",
             scrub: mode === "mobile" ? .5 : .72,
             anticipatePin: 1,
             invalidateOnRefresh: true,
@@ -128,11 +134,11 @@ export function FoundationReveal() {
       },
     );
 
-    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    const finePointer = window.matchMedia("(min-width: 1025px) and (hover: hover) and (pointer: fine)").matches;
     const moveX = finePointer && light ? gsap.quickTo(light, "x", { duration: 1.8, ease: "power3.out" }) : null;
     const moveY = finePointer && light ? gsap.quickTo(light, "y", { duration: 1.8, ease: "power3.out" }) : null;
     const handlePointerMove = (event: PointerEvent) => {
-      if (!hero || !moveX || !moveY) return;
+      if (!hero || !moveX || !moveY || event.pointerType !== "mouse" || !window.matchMedia("(min-width: 1025px) and (prefers-reduced-motion: no-preference)").matches) return;
       const bounds = hero.getBoundingClientRect();
       moveX((((event.clientX - bounds.left) / bounds.width) - .5) * 16);
       moveY((((event.clientY - bounds.top) / bounds.height) - .5) * 10);
@@ -153,6 +159,9 @@ export function FoundationReveal() {
     return () => {
       isActive = false;
       cancelAnimationFrame(refreshFrame);
+      window.clearTimeout(refreshTimer);
+      moveX?.tween.kill();
+      moveY?.tween.kill();
       hero?.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("load", refresh);
       imageListeners.forEach(({ image, handler }) => {

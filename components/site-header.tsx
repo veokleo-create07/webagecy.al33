@@ -16,6 +16,8 @@ export function SiteHeader() {
   const [isOverFinalCta, setIsOverFinalCta] = useState(false);
   const firstMenuLink = useRef<HTMLAnchorElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
+  const focusMenuOnOpen = useRef(false);
 
   useEffect(() => {
     const mobile = window.matchMedia("(max-width: 767px)");
@@ -78,24 +80,45 @@ export function SiteHeader() {
 
   useEffect(() => {
     if (!isMenuOpen) return;
-    firstMenuLink.current?.focus();
+    if (focusMenuOnOpen.current) firstMenuLink.current?.focus({ preventScroll: true });
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setIsMenuOpen(false);
-        menuButton.current?.focus();
+        menuButton.current?.focus({ preventScroll: true });
       }
     };
 
+    const closeOutside = (event: PointerEvent) => {
+      if (!headerRef.current?.contains(event.target as Node)) setIsMenuOpen(false);
+    };
+    const closeOnFocusExit = (event: FocusEvent) => {
+      if (!headerRef.current?.contains(event.target as Node)) setIsMenuOpen(false);
+    };
+    const desktop = window.matchMedia("(min-width: 768px)");
+    const closeOnDesktop = () => { if (desktop.matches) setIsMenuOpen(false); };
+
     document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener("pointerdown", closeOutside);
+    document.addEventListener("focusin", closeOnFocusExit);
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("pointerdown", closeOutside);
+      document.removeEventListener("focusin", closeOnFocusExit);
+      desktop.removeEventListener("change", closeOnDesktop);
+    };
   }, [isMenuOpen]);
 
   useEffect(() => {
     const finalCta = document.querySelector<HTMLElement>(".final-cta");
     if (!finalCta) return;
     const observer = new IntersectionObserver(
-      entries => setIsOverFinalCta(entries.some(entry => entry.isIntersecting)),
+      entries => {
+        const visible = entries.some(entry => entry.isIntersecting);
+        setIsOverFinalCta(visible);
+        if (visible) setIsMenuOpen(false);
+      },
       { rootMargin: "0px 0px -28% 0px", threshold: .01 },
     );
     observer.observe(finalCta);
@@ -114,6 +137,8 @@ export function SiteHeader() {
 
   return (
     <header
+      ref={headerRef}
+      inert={isOverFinalCta}
       className={`${styles.header} site-header${isCompact ? " is-compact" : ""}${
         isMenuOpen ? " is-menu-open" : ""
       }${isScrolled ? " has-scrolled" : ""}${isReady ? " is-ready" : ""}`}
@@ -155,7 +180,10 @@ export function SiteHeader() {
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-            onClick={() => setIsMenuOpen((open) => !open)}
+            onClick={event => {
+              focusMenuOnOpen.current = event.detail === 0;
+              setIsMenuOpen(open => !open);
+            }}
           >
             <span>{isMenuOpen ? "Close" : "Menu"}</span>
             <span className="menu-toggle__glyph" aria-hidden="true">
@@ -165,7 +193,7 @@ export function SiteHeader() {
           </button>
         </div>
 
-        <div className="mobile-menu" id="mobile-menu" aria-hidden={!isMenuOpen}>
+        <div className="mobile-menu" id="mobile-menu" aria-hidden={!isMenuOpen} inert={!isMenuOpen}>
           <nav aria-label="Mobile navigation">
             {navigation.map((item, index) => (
               <a
@@ -176,7 +204,6 @@ export function SiteHeader() {
                 onClick={closeMenu}
               >
                 <span>{item.label}</span>
-                <span aria-hidden="true">↘</span>
               </a>
             ))}
             <button
@@ -185,7 +212,7 @@ export function SiteHeader() {
               tabIndex={isMenuOpen ? 0 : -1}
               onClick={goToContact}
             >
-              <span className={styles.controlLabel}><span>Start a project</span><span aria-hidden="true">↗</span></span>
+              <span className={styles.controlLabel}><span>Start a project</span></span>
             </button>
           </nav>
         </div>
