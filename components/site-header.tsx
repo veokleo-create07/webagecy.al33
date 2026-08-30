@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ShimmerButton } from "@/components/ui/shimmer-button";
+import styles from "./site-header.module.css";
 
 const navigation = [
   { label: "Work", href: "#work" },
@@ -25,6 +25,10 @@ export function SiteHeader() {
     const prepare = () => {
       window.clearTimeout(timeout);
       window.cancelAnimationFrame(frame);
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        setIsReady(true);
+        return;
+      }
       if (mobile.matches) {
         setIsReady(false);
         timeout = window.setTimeout(() => {
@@ -110,15 +114,23 @@ export function SiteHeader() {
 
   return (
     <header
-      className={`site-header${isCompact ? " is-compact" : ""}${
+      className={`${styles.header} site-header${isCompact ? " is-compact" : ""}${
         isMenuOpen ? " is-menu-open" : ""
       }${isScrolled ? " has-scrolled" : ""}${isReady ? " is-ready" : ""}`}
       data-final-cta={isOverFinalCta ? "visible" : "hidden"}
+      onPointerMove={event => {
+        if (event.pointerType !== "mouse" || !window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return;
+        const bounds = event.currentTarget.getBoundingClientRect();
+        event.currentTarget.style.setProperty("--glass-light-x", `${Math.round((event.clientX - bounds.left) / bounds.width * 100)}%`);
+      }}
+      onPointerLeave={event => event.currentTarget.style.setProperty("--glass-light-x", "32%")}
     >
       <div className="glass-nav">
+        <span className={styles.volume} aria-hidden="true" />
         <div className="glass-nav__topline">
           <a className="wordmark" href="#top" aria-label="KREU WEB, home" onClick={closeMenu}>
-            KREU WEB
+            <span className={styles.mark} aria-hidden="true"><img src="/brand/kreu-liquid-mark.png" alt="" width="690" height="387" /></span>
+            <span>KREU WEB</span>
           </a>
 
           <nav className="site-nav site-nav--desktop" aria-label="Primary navigation">
@@ -129,16 +141,13 @@ export function SiteHeader() {
             ))}
           </nav>
 
-          <ShimmerButton
+          <button
             type="button"
-            size="sm"
-            className="header-shimmer"
-            shimmerColor="rgba(241, 239, 232, 0.78)"
+            className={`header-shimmer ${styles.opticalControl}`}
             onClick={goToContact}
           >
-            <span>Start a project</span>
-            <span className="header-shimmer__arrow" aria-hidden="true">↗</span>
-          </ShimmerButton>
+            <span className={styles.controlLabel}><span>Start a project</span><span className="header-shimmer__arrow" aria-hidden="true">↗</span></span>
+          </button>
 
           <button
             ref={menuButton}
@@ -171,17 +180,14 @@ export function SiteHeader() {
                 <span aria-hidden="true">↘</span>
               </a>
             ))}
-            <ShimmerButton
+            <button
               type="button"
-              size="default"
-              className="mobile-menu__shimmer"
-              shimmerColor="rgba(241, 239, 232, 0.78)"
+              className={`mobile-menu__shimmer ${styles.opticalControl}`}
               tabIndex={isMenuOpen ? 0 : -1}
               onClick={goToContact}
             >
-              <span>Start a project</span>
-              <span aria-hidden="true">↗</span>
-            </ShimmerButton>
+              <span className={styles.controlLabel}><span>Start a project</span><span aria-hidden="true">↗</span></span>
+            </button>
           </nav>
         </div>
       </div>
