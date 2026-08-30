@@ -54,8 +54,8 @@
 .header :global(.glass-nav__topline) { z-index: 2; min-height: 4.8rem; padding: .6rem .7rem .6rem 1.2rem; }
 .header :global(.glass-nav__topline)::after { display: none; }
 .header :global(.wordmark) { display: inline-flex; align-items: center; gap: .55rem; white-space: nowrap; letter-spacing: -.02em; font-size: .87rem; }
-.mark { position: relative; display: block; width: 58px; height: 36px; overflow: hidden; flex-shrink: 0; }
-.mark img { position: absolute; max-width: none; width: 108px; height: auto; left: -28px; top: -7px; }
+.mark { position: relative; display: block; width: 58px; height: 38px; overflow: hidden; flex-shrink: 0; }
+.mark img { position: absolute; max-width: none; width: 74px; height: auto; left: -11px; top: -17px; }
 .header :global(.site-nav) { gap: .5rem; color: #dedfd9; letter-spacing: .01em; text-transform: none; font-size: .9rem; }
 .header :global(.site-nav a) { padding: .65rem 1.2rem; border-radius: 999px; transition: background 250ms ease, color 250ms ease; }
 .header :global(.site-nav a:hover) { background: #ffffff08; color: #fff; }
@@ -120,8 +120,8 @@
   .header:global(.site-header.is-menu-open) :global(.glass-nav) { border-radius: 2rem; background-color: rgb(20 24 26 / .79); }
   .header :global(.glass-nav__topline), .header:global(.is-compact) :global(.glass-nav__topline) { min-height: 4rem; padding: .45rem .5rem .45rem .75rem; }
   .header :global(.wordmark) { gap: .3rem; font-size: .75rem; }
-  .mark { width: 50px; }
-  .mark img { width: 98px; left: -26px; top: -5px; }
+  .mark { width: 50px; height: 34px; }
+  .mark img { width: 66px; left: -10px; top: -15px; }
   .header :global(.header-shimmer) { display: none; }
   .header :global(.menu-toggle) { min-height: 3.05rem; padding-inline: 1rem; font-size: .72rem; text-transform: uppercase; gap: .7rem; }
   .header :global(.mobile-menu__shimmer) { display: flex; min-height: 3.6rem; margin-bottom: .2rem; }
