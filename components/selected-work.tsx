@@ -108,6 +108,52 @@ const concepts = {
   velor: VelorConcept,
 };
 
+function RentalMotion({ suspended }: { suspended: boolean }) {
+  const scene = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    const element = scene.current;
+    if (!element) return;
+    let intersecting = false;
+    const update = () => setVisible(intersecting && !document.hidden);
+    const observer = new IntersectionObserver(([entry]) => {
+      intersecting = entry.isIntersecting;
+      update();
+    }, { threshold: .05 });
+    observer.observe(element);
+    document.addEventListener("visibilitychange", update);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", update);
+    };
+  }, []);
+
+  return (
+    <div ref={scene} className={styles.motion} data-playing={visible && !paused && !suspended}>
+      <div className={styles.motionScene} aria-hidden="true">
+        <img className={styles.motionCar} src="/portfolio/velor-main.jpg" alt="" loading="lazy" decoding="async" />
+        <span className={styles.motionBrand}>First Class / Rentals</span>
+        <div className={styles.motionType}>First class.<br /><i>Every mile.</i></div>
+        <div className={styles.motionRail}><span /></div>
+        <div className={styles.motionInterface}>
+          <span>Your next drive</span><span>Explore the fleet ↗</span>
+        </div>
+      </div>
+      <button
+        className={styles.pause}
+        type="button"
+        aria-label={paused ? "Play First Class motion" : "Pause First Class motion"}
+        aria-pressed={paused}
+        onClick={() => setPaused(value => !value)}
+      >
+        <span aria-hidden="true">{paused ? "▶" : "Ⅱ"}</span>
+      </button>
+    </div>
+  );
+}
+
 export function SelectedWork() {
   const [active, setActive] = useState<(typeof projects)[number] | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -140,7 +186,7 @@ export function SelectedWork() {
           const Concept = concepts[project.slug];
           return (
             <article
-              className={`${styles.project} ${index === 0 ? styles.featured : ""}`}
+              className={`${styles.project} ${styles[project.slug]} ${index === 0 ? styles.featured : ""}`}
               key={project.slug}
               onPointerMove={event => {
                 if (event.pointerType !== "mouse" || !window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return;
@@ -153,8 +199,8 @@ export function SelectedWork() {
                 event.currentTarget.style.setProperty("--tilt-y", "0deg");
               }}
             >
-              <div className={styles.media} aria-hidden="true">
-                <div className={conceptStyles.preview}><Concept /></div>
+              <div className={styles.media} aria-hidden={index === 4 ? undefined : true}>
+                {index === 4 ? <RentalMotion suspended={Boolean(active)} /> : <div className={conceptStyles.preview}><Concept /></div>}
               </div>
               <div className={styles.caption}>
                 <h3 id={`work-${project.slug}`}>{project.name}</h3>
@@ -170,11 +216,15 @@ export function SelectedWork() {
                   setActive(project);
                 }}
               >
-                <span className={styles.view}>View project <span aria-hidden="true">↗</span></span>
+                <span className={styles.view} aria-hidden="true">↗</span>
               </button>
             </article>
           );
         })}
+        <a className={styles.callTile} href="mailto:hello@kreuweb.com">
+          <span className={styles.callEyebrow}>Your next chapter</span>
+          <span className={styles.callLabel}>Book a call <span aria-hidden="true">↗</span></span>
+        </a>
       </div>
 
       <dialog
