@@ -1,96 +1,101 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import styles from "./selected-work.module.css";
+import conceptStyles from "./project-concepts.module.css";
+
 const projects = [
   {
     slug: "nova",
-    name: "Nova Residences",
-    category: "Real Estate",
+    name: "Park & Stone",
+    category: "Residential Real Estate",
     description: "A refined digital experience for modern residential developments.",
   },
   {
     slug: "maison",
-    name: "Maison",
+    name: "The Mercer Shop",
     category: "Luxury E-commerce",
     description: "A fashion-led storefront where editorial desire becomes effortless commerce.",
   },
   {
     slug: "lume",
-    name: "Lume",
-    category: "Aesthetic Clinic",
+    name: "Westside Aesthetics",
+    category: "Med Spa",
     description: "A calm, clinically precise experience for modern aesthetic care.",
   },
   {
     slug: "noir",
-    name: "Noir",
-    category: "Restaurant / Hospitality",
+    name: "The Oak House",
+    category: "Hospitality",
     description: "A cinematic reservation experience built around appetite and atmosphere.",
   },
   {
     slug: "velor",
-    name: "Velor",
-    category: "Premium Car Rental",
+    name: "First Class Rentals",
+    category: "Car Rental",
     description: "A performance-driven booking experience for exceptional cars.",
   },
 ] as const;
 
 function NovaConcept() {
   return (
-    <div className="concept-site concept-nova">
-      <img src="/portfolio/nova-detail.jpg" alt="Contemporary luxury residence architecture" />
-      <div className="concept-shade" />
-      <header><b>NOVA / R</b><nav><span>Residences</span><span>Architecture</span><span>Neighbourhood</span></nav><span>Private viewings ↗</span></header>
-      <div className="nova-hero"><p>Private residences · Tirana</p><h3>Life, framed<br />by architecture.</h3><span>Explore availability ↘</span></div>
-      <div className="nova-detail"><img src="/portfolio/nova-main.jpg" alt="" /><span>Residence 04<br />Three bedrooms · 186 m²</span></div>
-      <div className="nova-status"><span>Now selling</span><span>Completion · Autumn 2027</span></div>
+    <div className="demo-concept-site demo-concept-nova">
+      <img loading="lazy" decoding="async" src="/portfolio/nova-detail.jpg" alt="Contemporary luxury residence architecture" />
+      <div className="demo-concept-shade" />
+      <header><b>Park &amp; Stone</b><nav><span>Residences</span><span>Architecture</span><span>Neighbourhood</span></nav><span>Private viewings ↗</span></header>
+      <div className="demo-nova-hero"><p>Private residences · Tirana</p><h3>Life, framed<br />by architecture.</h3><span>Explore availability ↘</span></div>
+      <div className="demo-nova-detail"><img loading="lazy" decoding="async" src="/portfolio/nova-main.jpg" alt="" /><span>Residence 04<br />Three bedrooms · 186 m²</span></div>
+      <div className="demo-nova-status"><span>Now selling</span><span>Completion · Autumn 2027</span></div>
     </div>
   );
 }
 
 function MaisonConcept() {
   return (
-    <div className="concept-site concept-maison">
-      <header><span>Shop · Editorial · About</span><b>Maison</b><span>Search &nbsp; Bag (0)</span></header>
-      <div className="maison-wordmark">MAISON</div>
-      <div className="maison-main"><img src="/portfolio/maison-detail.jpg" alt="Fashion editorial in Milan" /><span>Issue 06 · Milano</span></div>
-      <div className="maison-copy"><p>The city edition</p><h3>Poise in<br /><i>motion.</i></h3><span>Discover the story →</span></div>
-      <div className="maison-detail"><img src="/portfolio/maison-main.jpg" alt="" /><span>New season · Look 14</span></div>
-      <div className="maison-product"><span>Silk column coat</span><span>Exclusive online</span><span>€ 1,280</span></div>
+    <div className="demo-concept-site demo-concept-maison">
+      <header><span>Shop · Editorial · About</span><b>The Mercer Shop</b><span>Search &nbsp; Bag (0)</span></header>
+      <div className="demo-maison-wordmark">MERCER</div>
+      <div className="demo-maison-main"><img loading="lazy" decoding="async" src="/portfolio/maison-detail.jpg" alt="Fashion editorial in Milan" /><span>Issue 06 · Milano</span></div>
+      <div className="demo-maison-copy"><p>The city edition</p><h3>Poise in<br /><i>motion.</i></h3><span>Discover the story →</span></div>
+      <div className="demo-maison-detail"><img loading="lazy" decoding="async" src="/portfolio/maison-main.jpg" alt="" /><span>New season · Look 14</span></div>
+      <div className="demo-maison-product"><span>Silk column coat</span><span>Exclusive online</span><span>€ 1,280</span></div>
     </div>
   );
 }
 
 function LumeConcept() {
   return (
-    <div className="concept-site concept-lume">
-      <header><b>LUME°</b><nav><span>Treatments</span><span>Doctors</span><span>Philosophy</span></nav><span>Book a consultation ↗</span></header>
-      <div className="lume-copy"><span>Skin intelligence · Tirana</span><h3>Results you see.<br /><i>Restraint you feel.</i></h3><p>Doctor-led aesthetic medicine designed around skin health, natural expression, and long-term confidence.</p><b>Meet your skin →</b></div>
-      <div className="lume-main"><img src="/portfolio/lume-portrait.jpg" alt="Portrait focused on natural skin" /></div>
-      <div className="lume-detail"><img src="/portfolio/lume-detail.jpg" alt="" /><span>Precision peel<br />45 min · From €120</span></div>
-      <div className="lume-treatments"><span>Signature facial</span><span>Skin renewal</span><span>Injectables</span></div>
+    <div className="demo-concept-site demo-concept-lume">
+      <header><b>Westside°</b><nav><span>Treatments</span><span>Doctors</span><span>Philosophy</span></nav><span>Book a consultation ↗</span></header>
+      <div className="demo-lume-copy"><span>Skin intelligence · Tirana</span><h3>Results you see.<br /><i>Restraint you feel.</i></h3><p>Doctor-led aesthetic medicine designed around skin health, natural expression, and long-term confidence.</p><b>Meet your skin →</b></div>
+      <div className="demo-lume-main"><img loading="lazy" decoding="async" src="/portfolio/lume-portrait.jpg" alt="Portrait focused on natural skin" /></div>
+      <div className="demo-lume-detail"><img loading="lazy" decoding="async" src="/portfolio/lume-detail.jpg" alt="" /><span>Precision peel<br />45 min · From €120</span></div>
     </div>
   );
 }
 
 function NoirConcept() {
   return (
-    <div className="concept-site concept-noir">
-      <img className="noir-image" src="/portfolio/noir-main-2.jpg" alt="Contemporary fine dining room" />
-      <div className="concept-shade" />
-      <header><span>Menu &nbsp; Cellar &nbsp; Story</span><b>NOIR</b><span>Reserve a table ↗</span></header>
-      <div className="noir-copy"><p>Tirana · Dinner, Tuesday—Sunday</p><h3>The night<br /><i>has a flavour.</i></h3><span>Discover the menu →</span></div>
-      <div className="noir-detail"><img src="/portfolio/noir-main.jpg" alt="" /><span>Chef’s table<br />Eight seasonal courses</span></div>
-      <div className="noir-hours"><span>Rruga e Durrësit, Tirana</span><span>18:30 — Late</span></div>
+    <div className="demo-concept-site demo-concept-noir">
+      <img loading="lazy" decoding="async" className="demo-noir-image" src="/portfolio/noir-main-2.jpg" alt="Contemporary fine dining room" />
+      <div className="demo-concept-shade" />
+      <header><span>Menu &nbsp; Cellar &nbsp; Story</span><b>The Oak House</b><span>Reserve a table ↗</span></header>
+      <div className="demo-noir-copy"><p>Tirana · Dinner, Tuesday—Sunday</p><h3>The night<br /><i>has a flavour.</i></h3><span>Discover the menu →</span></div>
+      <div className="demo-noir-detail"><img loading="lazy" decoding="async" src="/portfolio/noir-main.jpg" alt="" /><span>Chef’s table<br />Eight seasonal courses</span></div>
+      <div className="demo-noir-hours"><span>Rruga e Durrësit, Tirana</span><span>18:30 — Late</span></div>
     </div>
   );
 }
 
 function VelorConcept() {
   return (
-    <div className="concept-site concept-velor">
-      <img className="velor-image" src="/portfolio/velor-main.jpg" alt="Black performance car in motion" />
-      <div className="concept-shade" />
-      <header><b>VELOR</b><nav><span>Fleet</span><span>Membership</span><span>Destinations</span></nav><span>Reserve ↗</span></header>
-      <div className="velor-copy"><p>Porsche Panamera Turbo · Tirana</p><h3>Performance,<br />on your terms.</h3><span>Configure your drive →</span></div>
-      <div className="velor-specs"><span>550 PS</span><span>0—100 · 3.8 sec</span><span>From €680 / day</span><span>24 / 7 concierge</span></div>
-      <div className="velor-detail"><img src="/portfolio/velor-detail-2.jpg" alt="" /><span>Also available<br />Bugatti Chiron</span></div>
+    <div className="demo-concept-site demo-concept-velor">
+      <img loading="lazy" decoding="async" className="demo-velor-image" src="/portfolio/velor-main.jpg" alt="Black performance car in motion" />
+      <div className="demo-concept-shade" />
+      <header><b>First Class Rentals</b><nav><span>Fleet</span><span>Membership</span><span>Destinations</span></nav><span>Reserve ↗</span></header>
+      <div className="demo-velor-copy"><p>Porsche Panamera Turbo · Tirana</p><h3>Performance,<br />on your terms.</h3><span>Configure your drive →</span></div>
+      <div className="demo-velor-specs"><span>550 PS</span><span>0—100 · 3.8 sec</span><span>From €680 / day</span><span>24 / 7 concierge</span></div>
+      <div className="demo-velor-detail"><img loading="lazy" decoding="async" src="/portfolio/velor-detail-2.jpg" alt="" /><span>Also available<br />Bugatti Chiron</span></div>
     </div>
   );
 }
@@ -104,34 +109,106 @@ const concepts = {
 };
 
 export function SelectedWork() {
-  return (
-    <section className="selected-work" id="work" aria-labelledby="work-title">
-      <div className="selected-work__pin">
-        <header className="selected-work__intro">
-          <h2 id="work-title">Digital work with presence.</h2>
-        </header>
+  const [active, setActive] = useState<(typeof projects)[number] | null>(null);
+  const dialog = useRef<HTMLDialogElement>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
+  const trigger = useRef<HTMLButtonElement | null>(null);
+  const ActiveConcept = active ? concepts[active.slug] : null;
 
-        <div className="project-gallery" aria-live="polite">
-          {projects.map((project) => {
-            const Concept = concepts[project.slug];
-            return (
-              <article className={`project-panel project-${project.slug}`} key={project.slug}>
-                <div className="project-stage">
-                  <Concept />
-                </div>
-                <div className="project-copy">
-                  <p>{project.category}</p>
-                  <h3>{project.name}</h3>
-                  <div>
-                    <p>{project.description}</p>
-                    <a href="#contact">View project <span aria-hidden="true">↗</span></a>
-                  </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
+  useEffect(() => {
+    if (!active || !dialog.current) return;
+    const modal = dialog.current;
+    const root = document.documentElement;
+    const previousOverflow = root.style.overflow;
+    const previousGutter = root.style.scrollbarGutter;
+    root.style.scrollbarGutter = "stable";
+    root.style.overflow = "hidden";
+    modal.showModal();
+    closeButton.current?.focus({ preventScroll: true });
+    return () => {
+      modal.close();
+      root.style.overflow = previousOverflow;
+      root.style.scrollbarGutter = previousGutter;
+      trigger.current?.focus({ preventScroll: true });
+    };
+  }, [active]);
+
+  return (
+    <section className={styles.showcase} id="work" aria-label="Selected website concepts">
+      <div className={styles.composition}>
+        {projects.map((project, index) => {
+          const Concept = concepts[project.slug];
+          return (
+            <article
+              className={`${styles.project} ${index === 0 ? styles.featured : ""}`}
+              key={project.slug}
+              onPointerMove={event => {
+                if (event.pointerType !== "mouse" || !window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return;
+                const bounds = event.currentTarget.getBoundingClientRect();
+                event.currentTarget.style.setProperty("--tilt-x", `${(0.5 - (event.clientY - bounds.top) / bounds.height) * 2.4}deg`);
+                event.currentTarget.style.setProperty("--tilt-y", `${((event.clientX - bounds.left) / bounds.width - 0.5) * 3}deg`);
+              }}
+              onPointerLeave={event => {
+                event.currentTarget.style.setProperty("--tilt-x", "0deg");
+                event.currentTarget.style.setProperty("--tilt-y", "0deg");
+              }}
+            >
+              <div className={styles.media} aria-hidden="true">
+                <div className={conceptStyles.preview}><Concept /></div>
+              </div>
+              <div className={styles.caption}>
+                <h3 id={`work-${project.slug}`}>{project.name}</h3>
+                <p id={`category-${project.slug}`}>{project.category}</p>
+              </div>
+              <button
+                className={styles.projectTrigger}
+                type="button"
+                aria-label={`Preview ${project.name} — ${project.category}`}
+                aria-haspopup="dialog"
+                onClick={event => {
+                  trigger.current = event.currentTarget;
+                  setActive(project);
+                }}
+              >
+                <span className={styles.view}>View project <span aria-hidden="true">↗</span></span>
+              </button>
+            </article>
+          );
+        })}
       </div>
+
+      <dialog
+        ref={dialog}
+        className={styles.modal}
+        aria-labelledby="project-preview-title"
+        aria-describedby="project-preview-description"
+        onClose={() => setActive(null)}
+        onKeyDown={event => {
+          if (event.key === "Escape") {
+            event.preventDefault();
+            dialog.current?.close();
+          }
+        }}
+        onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }}
+      >
+        {active && ActiveConcept && (
+          <>
+            <div className={styles.modalHeader}>
+              <div>
+                <p>{active.category} · Design concept</p>
+                <h2 id="project-preview-title">{active.name}</h2>
+              </div>
+              <button ref={closeButton} className={styles.close} type="button" onClick={() => dialog.current?.close()}>
+                Close <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div className={styles.modalMedia} aria-hidden="true">
+              <div className={conceptStyles.preview}><ActiveConcept /></div>
+            </div>
+            <p className={styles.modalDescription} id="project-preview-description">{active.description}</p>
+          </>
+        )}
+      </dialog>
     </section>
   );
 }

@@ -6,12 +6,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 type MotionMode = "desktop" | "tablet" | "mobile";
 
-const portfolioConfig = {
-  desktop: { distance: 3.1, enterX: 72, exitX: -72, scale: .84, rotation: 4.5, blur: 5 },
-  tablet: { distance: 2.65, enterX: 34, exitX: -34, scale: .9, rotation: 2, blur: 3 },
-  mobile: { distance: 2.15, enterX: 12, exitX: -12, scale: .96, rotation: 0, blur: 1.2 },
-} as const;
-
 const servicesConfig = {
   desktop: { distance: 2.15, vertical: false },
   tablet: { distance: 1.7, vertical: true },
@@ -36,11 +30,6 @@ export function FoundationReveal() {
 
     if (reduceMotion) {
       gsap.set("[data-intro], [data-reveal], [data-final-reveal]", { clearProps: "all" });
-      gsap.set(".project-gallery", { opacity: 1 });
-      gsap.set(".project-panel", { opacity: 0, pointerEvents: "none" });
-      gsap.set(".project-panel:first-child", { opacity: 1, pointerEvents: "auto" });
-      gsap.set(".project-panel:first-child .project-stage", { opacity: 1, scale: 1, xPercent: 0, yPercent: 0, filter: "none" });
-      gsap.set(".project-panel:first-child .project-copy", { opacity: 1, y: 0 });
       gsap.set("[data-workflow-node]", { opacity: 1, scale: 1, y: 0 });
       gsap.set("[data-workflow-connector] span", { scaleX: 1, scaleY: 1 });
       refresh();
@@ -95,92 +84,6 @@ export function FoundationReveal() {
           ease: "none",
           scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: mode === "mobile" ? .5 : 1 },
         });
-      },
-    );
-
-    const portfolioMedia = gsap.matchMedia();
-    portfolioMedia.add(
-      { desktop: "(min-width: 1025px)", tablet: "(min-width: 768px) and (max-width: 1024px)", mobile: "(max-width: 767px)" },
-      media => {
-        const mode: MotionMode = media.conditions?.desktop ? "desktop" : media.conditions?.tablet ? "tablet" : "mobile";
-        const config = portfolioConfig[mode];
-        const panels = gsap.utils.toArray<HTMLElement>(".project-panel");
-        const stages = panels.map(panel => panel.querySelector<HTMLElement>(".project-stage"));
-        const copies = panels.map(panel => panel.querySelector<HTMLElement>(".project-copy"));
-        const title = document.querySelector<HTMLElement>(".selected-work__intro h2");
-        if (!panels.length || !title || stages.some(stage => !stage) || copies.some(copy => !copy)) return;
-
-        panels.forEach((panel, index) => {
-          gsap.set(panel, { zIndex: panels.length - index, pointerEvents: index === 0 ? "auto" : "none" });
-          gsap.set(stages[index], {
-            xPercent: index === 0 ? 0 : config.enterX,
-            yPercent: index === 0 ? 0 : mode === "desktop" ? 3 : 1,
-            scale: index === 0 ? .97 : config.scale,
-            rotateY: index === 0 ? 0 : -config.rotation,
-            rotateZ: index === 0 || mode === "mobile" ? 0 : .45,
-            opacity: 0,
-            filter: `blur(${index === 0 ? Math.min(config.blur, 2) : config.blur}px)`,
-          });
-          gsap.set(copies[index], { y: mode === "mobile" ? 12 : 20, opacity: 0 });
-        });
-
-        const timeline = gsap.timeline({
-          defaults: { ease: "power2.inOut" },
-          scrollTrigger: {
-            trigger: ".selected-work",
-            start: "top top",
-            end: () => `+=${window.innerHeight * config.distance}`,
-            pin: ".selected-work__pin",
-            scrub: mode === "mobile" ? .55 : .78,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        timeline
-          .to(title, {
-            x: () => mode === "desktop" ? -Math.min(window.innerWidth * .28, 400) : mode === "tablet" ? -Math.min(window.innerWidth * .19, 190) : 0,
-            y: () => -window.innerHeight * (mode === "desktop" ? .075 : mode === "tablet" ? .065 : .11),
-            scale: mode === "desktop" ? .26 : mode === "tablet" ? .32 : .38,
-            opacity: .76,
-            duration: .48,
-            transformOrigin: "center center",
-          }, 0)
-          .to(".project-gallery", { opacity: 1, duration: .28 }, .28)
-          .to(stages[0], { scale: 1, opacity: 1, filter: "blur(0px)", duration: .38 }, .3)
-          .to(copies[0], { y: 0, opacity: 1, duration: .28 }, .44);
-
-        let lastTransition = .8;
-        for (let index = 1; index < panels.length; index += 1) {
-          const at = .8 + (index - 1) * .62;
-          lastTransition = at;
-          timeline
-            .set(panels[index], { pointerEvents: "auto" }, at)
-            .to(copies[index - 1], { y: -8, opacity: 0, duration: .2, ease: "power2.out" }, at)
-            .to(stages[index - 1], {
-              xPercent: config.exitX,
-              yPercent: mode === "desktop" ? -3 : -1,
-              scale: config.scale,
-              rotateY: config.rotation,
-              rotateZ: mode === "mobile" ? 0 : -.45,
-              opacity: 0,
-              filter: `blur(${config.blur}px)`,
-              duration: .5,
-            }, at)
-            .to(stages[index], {
-              xPercent: 0,
-              yPercent: 0,
-              scale: 1,
-              rotateY: 0,
-              rotateZ: 0,
-              opacity: 1,
-              filter: "blur(0px)",
-              duration: .5,
-            }, at)
-            .to(copies[index], { y: 0, opacity: 1, duration: .26, ease: "power2.out" }, at + .2)
-            .set(panels[index - 1], { pointerEvents: "none" }, at + .48);
-        }
-        timeline.to(title, { opacity: 0, duration: .16 }, lastTransition + .48);
       },
     );
 
@@ -257,7 +160,6 @@ export function FoundationReveal() {
         image.removeEventListener("error", handler);
       });
       heroMedia.revert();
-      portfolioMedia.revert();
       workflowMedia.revert();
       context.revert();
     };
