@@ -52,20 +52,48 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
 
   useEffect(() => {
     if (!open || step !== 6 || confirmation) return;
-    const controller = new AbortController();
-    setAvailability("loading");
-    setSelected(null);
-    fetch("/api/booking/slots", { signal: controller.signal, cache: "no-store" })
+    let controller: AbortController | undefined;
+    let loading = false;
+    let lastAttempt = 0;
+    const load = () => {
+      if (loading || posting.current) return;
+      const request = new AbortController();
+      controller = request;
+      loading = true;
+      lastAttempt = Date.now();
+      setAvailability("loading");
+      fetch("/api/booking/slots", { signal: request.signal, cache: "no-store" })
       .then(async response => {
         const data = await response.json();
-        if (controller.signal.aborted) return;
-        if (data.code === "NOT_CONFIGURED") { setAvailability("unconfigured"); return; }
+        if (request.signal.aborted) return;
+        if (data.code === "NOT_CONFIGURED") { setSlots([]); setSelected(null); setAvailability("unconfigured"); return; }
         if (!response.ok || !data.success || !Array.isArray(data.slots)) throw new Error("Availability unavailable");
-        setSlots(data.slots.map((slot: { start: string; end: string }) => ({ id: slot.start, startsAt: slot.start, endsAt: slot.end })));
+        const available: Slot[] = data.slots
+          .filter((slot: { start: string; end: string }) => Date.parse(slot.start) > Date.now() && Date.parse(slot.end) > Date.parse(slot.start))
+          .map((slot: { start: string; end: string }) => ({ id: slot.start, startsAt: slot.start, endsAt: slot.end }))
+          .sort((a: Slot, b: Slot) => Date.parse(a.startsAt) - Date.parse(b.startsAt));
+        setSlots(available);
+        setSelected(previous => previous && available.some(slot => slot.id === previous.id) ? previous : null);
         setAvailability("ready");
       })
-      .catch(() => { if (!controller.signal.aborted) setAvailability("error"); });
-    return () => controller.abort();
+      .catch(() => {
+        if (!request.signal.aborted) { setSlots([]); setSelected(null); setAvailability("error"); }
+      })
+      .finally(() => { loading = false; });
+    };
+    const refresh = () => {
+      if (document.visibilityState === "visible" && Date.now() - lastAttempt > 2000) load();
+    };
+    load();
+    window.addEventListener("focus", refresh);
+    window.addEventListener("online", refresh);
+    document.addEventListener("visibilitychange", refresh);
+    return () => {
+      controller?.abort();
+      window.removeEventListener("focus", refresh);
+      window.removeEventListener("online", refresh);
+      document.removeEventListener("visibilitychange", refresh);
+    };
   }, [open, step, retry, timezone, confirmation]);
 
   function update<K extends keyof BookingDetails>(key: K, value: BookingDetails[K]) {
@@ -88,7 +116,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
     const invalid = validateStep(step, details);
     if (invalid) { setError(invalid); return; }
     if (step < 6) { setError(""); setDirection(1); setStep(step + 1); return; }
-    if (!selected) { setError("Choose an available date and time to book your call."); return; }
+    if (availability !== "ready" || !selected) { setError("Choose an available date and time to book your call."); return; }
     const payload = JSON.stringify({ ...details, website: details.hasWebsite === "yes" ? details.website : "", start: selected.startsAt, timezone });
     if (requestKey.current.payload !== payload) requestKey.current = { payload, key: crypto.randomUUID() };
     posting.current = true;
@@ -172,13 +200,14 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
                   {step === 5 && <label className={styles.field}><span>A little context <small>Optional</small></span><textarea {...fieldProps} name="notes" rows={4} value={details.notes} onChange={e => update("notes", e.target.value)} maxLength={2000} placeholder="A few lines about the business, what’s changing, and what you want Kreu to help you achieve." /></label>}
                   {step === 6 && <>
                     <p className={styles.hint}>Times shown in {timezone.replaceAll("_", " ")}.</p>
-                    {availability === "loading" && <p className={styles.calendarStatus} role="status">Finding available times…</p>}
-                    {availability === "ready" && slots.length > 0 && <BookingCalendar slots={slots} timezone={timezone} selected={selected} onSelect={setSelected} disabled={pending} />}
-                    {(availability === "error" || availability === "unconfigured" || (availability === "ready" && slots.length === 0)) && <div className={styles.calendarStatus} role="status">
-                      <p>{availability === "unconfigured" ? "Online scheduling isn’t connected yet." : availability === "error" ? "We couldn’t load the calendar." : "There are no open times in the next 60 days."}</p>
+                    <BookingCalendar slots={slots} timezone={timezone} selected={selected} onSelect={setSelected} disabled={pending || availability !== "ready"} status={<>
+                    {availability === "loading" && <p className={styles.hint} role="status">Finding available times…</p>}
+                    {(availability === "error" || availability === "unconfigured" || (availability === "ready" && slots.length === 0)) && <div className={styles.hint} role="status">
+                      <p>{availability === "unconfigured" ? "Scheduling is temporarily unavailable." : availability === "error" ? "We couldn’t load available times." : "There are no open times in the next 60 days."}</p>
                       <p>Email <a href="mailto:hello@kreuweb.com">hello@kreuweb.com</a> to arrange a call.{availability === "unconfigured" && " Your details haven’t been sent."}</p>
                       <button className={styles.back} type="button" onClick={() => setRetry(value => value + 1)}>Check again</button>
                     </div>}
+                    </>} />
                   </>}
                 </div>
                 {error && <p id="booking-error" className={styles.error} role="alert">{error}</p>}

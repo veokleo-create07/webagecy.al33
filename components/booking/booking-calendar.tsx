@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { dayKey, type Slot } from "@/lib/booking";
 import styles from "./booking.module.css";
 
-type Props = { slots: Slot[]; timezone: string; selected: Slot | null; onSelect: (slot: Slot | null) => void; disabled: boolean };
+type Props = { slots: Slot[]; timezone: string; selected: Slot | null; onSelect: (slot: Slot | null) => void; disabled: boolean; status?: ReactNode };
 
-export function BookingCalendar({ slots, timezone, selected, onSelect, disabled }: Props) {
+export function BookingCalendar({ slots, timezone, selected, onSelect, disabled, status }: Props) {
   const today = dayKey(new Date(), timezone);
   const [month, setMonth] = useState(() => slots[0] ? dayKey(slots[0].startsAt, timezone).slice(0, 7) : today.slice(0, 7));
   const [selectedDay, setSelectedDay] = useState(selected ? dayKey(selected.startsAt, timezone) : "");
@@ -20,8 +20,12 @@ export function BookingCalendar({ slots, timezone, selected, onSelect, disabled 
   }, [slots, timezone]);
 
   useEffect(() => {
-    if (selectedDay && !byDay.has(selectedDay)) { setSelectedDay(""); onSelect(null); }
-  }, [byDay, selectedDay, onSelect]);
+    // Open the first available day, but leave the time for the visitor to choose.
+    if (selectedDay && byDay.has(selectedDay)) return;
+    const nextDay = [...byDay.keys()].sort()[0] ?? "";
+    setSelectedDay(nextDay);
+    if (nextDay) setMonth(nextDay.slice(0, 7));
+  }, [byDay, selectedDay]);
 
   const [year, number] = month.split("-").map(Number);
   const monthDate = new Date(Date.UTC(year, number - 1, 1));
@@ -55,7 +59,7 @@ export function BookingCalendar({ slots, timezone, selected, onSelect, disabled 
       </div>
       <div className={styles.times}>
         <p className={styles.label}>{selectedDay ? dayLabel(selectedDay) : "Available times"}</p>
-        {!selectedDay && <p className={styles.hint}>Select an available day to see call times.</p>}
+        {status || (!selectedDay && <p className={styles.hint}>There are no available times to select.</p>)}
         <div className={styles.timeGrid} role="group" aria-label="Choose a time">
           {(byDay.get(selectedDay) ?? []).map(slot => <button type="button" key={slot.id} className={styles.time} disabled={disabled} aria-pressed={selected?.id === slot.id} onClick={() => onSelect(slot)}>{timeLabel(slot.startsAt)}<span>{Math.round((Date.parse(slot.endsAt) - Date.parse(slot.startsAt)) / 60000)} min</span></button>)}
         </div>
