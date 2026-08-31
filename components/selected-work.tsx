@@ -1,5 +1,6 @@
 "use client";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
+import { BookingLink } from "@/components/booking/booking-provider";
 
 import { useEffect, useRef, useState } from "react";
 import styles from "./selected-work.module.css";
@@ -222,10 +223,10 @@ export function SelectedWork() {
             </article>
           );
         })}
-        <a className={styles.callTile} href="mailto:hello@kreuweb.com">
+        <BookingLink className={styles.callTile}>
           <span className={styles.callEyebrow}>Your next chapter</span>
           <span className={styles.callLabel}>Book a call <span aria-hidden="true"><ArrowIcon /></span></span>
-        </a>
+        </BookingLink>
       </div>
 
       <dialog

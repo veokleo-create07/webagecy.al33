@@ -1,4 +1,5 @@
 import { ArrowIcon } from "@/components/ui/arrow-icon";
+import { BookingLink } from "@/components/booking/booking-provider";
 
 const services = [
   "Strategy & Design",
@@ -17,10 +18,10 @@ export function Services() {
             We connect design, development and digital visibility into one system
             built to move your business forward.
           </p>
-          <a className="services__cta" href="mailto:hello@kreuweb.com">
+          <BookingLink className="services__cta">
             <span>Book a call</span>
             <span aria-hidden="true"><ArrowIcon /></span>
-          </a>
+          </BookingLink>
         </header>
 
         <div className="workflow" aria-label="Connected services workflow">

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter_Tight } from "next/font/google";
+import { BookingProvider } from "@/components/booking/booking-provider";
 import "./globals.css";
 
 const interTight = Inter_Tight({
@@ -24,7 +25,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={interTight.variable}>{children}</body>
+      <body className={interTight.variable}><BookingProvider>{children}</BookingProvider></body>
     </html>
   );
 }

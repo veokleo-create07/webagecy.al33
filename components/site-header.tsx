@@ -1,7 +1,8 @@
 "use client";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
+import { useBooking } from "@/components/booking/booking-provider";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import styles from "./site-header.module.css";
 
 const navigation = [
@@ -10,6 +11,7 @@ const navigation = [
 ];
 
 export function SiteHeader() {
+  const openBooking = useBooking();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCompact, setIsCompact] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -127,13 +129,9 @@ export function SiteHeader() {
   }, []);
 
   const closeMenu = () => setIsMenuOpen(false);
-  const goToContact = () => {
+  const goToContact = (event: MouseEvent<HTMLButtonElement>) => {
     closeMenu();
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    document.getElementById("contact")?.scrollIntoView({
-      behavior: reduceMotion ? "auto" : "smooth",
-      block: "start",
-    });
+    openBooking(event.currentTarget.closest(".mobile-menu") ? menuButton.current ?? event.currentTarget : event.currentTarget);
   };
 
   return (
@@ -169,6 +167,7 @@ export function SiteHeader() {
           <button
             type="button"
             className={`header-shimmer ${styles.opticalControl}`}
+            aria-haspopup="dialog"
             onClick={goToContact}
           >
             <span className={styles.controlLabel}><span>Start a project</span><span className="header-shimmer__arrow" aria-hidden="true"><ArrowIcon /></span></span>
@@ -210,6 +209,7 @@ export function SiteHeader() {
             <button
               type="button"
               className={`mobile-menu__shimmer ${styles.opticalControl}`}
+              aria-haspopup="dialog"
               tabIndex={isMenuOpen ? 0 : -1}
               onClick={goToContact}
             >

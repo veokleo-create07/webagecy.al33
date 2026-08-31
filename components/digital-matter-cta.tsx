@@ -1,5 +1,6 @@
 "use client";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
+import { BookingLink } from "@/components/booking/booking-provider";
 
 import { type CSSProperties, type PointerEvent, useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -198,10 +199,9 @@ export function FinalCTA() {
         <p className="final-cta__eyebrow">Ready to build?</p>
         <h2 id="contact-title">Premium websites that move businesses forward.</h2>
         <p className="final-cta__subline">Strategy, design and development crafted to turn strong businesses into stronger digital brands.</p>
-        <a
+        <BookingLink
           ref={buttonRef}
           className="final-cta__button magnetic-cta__button"
-          href="mailto:hello@kreuweb.com"
           onPointerMove={handleLens}
           onPointerLeave={() => {
             buttonRef.current?.style.setProperty("--lens-x", "50%");
@@ -210,7 +210,7 @@ export function FinalCTA() {
           style={{ "--lens-x": "50%", "--lens-y": "20%" } as CSSProperties}
         >
           <span>Book a call</span><span aria-hidden="true"><ArrowIcon /></span>
-        </a>
+        </BookingLink>
       </div>
     </section>
   );

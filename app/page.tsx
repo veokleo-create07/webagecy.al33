@@ -1,5 +1,6 @@
 import { FoundationReveal } from "@/components/foundation-reveal";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
+import { BookingLink } from "@/components/booking/booking-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SelectedWork } from "@/components/selected-work";
 import { Services } from "@/components/services";
@@ -32,9 +33,9 @@ export default function Home() {
             </p>
 
             <div className="hero__actions" data-intro>
-              <a className="hero__primary" href="#contact">
+              <BookingLink className="hero__primary">
                 Start a project <span aria-hidden="true"><ArrowIcon /></span>
-              </a>
+              </BookingLink>
               <a className="hero__secondary" href="#work">
                 View our work <span aria-hidden="true"><ArrowIcon direction="down" /></span>
               </a>
