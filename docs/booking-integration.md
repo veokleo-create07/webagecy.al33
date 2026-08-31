@@ -38,7 +38,7 @@ Receives `Idempotency-Key` (UUID) plus:
   "businessName": "Business name",
   "hasWebsite": true,
   "website": "https://business.example/",
-  "revenue": "Prefer not to say",
+  "revenue": "€10k–€50k",
   "notes": "Optional context",
   "slotId": "opaque-slot-id",
   "timezone": "Europe/Tirane"

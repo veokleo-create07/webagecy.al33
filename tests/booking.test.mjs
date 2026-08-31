@@ -19,7 +19,7 @@ function load(file, dependencies = {}, globals = {}) {
 }
 const booking = load("lib/booking.ts");
 const gateway = load("lib/booking-gateway.server.ts");
-const details = { ...booking.emptyDetails, fullName: "Test Visitor", email: " Visitor+call@EXAMPLE.com ", businessName: "Test Studio", hasWebsite: "yes", website: "example.com", revenue: "Prefer not to say", notes: "" };
+const details = { ...booking.emptyDetails, fullName: "Test Visitor", email: " Visitor+call@EXAMPLE.com ", businessName: "Test Studio", hasWebsite: "yes", website: "example.com", revenue: "€10k–€50k", notes: "" };
 const payload = { ...details, slotId: "slot-a", timezone: "Europe/Tirane" };
 const key = "12345678-1234-4123-8123-123456789012";
 const future = new Date(Date.now() + 86400000).toISOString();
@@ -41,6 +41,11 @@ test("required fields, email addresses and revenue choices are validated", () =>
 test("email accepts aliases and subdomains but rejects malformed mailboxes", () => {
   for (const email of ["hello@example.com", "first.last+call@studio.example.co.uk", "o'neil@example.com"]) assert.equal(booking.validateStep(1, { ...details, email }), null);
   for (const email of ["", "   ", "name", "name@", "@example.com", "name@example", "name@@example.com", "first last@example.com", ".name@example.com", "name..last@example.com", "name.@example.com", "name@-example.com", "name@example-.com", "name@example..com", "name@example.com\r\nBcc:other@example.com", `${"a".repeat(65)}@example.com`, `name@${"a".repeat(64)}.com`]) assert.ok(booking.validateStep(1, { ...details, email }), email);
+});
+test("revenue offers exactly four ranges and rejects the removed option", () => {
+  assert.deepEqual(booking.revenueOptions, ["Under €10k", "€10k–€50k", "€50k–€100k", "€100k+"]);
+  for (const revenue of booking.revenueOptions) assert.equal(booking.validateStep(4, { ...details, revenue }), null);
+  assert.equal(booking.validateStep(4, { ...details, revenue: "Prefer not to say" }), "Choose a revenue range.");
 });
 test("website is required only for Yes; unsafe schemes and credentials fail", () => {
   assert.equal(booking.validateStep(3, { ...details, hasWebsite: "no", website: "" }), null);

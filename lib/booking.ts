@@ -1,4 +1,4 @@
-export const revenueOptions = ["Under €10k", "€10k–€50k", "€50k–€100k", "€100k+", "Prefer not to say"] as const;
+export const revenueOptions = ["Under €10k", "€10k–€50k", "€50k–€100k", "€100k+"] as const;
 export type BookingDetails = {
   fullName: string;
   email: string;
@@ -44,7 +44,7 @@ export function validateStep(step: number, details: BookingDetails): string | nu
     if (!["yes", "no"].includes(details.hasWebsite)) return "Choose Yes or No to continue.";
     if (details.hasWebsite === "yes" && (!normalizedWebsite(details.website) || details.website.length > 2048)) return "Enter your website address, for example yourbusiness.com.";
   }
-  if (step === 4 && !(revenueOptions as readonly string[]).includes(details.revenue)) return "Choose a revenue range, or Prefer not to say.";
+  if (step === 4 && !(revenueOptions as readonly string[]).includes(details.revenue)) return "Choose a revenue range.";
   if (step === 5 && details.notes.length > 2000) return "Please keep your notes under 2,000 characters.";
   return null;
 }
