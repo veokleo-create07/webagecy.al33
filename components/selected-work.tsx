@@ -3,6 +3,8 @@ import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { BookingLink } from "@/components/booking/booking-provider";
 
 import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./selected-work.module.css";
 import conceptStyles from "./project-concepts.module.css";
 
@@ -157,11 +159,61 @@ function RentalMotion({ suspended }: { suspended: boolean }) {
 }
 
 export function SelectedWork() {
+  const showcase = useRef<HTMLElement>(null);
   const [active, setActive] = useState<(typeof projects)[number] | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
   const trigger = useRef<HTMLButtonElement | null>(null);
   const ActiveConcept = active ? concepts[active.slug] : null;
+
+  useEffect(() => {
+    const section = showcase.current;
+    if (!section) return;
+    gsap.registerPlugin(ScrollTrigger);
+    const media = gsap.matchMedia();
+    media.add({
+      desktop: "(min-width: 1025px) and (hover: hover) and (pointer: fine)",
+      compact: "(max-width: 1024px), (hover: none), (pointer: coarse)",
+      reduced: "(prefers-reduced-motion: reduce)",
+    }, context => {
+      if (context.conditions?.reduced) return;
+      const desktop = Boolean(context.conditions?.desktop);
+      const frames = section.querySelectorAll<HTMLElement>(`[data-exhibit]`);
+      frames.forEach((frame, index) => {
+        const featured = index === 0;
+        // Scroll owns the exhibit; hover owns its inner surface. Neither can
+        // overwrite the other's transforms, including during breakpoint changes.
+        gsap.fromTo(frame, {
+          y: desktop ? (featured ? 44 : 24 + index * 3) : (featured ? 16 : 10),
+          scale: featured ? (desktop ? .965 : .99) : 1,
+          rotationX: desktop && featured ? 2.5 : 0,
+          rotationY: desktop && !featured ? (index % 2 ? 1.2 : -1.2) : 0,
+          transformPerspective: desktop ? 1600 : 0,
+          opacity: desktop ? .45 : .7,
+        }, {
+          y: 0, scale: 1, rotationX: 0, rotationY: 0, opacity: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: desktop ? section : frame,
+            start: desktop ? `top ${92 - index * 2}%` : "top 96%",
+            end: desktop ? `top ${30 + index * 3}%` : "top 72%",
+            scrub: desktop ? .55 : .2,
+            invalidateOnRefresh: true,
+          },
+        });
+      });
+      if (desktop) {
+        section.querySelectorAll<HTMLElement>(`[data-image-depth]`).forEach((layer, index) => {
+          gsap.fromTo(layer, { yPercent: index === 0 ? -1.2 : -.6 }, {
+            yPercent: index === 0 ? 1.2 : .6,
+            ease: "none",
+            scrollTrigger: { trigger: section, start: "top bottom", end: "bottom top", scrub: .65 },
+          });
+        });
+      }
+    }, section);
+    return () => media.revert();
+  }, []);
 
   useEffect(() => {
     if (!active || !dialog.current) return;
@@ -182,7 +234,7 @@ export function SelectedWork() {
   }, [active]);
 
   return (
-    <section className={styles.showcase} id="work" aria-label="Selected website concepts">
+    <section ref={showcase} className={styles.showcase} id="work" aria-label="Selected website concepts">
       <div className={styles.composition}>
         {projects.map((project, index) => {
           const Concept = concepts[project.slug];
@@ -190,8 +242,9 @@ export function SelectedWork() {
             <article
               className={`${styles.project} ${styles[project.slug]} ${index === 0 ? styles.featured : ""}`}
               key={project.slug}
+              data-exhibit
               onPointerMove={event => {
-                if (event.pointerType !== "mouse" || !window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return;
+                if (event.pointerType !== "mouse" || !window.matchMedia("(min-width: 1025px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return;
                 const bounds = event.currentTarget.getBoundingClientRect();
                 event.currentTarget.style.setProperty("--tilt-x", `${(0.5 - (event.clientY - bounds.top) / bounds.height) * 2.4}deg`);
                 event.currentTarget.style.setProperty("--tilt-y", `${((event.clientX - bounds.left) / bounds.width - 0.5) * 3}deg`);
@@ -201,25 +254,33 @@ export function SelectedWork() {
                 event.currentTarget.style.setProperty("--tilt-y", "0deg");
               }}
             >
-              <div className={styles.media} aria-hidden={index === 4 ? undefined : true}>
-                {index === 4 ? <RentalMotion suspended={Boolean(active)} /> : <div className={conceptStyles.preview}><Concept /></div>}
+              <div className={styles.surface}>
+                <div className={styles.media} aria-hidden={index === 4 ? undefined : true}>
+                  {index === 4 ? <RentalMotion suspended={Boolean(active)} /> : (
+                    <div className={styles.mediaZoom}>
+                      <div className={styles.mediaDepth} data-image-depth>
+                        <div className={conceptStyles.preview}><Concept /></div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className={styles.caption}>
+                  <h3 id={`work-${project.slug}`}>{project.name}</h3>
+                  <p id={`category-${project.slug}`}>{project.category}</p>
+                </div>
+                <button
+                  className={styles.projectTrigger}
+                  type="button"
+                  aria-label={`Preview ${project.name} — ${project.category}`}
+                  aria-haspopup="dialog"
+                  onClick={event => {
+                    trigger.current = event.currentTarget;
+                    setActive(project);
+                  }}
+                >
+                  <span className={styles.view} aria-hidden="true"><ArrowIcon /></span>
+                </button>
               </div>
-              <div className={styles.caption}>
-                <h3 id={`work-${project.slug}`}>{project.name}</h3>
-                <p id={`category-${project.slug}`}>{project.category}</p>
-              </div>
-              <button
-                className={styles.projectTrigger}
-                type="button"
-                aria-label={`Preview ${project.name} — ${project.category}`}
-                aria-haspopup="dialog"
-                onClick={event => {
-                  trigger.current = event.currentTarget;
-                  setActive(project);
-                }}
-              >
-                <span className={styles.view} aria-hidden="true"><ArrowIcon /></span>
-              </button>
             </article>
           );
         })}
