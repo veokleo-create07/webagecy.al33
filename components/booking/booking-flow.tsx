@@ -174,11 +174,14 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
             <motion.div key={confirmation ? "confirmed" : step} initial={reduced ? false : { opacity: 0, x: direction * 14 }} animate={{ opacity: 1, x: 0 }} exit={reduced ? { opacity: 1 } : { opacity: 0, x: direction * -10 }} transition={{ duration: reduced ? 0 : .22, ease: [.22, 1, .36, 1] }} onAnimationComplete={focusHeading}>
               <h1 id="booking-question" ref={headingRef} tabIndex={-1} className={styles.question}>{confirmation ? "You’re booked." : questions[step]}</h1>
               {confirmation ? <div className={styles.confirmation}>
-                <p>A confirmation has been sent to your email.</p>
+                <p>Your discovery call is confirmed. Check your email for the invitation.</p>
                 <div className={styles.appointment}>
+                  <span>{details.fullName.trim()} · {details.businessName.trim()}</span>
+                  <span>{details.email.trim()}</span>
                   <span>{new Intl.DateTimeFormat("en-GB", { dateStyle: "full", timeZone: confirmation.timezone }).format(new Date(confirmation.startsAt))}</span>
-                  <span>{new Intl.DateTimeFormat("en-GB", { timeStyle: "short", timeZone: confirmation.timezone }).format(new Date(confirmation.startsAt))} · {confirmation.timezone.replaceAll("_", " ")}</span>
+                  <span>{new Intl.DateTimeFormat("en-GB", { timeStyle: "short", timeZone: confirmation.timezone }).format(new Date(confirmation.startsAt))}–{new Intl.DateTimeFormat("en-GB", { timeStyle: "short", timeZone: confirmation.timezone }).format(new Date(confirmation.endsAt))} · {confirmation.timezone.replaceAll("_", " ")}</span>
                 </div>
+                {!confirmation.joinUrl && <p>The call link isn’t available yet. Check your invitation email or contact hello@kreuweb.com before the call.</p>}
                 {confirmation.joinUrl ? <div className={styles.actions}>
                   <a className={styles.primary} href={confirmation.joinUrl} target="_blank" rel="noopener noreferrer">Join call <ArrowIcon /></a>
                   <button type="button" className={styles.primary} onClick={close}>Back to Kreu <ArrowIcon /></button>

@@ -19,6 +19,8 @@ Never prefix them with `NEXT_PUBLIC_`. No credentials are committed, logged, or 
 
 Only the server selects the event type. Only an accepted Cal booking with valid start/end timestamps becomes a confirmation. The response contains a normalized booking UID, start/end, timezone, and an optional validated HTTPS meeting URL. No invented meeting links or raw Cal errors reach the UI.
 
+The confirmation screen displays the visitor's retained name, business and email, the confirmed date/time range in Europe/Tirane, and a Join call control when Cal returns a valid meeting URL. If no URL is returned, the screen explains that the link is not yet available instead of fabricating one. The event type must have Cal Video or another connected conferencing location configured to generate join links.
+
 Qualification answers are attached as metadata. Long website/notes values are split into 500-character continuation keys (`notes_2`, etc.) to preserve the entire answer within Cal's limits. Notes are not sent to another service.
 
 ## Duplicate and conflict handling
