@@ -6,7 +6,7 @@ The six qualification screens, live-availability calendar, submission states and
 
 **A scheduling service has not been supplied or connected.** Until it is connected, the calendar clearly reports that online scheduling is unavailable, and the Book button remains disabled. No demo slots or fake confirmations are exposed to visitors.
 
-Connect the studio's calendar with a server-side adapter implementing the contract below. This generic gateway is not a direct Calendly or Cal.com API client. Once the owner selects a provider, either implement the two adapter operations or replace `lib/booking-gateway.server.ts` with that provider's documented integration. No attendee email is collected: the chosen service must support phone-based discovery bookings.
+Connect the studio's calendar with a server-side adapter implementing the contract below. This generic gateway is not a direct Calendly or Cal.com API client. Once the owner selects a provider, either implement the two adapter operations or replace `lib/booking-gateway.server.ts` with that provider's documented integration. A required attendee email is collected; phone numbers and country codes are not collected.
 
 Set these **server-only** environment variables in the local environment and Vercel:
 
@@ -15,7 +15,7 @@ KREU_BOOKING_API_URL=https://your-scheduling-adapter.example/api/kreu
 KREU_BOOKING_API_TOKEN=your-server-only-token
 ```
 
-Never prefix these with NEXT_PUBLIC or commit live credentials. HTTPS is required. Requests use bearer authentication, no redirects or cache, and a 12-second timeout. The adapter must not log phone numbers, revenue or notes unnecessarily.
+Never prefix these with NEXT_PUBLIC or commit live credentials. HTTPS is required. Requests use bearer authentication, no redirects or cache, and a 12-second timeout. The adapter must not log email addresses, revenue or notes unnecessarily.
 
 ### GET /availability
 
@@ -34,7 +34,7 @@ Receives `Idempotency-Key` (UUID) plus:
 ```json
 {
   "fullName": "Attendee name",
-  "phone": "+355691234567",
+  "email": "attendee@example.com",
   "businessName": "Business name",
   "hasWebsite": true,
   "website": "https://business.example/",
@@ -53,10 +53,10 @@ Only after durable booking creation, return:
 { "status": "confirmed", "booking": { "id": "booking-id", "startsAt": "2030-01-10T10:00:00Z", "endsAt": "2030-01-10T10:30:00Z" } }
 ```
 
-A generic webhook acknowledgement, email notification or `pending` response is **not** confirmation. Only this confirmed response activates “You’re booked.” WhatsApp outreach remains the studio's responsibility; no WhatsApp messages are sent by this integration.
+A generic webhook acknowledgement, email notification or `pending` response is **not** confirmation. Only this confirmed response activates “You’re booked.” Email outreach remains the studio's responsibility; no emails are sent by this integration.
 
 ## Verification
 
 Run `npm run build`, `npx tsc --noEmit` and `node --test tests/booking.test.mjs`.
 
-Before enabling real bookings, verify live availability, timezone/DST conversion, phone-based attendee creation, a confirmed appointment in the host calendar, an occupied slot (409), retries with the same idempotency key, and provider failure. Preview tests alone cannot establish a real calendar connection.
+Before enabling real bookings, verify live availability, timezone/DST conversion, email-based attendee creation, a confirmed appointment in the host calendar, an occupied slot (409), retries with the same idempotency key, and provider failure. Preview tests alone cannot establish a real calendar connection.

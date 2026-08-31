@@ -19,7 +19,7 @@ function load(file, dependencies = {}, globals = {}) {
 }
 const booking = load("lib/booking.ts");
 const gateway = load("lib/booking-gateway.server.ts");
-const details = { ...booking.emptyDetails, fullName: "Test Visitor", country: "AL", phone: "0691234567", businessName: "Test Studio", hasWebsite: "yes", website: "example.com", revenue: "Prefer not to say", notes: "" };
+const details = { ...booking.emptyDetails, fullName: "Test Visitor", email: " Visitor+call@EXAMPLE.com ", businessName: "Test Studio", hasWebsite: "yes", website: "example.com", revenue: "Prefer not to say", notes: "" };
 const payload = { ...details, slotId: "slot-a", timezone: "Europe/Tirane" };
 const key = "12345678-1234-4123-8123-123456789012";
 const future = new Date(Date.now() + 86400000).toISOString();
@@ -33,11 +33,14 @@ function postWith(fn = gateway.bookingGateway) {
 
 test("all six qualification steps accept valid data; notes are optional", () => {
   for (let step = 0; step < 6; step++) assert.equal(booking.validateStep(step, details), null);
-  assert.equal(booking.normalizedPhone(details), "+355691234567");
-  assert.equal(booking.normalizedPhone({ ...details, country: "XK", phone: "+38344123456" }), "+38344123456");
+  assert.equal(booking.normalizedEmail(details.email), "Visitor+call@example.com");
 });
-test("required fields, international phones and revenue choices are validated", () => {
-  for (const [step, patch] of [[0, { fullName: "" }], [1, { phone: "123" }], [2, { businessName: "" }], [3, { hasWebsite: "" }], [4, { revenue: "project budget" }], [5, { notes: "a".repeat(2001) }]]) assert.equal(typeof booking.validateStep(step, { ...details, ...patch }), "string");
+test("required fields, email addresses and revenue choices are validated", () => {
+  for (const [step, patch] of [[0, { fullName: "" }], [1, { email: "" }], [2, { businessName: "" }], [3, { hasWebsite: "" }], [4, { revenue: "project budget" }], [5, { notes: "a".repeat(2001) }]]) assert.equal(typeof booking.validateStep(step, { ...details, ...patch }), "string");
+});
+test("email accepts aliases and subdomains but rejects malformed mailboxes", () => {
+  for (const email of ["hello@example.com", "first.last+call@studio.example.co.uk", "o'neil@example.com"]) assert.equal(booking.validateStep(1, { ...details, email }), null);
+  for (const email of ["", "   ", "name", "name@", "@example.com", "name@example", "name@@example.com", "first last@example.com", ".name@example.com", "name..last@example.com", "name.@example.com", "name@-example.com", "name@example-.com", "name@example..com", "name@example.com\r\nBcc:other@example.com", `${"a".repeat(65)}@example.com`, `name@${"a".repeat(64)}.com`]) assert.ok(booking.validateStep(1, { ...details, email }), email);
 });
 test("website is required only for Yes; unsafe schemes and credentials fail", () => {
   assert.equal(booking.validateStep(3, { ...details, hasWebsite: "no", website: "" }), null);
@@ -74,7 +77,8 @@ test("server rejects foreign origins, invalid payloads and oversized bodies", as
   const post = postWith(async () => { calls++; });
   assert.equal((await post(request(payload, { Origin: "https://elsewhere.example" }))).status, 403);
   assert.equal((await post(request(payload, { "Idempotency-Key": "bad" }))).status, 400);
-  assert.equal((await post(request({ ...payload, phone: "bad" }))).status, 400);
+  assert.equal((await post(request({ ...payload, email: "bad" }))).status, 400);
+  assert.equal((await post(request({ ...payload, email: undefined }))).status, 400);
   assert.equal((await post(request({ ...payload, notes: "x".repeat(20000) }))).status, 413);
   assert.equal(calls, 0);
 });
@@ -91,9 +95,10 @@ test("confirmed bookings forward normalized data and the unchanged retry key", a
   }
   assert.equal(calls[0].key, key);
   assert.equal(calls[1].key, key);
-  assert.equal(calls[0].body.phone, "+355691234567");
+  assert.equal(calls[0].body.email, "Visitor+call@example.com");
   assert.equal(calls[0].body.website, "https://example.com/");
-  assert.equal("email" in calls[0].body, false);
+  assert.equal("phone" in calls[0].body, false);
+  assert.equal("country" in calls[0].body, false);
 });
 test("a slot conflict or pending acknowledgement cannot show confirmation", async () => {
   const conflict = postWith(async () => { throw new gateway.BookingGatewayError("CONFLICT", 409); });

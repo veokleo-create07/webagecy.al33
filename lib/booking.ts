@@ -1,10 +1,7 @@
-import { parsePhoneNumberFromString, type CountryCode } from "libphonenumber-js/min";
-
 export const revenueOptions = ["Under €10k", "€10k–€50k", "€50k–€100k", "€100k+", "Prefer not to say"] as const;
 export type BookingDetails = {
   fullName: string;
-  country: CountryCode;
-  phone: string;
+  email: string;
   businessName: string;
   hasWebsite: "yes" | "no" | "";
   website: string;
@@ -15,14 +12,20 @@ export type Slot = { id: string; startsAt: string; endsAt: string };
 export type Confirmation = { id: string; startsAt: string; endsAt: string; timezone: string };
 
 export const emptyDetails: BookingDetails = {
-  fullName: "", country: "AL", phone: "", businessName: "", hasWebsite: "", website: "", revenue: "", notes: "",
+  fullName: "", email: "", businessName: "", hasWebsite: "", website: "", revenue: "", notes: "",
 };
 
-export function normalizedPhone(details: BookingDetails) {
-  try {
-    const phone = parsePhoneNumberFromString(details.phone, { defaultCountry: details.country, extract: false });
-    return phone?.isValid() && !phone.ext ? phone.number : null;
-  } catch { return null; }
+/** Validate an ordinary mailbox address; preserve local-part case and aliases. */
+export function normalizedEmail(value: string): string | null {
+  const email = value.trim();
+  if (email.length > 254) return null;
+  const parts = email.split("@");
+  if (parts.length !== 2) return null;
+  const [local, domain] = parts;
+  if (!local || local.length > 64 || !/^[a-z\d.!#$%&'*+/=?^_`{|}~-]+$/i.test(local) || local.startsWith(".") || local.endsWith(".") || local.includes("..")) return null;
+  const labels = domain.split(".");
+  if (labels.length < 2 || labels.some(label => !/^[a-z\d](?:[a-z\d-]{0,61}[a-z\d])?$/i.test(label)) || !/^[a-z]{2,63}$/i.test(labels.at(-1)!)) return null;
+  return `${local}@${domain.toLowerCase()}`;
 }
 
 export function normalizedWebsite(value: string) {
@@ -35,7 +38,7 @@ export function normalizedWebsite(value: string) {
 
 export function validateStep(step: number, details: BookingDetails): string | null {
   if (step === 0 && (details.fullName.trim().length < 2 || details.fullName.length > 120)) return "Please enter your full name.";
-  if (step === 1 && !normalizedPhone(details)) return "Enter a valid phone number, including the correct country code.";
+  if (step === 1 && !normalizedEmail(details.email)) return "Please enter a valid email address.";
   if (step === 2 && (details.businessName.trim().length < 2 || details.businessName.length > 160)) return "Please enter your business name.";
   if (step === 3) {
     if (!["yes", "no"].includes(details.hasWebsite)) return "Choose Yes or No to continue.";

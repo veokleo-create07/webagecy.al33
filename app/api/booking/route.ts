@@ -1,5 +1,4 @@
-import { getCountries } from "libphonenumber-js/min";
-import { normalizedPhone, normalizedWebsite, validateStep, validTimezone, type BookingDetails } from "@/lib/booking";
+import { normalizedEmail, normalizedWebsite, validateStep, validTimezone, type BookingDetails } from "@/lib/booking";
 import { bookingGateway, bookingError } from "@/lib/booking-gateway.server";
 
 export const dynamic = "force-dynamic";
@@ -26,10 +25,10 @@ export async function POST(request: Request) {
     data = JSON.parse(Buffer.concat(chunks).toString("utf8"));
     if (!data || Array.isArray(data) || typeof data !== "object") throw new Error("Invalid body");
   } catch { return Response.json({ code: "INVALID_DETAILS" }, { status: 400 }); }
-  const fields = ["fullName", "country", "phone", "businessName", "hasWebsite", "website", "revenue", "notes", "slotId", "timezone"];
+  const fields = ["fullName", "email", "businessName", "hasWebsite", "website", "revenue", "notes", "slotId", "timezone"];
   if (fields.some(field => typeof data[field] !== "string")) return Response.json({ code: "INVALID_DETAILS" }, { status: 400 });
   const details = data as unknown as BookingDetails;
-  if (!(getCountries() as string[]).includes(details.country) || details.phone.length > 40 || typeof data.timezone !== "string" || data.timezone.length > 100 || !validTimezone(data.timezone) || typeof data.slotId !== "string" || !data.slotId || data.slotId.length > 200) return Response.json({ code: "INVALID_DETAILS" }, { status: 400 });
+  if (typeof data.timezone !== "string" || data.timezone.length > 100 || !validTimezone(data.timezone) || typeof data.slotId !== "string" || !data.slotId || data.slotId.length > 200) return Response.json({ code: "INVALID_DETAILS" }, { status: 400 });
   for (let step = 0; step < 6; step++) {
     const error = validateStep(step, details);
     if (error) return Response.json({ code: "INVALID_DETAILS", step, message: error }, { status: 400 });
@@ -40,7 +39,7 @@ export async function POST(request: Request) {
     const result = await bookingGateway("bookings", {
       method: "POST", headers: { "Idempotency-Key": key },
       body: JSON.stringify({
-        fullName: details.fullName.trim(), phone: normalizedPhone(details), businessName: details.businessName.trim(),
+        fullName: details.fullName.trim(), email: normalizedEmail(details.email), businessName: details.businessName.trim(),
         hasWebsite: details.hasWebsite === "yes", website: details.hasWebsite === "yes" ? normalizedWebsite(details.website) : null,
         revenue: details.revenue, notes: details.notes.trim(), slotId: data.slotId, timezone: data.timezone,
       }),

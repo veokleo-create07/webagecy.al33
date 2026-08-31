@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { getCountries, getCountryCallingCode, type CountryCode } from "libphonenumber-js/min";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { emptyDetails, validateStep, type BookingDetails, type Confirmation, type Slot } from "@/lib/booking";
 import { revenueOptions } from "@/lib/booking";
@@ -10,12 +9,10 @@ import { BookingCalendar } from "./booking-calendar";
 import styles from "./booking.module.css";
 
 const questions = [
-  "What’s your full name?", "What’s the best number to reach you on?", "What’s your business called?",
+  "What’s your full name?", "What’s your email address?", "What’s your business called?",
   "Do you currently have a website?", "What’s your current monthly business revenue?",
   "What should we know before the call?", "Choose a time that works.",
 ];
-const names = new Intl.DisplayNames(["en"], { type: "region" });
-const countries = getCountries().sort((a, b) => (names.of(a) ?? a).localeCompare(names.of(b) ?? b));
 
 export default function BookingFlow({ open, opener, onClose }: { open: boolean; opener?: HTMLElement; onClose: () => void }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -146,7 +143,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
             <motion.div key={confirmation ? "confirmed" : step} initial={reduced ? false : { opacity: 0, x: direction * 14 }} animate={{ opacity: 1, x: 0 }} exit={reduced ? { opacity: 1 } : { opacity: 0, x: direction * -10 }} transition={{ duration: reduced ? 0 : .22, ease: [.22, 1, .36, 1] }} onAnimationComplete={focusHeading}>
               <h1 id="booking-question" ref={headingRef} tabIndex={-1} className={styles.question}>{confirmation ? "You’re booked." : questions[step]}</h1>
               {confirmation ? <div className={styles.confirmation}>
-                <p>We’ll reach out on WhatsApp if we need anything before the call.</p>
+                <p>We’ll reach out by email if we need anything before the call.</p>
                 <div className={styles.appointment}>
                   <span>{new Intl.DateTimeFormat("en-GB", { dateStyle: "full", timeZone: confirmation.timezone }).format(new Date(confirmation.startsAt))}</span>
                   <span>{new Intl.DateTimeFormat("en-GB", { timeStyle: "short", timeZone: confirmation.timezone }).format(new Date(confirmation.startsAt))} · {confirmation.timezone.replaceAll("_", " ")}</span>
@@ -155,16 +152,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
               </div> : <form onSubmit={submit} noValidate aria-busy={pending}>
                 <div className={styles.fields}>
                   {step === 0 && <label className={styles.field}><span>Full name</span><input {...fieldProps} name="fullName" autoComplete="name" value={details.fullName} onChange={e => update("fullName", e.target.value)} maxLength={120} placeholder="Your full name" required /></label>}
-                  {step === 1 && <div>
-                    <div className={styles.phone}>
-                      <label className={styles.field}><span>Country code</span><select aria-label="Country code" autoComplete="country" value={details.country} onChange={e => update("country", e.target.value as CountryCode)}>
-                        {["AL", "XK"].map(code => <option key={code} value={code}>{names.of(code)} +{getCountryCallingCode(code as CountryCode)}</option>)}
-                        {countries.filter(code => code !== "AL" && code !== "XK").map(code => <option key={code} value={code}>{names.of(code)} +{getCountryCallingCode(code)}</option>)}
-                      </select></label>
-                      <label className={styles.field}><span>Phone / WhatsApp</span><input {...fieldProps} name="phone" type="tel" inputMode="tel" autoComplete="tel-national" value={details.phone} onChange={e => update("phone", e.target.value)} placeholder="Your phone number" maxLength={40} required /></label>
-                    </div>
-                    <p className={styles.hint}>Use your local number, or paste the full international number.</p>
-                  </div>}
+                  {step === 1 && <label className={styles.field}><span>Email address</span><input {...fieldProps} name="email" type="email" inputMode="email" autoComplete="email" autoCapitalize="none" autoCorrect="off" spellCheck={false} value={details.email} onChange={e => update("email", e.target.value)} placeholder="you@business.com" maxLength={254} required /></label>}
                   {step === 2 && <label className={styles.field}><span>Business name</span><input {...fieldProps} name="businessName" autoComplete="organization" value={details.businessName} onChange={e => update("businessName", e.target.value)} maxLength={160} placeholder="Your business name" required /></label>}
                   {step === 3 && <>
                     <fieldset className={styles.choices} aria-describedby={fieldProps["aria-describedby"]}><legend className={styles.srOnly}>Do you currently have a website?</legend>
@@ -175,7 +163,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
                   {step === 4 && <fieldset className={styles.choices} aria-describedby={fieldProps["aria-describedby"]}><legend className={styles.srOnly}>Current monthly business revenue</legend>
                     {revenueOptions.map(value => <label key={value} className={styles.choice}><input type="radio" name="revenue" value={value} checked={details.revenue === value} onChange={() => update("revenue", value)} /><span>{value}</span><i aria-hidden="true" /></label>)}
                   </fieldset>}
-                  {step === 5 && <label className={styles.field}><span>A little context <small>Optional</small></span><textarea {...fieldProps} name="notes" rows={4} value={details.notes} onChange={e => update("notes", e.target.value)} maxLength={2000} placeholder="A few lines about the business, what’s changing, and what you want the website to help you achieve." /></label>}
+                  {step === 5 && <label className={styles.field}><span>A little context <small>Optional</small></span><textarea {...fieldProps} name="notes" rows={4} value={details.notes} onChange={e => update("notes", e.target.value)} maxLength={2000} placeholder="A few lines about the business, what’s changing, and what you want Kreu to help you achieve." /></label>}
                   {step === 6 && <>
                     <p className={styles.hint}>Times shown in {timezone.replaceAll("_", " ")}.</p>
                     {availability === "loading" && <p className={styles.calendarStatus} role="status">Finding available times…</p>}
