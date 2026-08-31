@@ -9,7 +9,7 @@ export type BookingDetails = {
   notes: string;
 };
 export type Slot = { id: string; startsAt: string; endsAt: string };
-export type Confirmation = { id: string; startsAt: string; endsAt: string; timezone: string };
+export type Confirmation = { id: string; startsAt: string; endsAt: string; timezone: string; joinUrl?: string };
 
 export const emptyDetails: BookingDetails = {
   fullName: "", email: "", businessName: "", hasWebsite: "", website: "", revenue: "", notes: "",

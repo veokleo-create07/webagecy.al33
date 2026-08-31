@@ -1,62 +1,44 @@
-# Discovery booking
+# Cal.com discovery booking
 
-The six qualification screens, live-availability calendar, submission states and confirmation UI are implemented. All six homepage booking CTAs open the same lazy-loaded modal. Closing and reopening keeps the draft in memory; nothing is stored in localStorage, and personal details are only transmitted on the final booking action.
+The existing seven-screen Kreu flow calls server-only Cal.com API v2 endpoints. No Cal embed or redirect is used.
 
-## Required before accepting appointments
+## Environment
 
-**A scheduling service has not been supplied or connected.** Until it is connected, the calendar clearly reports that online scheduling is unavailable, and the Book button remains disabled. No demo slots or fake confirmations are exposed to visitors.
+Set these server-only variables locally in ignored `.env.local`, and separately in the Vercel project's production/preview environment:
 
-Connect the studio's calendar with a server-side adapter implementing the contract below. This generic gateway is not a direct Calendly or Cal.com API client. Once the owner selects a provider, either implement the two adapter operations or replace `lib/booking-gateway.server.ts` with that provider's documented integration. A required attendee email is collected; phone numbers and country codes are not collected.
+- `CAL_API_KEY`
+- `CAL_EVENT_TYPE_ID`
 
-Set these **server-only** environment variables in the local environment and Vercel:
+Never prefix them with `NEXT_PUBLIC_`. No credentials are committed, logged, or included in public responses. The Cal host event owns the duration (currently 15 minutes), calendar availability, conferencing and email delivery. Keep automatic confirmation enabled and attendee confirmation emails enabled. This integration does not bypass availability or booking limits.
 
-```dotenv
-KREU_BOOKING_API_URL=https://your-scheduling-adapter.example/api/kreu
-KREU_BOOKING_API_TOKEN=your-server-only-token
-```
+## Endpoints
 
-Never prefix these with NEXT_PUBLIC or commit live credentials. HTTPS is required. Requests use bearer authentication, no redirects or cache, and a 12-second timeout. The adapter must not log email addresses, revenue or notes unnecessarily.
+- `GET /api/booking/slots`: fetches a 60-day window in Europe/Tirane. Returns `{ success: true, slots: [{ start, end }], timezone }` with future, sorted, deduplicated ISO datetimes.
+- `POST /api/booking/create`: validates name, email, business, website choice/URL, revenue, optional notes, a future `start`, and optional `timezone` (defaults to Europe/Tirane). Requires same-origin JSON and an `Idempotency-Key` UUID.
+- Former `/api/booking` and `/api/booking/availability` URLs forward to these handlers; their response contract is now the Cal-backed contract.
 
-### GET /availability
+Only the server selects the event type. Only an accepted Cal booking with valid start/end timestamps becomes a confirmation. The response contains a normalized booking UID, start/end, timezone, and an optional validated HTTPS meeting URL. No invented meeting links or raw Cal errors reach the UI.
 
-Query: `from` and `to` (UTC ISO timestamps, a rolling 60-day window), `timezone` (visitor's IANA timezone).
+Qualification answers are attached as metadata. Long website/notes values are split into 500-character continuation keys (`notes_2`, etc.) to preserve the entire answer within Cal's limits. Notes are not sent to another service.
 
-```json
-{ "slots": [{ "id": "opaque-slot-id", "startsAt": "2030-01-10T10:00:00Z", "endsAt": "2030-01-10T10:30:00Z" }] }
-```
+## Duplicate and conflict handling
 
-Dates above illustrate the schema only; they are never used in the site. Supply actual free times based on the connected calendar, business hours, buffers and host availability. Dates require explicit timezone offsets. The public endpoint drops past, duplicate and malformed slots.
+The client disables submission synchronously using a ref and a disabled button. It reuses the same request key after an uncertain response. Concurrent identical requests within an instance share one promise.
 
-### POST /bookings
+Cal metadata records an HMAC of the request key and payload. Before posting, the server searches Cal for a matching completed booking, including on a fresh server instance. On uncertain POST responses it checks again instead of blindly re-posting. Different payloads under the same matching request token are rejected. Cal's own availability checks remain enabled, and occupied slots return `SLOT_UNAVAILABLE`; the UI reloads availability.
 
-Receives `Idempotency-Key` (UUID) plus:
-
-```json
-{
-  "fullName": "Attendee name",
-  "email": "attendee@example.com",
-  "businessName": "Business name",
-  "hasWebsite": true,
-  "website": "https://business.example/",
-  "revenue": "€10k–€50k",
-  "notes": "Optional context",
-  "slotId": "opaque-slot-id",
-  "timezone": "Europe/Tirane"
-}
-```
-
-The adapter must validate the slot, reserve it atomically, create the calendar appointment and persist the idempotency key with its result. Repeated identical keys must return the same booking, even if the slot is now occupied. Reject reused keys with different payloads. Return HTTP 409 for a genuinely unavailable slot, which refreshes the calendar in the UI. Rate-limit availability and creation at the adapter or hosting edge before public launch; do not use an in-memory counter on serverless instances.
-
-Only after durable booking creation, return:
-
-```json
-{ "status": "confirmed", "booking": { "id": "booking-id", "startsAt": "2030-01-10T10:00:00Z", "endsAt": "2030-01-10T10:30:00Z" } }
-```
-
-A generic webhook acknowledgement, email notification or `pending` response is **not** confirmation. Only this confirmed response activates “You’re booked.” Email outreach remains the studio's responsibility; no emails are sent by this integration.
+Cal's documented create endpoint does not provide a native idempotency-key contract. Metadata recovery plus provider conflict checks is not a general cross-region transactional lock. Keep this event non-seated/non-recurring; do not enable overlapping bookings. If requirements expand to guaranteed distributed exactly-once writes independent of Cal, a durable idempotency store would be required; none has been added here. Configure abuse/rate protection at the deployment edge before broad public traffic.
 
 ## Verification
 
-Run `npm run build`, `npx tsc --noEmit` and `node --test tests/booking.test.mjs`.
+Run `node --test tests/booking.test.mjs`, `npx tsc --noEmit`, and `npm run build`.
 
-Before enabling real bookings, verify live availability, timezone/DST conversion, email-based attendee creation, a confirmed appointment in the host calendar, an occupied slot (409), retries with the same idempotency key, and provider failure. Preview tests alone cannot establish a real calendar connection.
+Tests cover validation, future slots, duplicate submissions, recovery on a new instance, lost responses, provider conflicts, metadata limits, unsafe meeting URLs and credential-free errors. Never store real keys in tests or fixtures.
+
+A live availability check and a browser-created test booking were performed against the configured event. The real confirmation included a Cal Video link. The test appointment was cancelled after verification. Confirm email receipt in the account inbox if delivery assurance is required: an accepted booking verifies Cal's response, not inbox delivery.
+
+## API references
+
+- [Availability](https://cal.com/docs/api-reference/v2/slots/get-available-time-slots-for-an-event-type): version `2024-09-04`, range format.
+- [Create booking](https://cal.com/docs/api-reference/v2/bookings/create-a-booking): version `2026-02-25`, attendee and metadata payload.
+- [List bookings](https://cal.com/docs/api-reference/v2/bookings/get-all-bookings): version `2026-05-01`, request recovery.

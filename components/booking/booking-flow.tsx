@@ -23,7 +23,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
   const [direction, setDirection] = useState(1);
   const [details, setDetails] = useState<BookingDetails>({ ...emptyDetails });
   const [error, setError] = useState("");
-  const [timezone] = useState(() => Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Tirane");
+  const timezone = "Europe/Tirane";
   const [slots, setSlots] = useState<Slot[]>([]);
   const [selected, setSelected] = useState<Slot | null>(null);
   const [availability, setAvailability] = useState<"loading" | "ready" | "error" | "unconfigured">("loading");
@@ -55,13 +55,13 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
     const controller = new AbortController();
     setAvailability("loading");
     setSelected(null);
-    fetch(`/api/booking/availability?timezone=${encodeURIComponent(timezone)}`, { signal: controller.signal, cache: "no-store" })
+    fetch("/api/booking/slots", { signal: controller.signal, cache: "no-store" })
       .then(async response => {
         const data = await response.json();
         if (controller.signal.aborted) return;
         if (data.code === "NOT_CONFIGURED") { setAvailability("unconfigured"); return; }
-        if (!response.ok || !Array.isArray(data.slots)) throw new Error("Availability unavailable");
-        setSlots(data.slots);
+        if (!response.ok || !data.success || !Array.isArray(data.slots)) throw new Error("Availability unavailable");
+        setSlots(data.slots.map((slot: { start: string; end: string }) => ({ id: slot.start, startsAt: slot.start, endsAt: slot.end })));
         setAvailability("ready");
       })
       .catch(() => { if (!controller.signal.aborted) setAvailability("error"); });
@@ -89,25 +89,28 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
     if (invalid) { setError(invalid); return; }
     if (step < 6) { setError(""); setDirection(1); setStep(step + 1); return; }
     if (!selected) { setError("Choose an available date and time to book your call."); return; }
-    const payload = JSON.stringify({ ...details, website: details.hasWebsite === "yes" ? details.website : "", slotId: selected.id, timezone });
+    const payload = JSON.stringify({ ...details, website: details.hasWebsite === "yes" ? details.website : "", start: selected.startsAt, timezone });
     if (requestKey.current.payload !== payload) requestKey.current = { payload, key: crypto.randomUUID() };
     posting.current = true;
     setPending(true);
     setError("");
     try {
-      const response = await fetch("/api/booking", {
+      const response = await fetch("/api/booking/create", {
         method: "POST", headers: { "Content-Type": "application/json", "Idempotency-Key": requestKey.current.key },
-        body: payload, signal: AbortSignal.timeout(30000),
+        body: payload, signal: AbortSignal.timeout(60000),
       });
       const data = await response.json();
-      if (response.status === 409) {
+      if (data.code === "SLOT_UNAVAILABLE") {
         setError("That time was just booked. Please choose another available time.");
         setRetry(value => value + 1);
         return;
       }
-      if (!response.ok || data.status !== "confirmed" || !data.booking?.id) throw new Error("Not confirmed");
+      if (data.code === "BOOKING_PENDING") {
+        setError("Your request is awaiting confirmation. Please check your email before trying again.");
+        return;
+      }
+      if (!response.ok || !data.success || data.status !== "confirmed" || !data.booking?.id) throw new Error("Not confirmed");
       setConfirmation(data.booking);
-      setDetails({ ...emptyDetails });
       setSelected(null);
     } catch {
       setError("We couldn’t confirm your booking. Please retry to check this request. If this continues, email hello@kreuweb.com.");
@@ -143,12 +146,15 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
             <motion.div key={confirmation ? "confirmed" : step} initial={reduced ? false : { opacity: 0, x: direction * 14 }} animate={{ opacity: 1, x: 0 }} exit={reduced ? { opacity: 1 } : { opacity: 0, x: direction * -10 }} transition={{ duration: reduced ? 0 : .22, ease: [.22, 1, .36, 1] }} onAnimationComplete={focusHeading}>
               <h1 id="booking-question" ref={headingRef} tabIndex={-1} className={styles.question}>{confirmation ? "You’re booked." : questions[step]}</h1>
               {confirmation ? <div className={styles.confirmation}>
-                <p>We’ll reach out by email if we need anything before the call.</p>
+                <p>A confirmation has been sent to your email.</p>
                 <div className={styles.appointment}>
                   <span>{new Intl.DateTimeFormat("en-GB", { dateStyle: "full", timeZone: confirmation.timezone }).format(new Date(confirmation.startsAt))}</span>
                   <span>{new Intl.DateTimeFormat("en-GB", { timeStyle: "short", timeZone: confirmation.timezone }).format(new Date(confirmation.startsAt))} · {confirmation.timezone.replaceAll("_", " ")}</span>
                 </div>
-                <button type="button" className={styles.primary} onClick={close}>Back to Kreu <ArrowIcon /></button>
+                {confirmation.joinUrl ? <div className={styles.actions}>
+                  <a className={styles.primary} href={confirmation.joinUrl} target="_blank" rel="noopener noreferrer">Join call <ArrowIcon /></a>
+                  <button type="button" className={styles.primary} onClick={close}>Back to Kreu <ArrowIcon /></button>
+                </div> : <button type="button" className={styles.primary} onClick={close}>Back to Kreu <ArrowIcon /></button>}
               </div> : <form onSubmit={submit} noValidate aria-busy={pending}>
                 <div className={styles.fields}>
                   {step === 0 && <label className={styles.field}><span>Full name</span><input {...fieldProps} name="fullName" autoComplete="name" value={details.fullName} onChange={e => update("fullName", e.target.value)} maxLength={120} placeholder="Your full name" required /></label>}
