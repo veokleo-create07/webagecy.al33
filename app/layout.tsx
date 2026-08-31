@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Inter_Tight } from "next/font/google";
 import { BookingProvider } from "@/components/booking/booking-provider";
+import { LanguageProvider } from "@/components/language-provider";
+import { cookies } from "next/headers";
+import { languageCookie, translate } from "@/lib/localization";
 import "./globals.css";
 
 const interTight = Inter_Tight({
@@ -9,23 +12,26 @@ const interTight = Inter_Tight({
   variable: "--font-inter-tight",
 });
 
-export const metadata: Metadata = {
-  title: "KREU WEB — Digital experiences with intent",
-  description:
-    "KREU WEB is an independent digital agency shaping distinctive websites for ambitious brands.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const language = (await cookies()).get(languageCookie)?.value === "en" ? "en" : "sq";
+  return {
+    title: translate(language, "KREU WEB — Digital experiences with intent"),
+    description: translate(language, "KREU WEB is an independent digital agency shaping distinctive websites for ambitious brands."),
+  };
+}
 
 export const viewport: Viewport = {
   colorScheme: "dark",
   themeColor: "#111110",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const language = (await cookies()).get(languageCookie)?.value === "en" ? "en" : "sq";
   return (
-    <html lang="en">
-      <body className={interTight.variable}><BookingProvider>{children}</BookingProvider></body>
+    <html lang={language}>
+      <body className={interTight.variable}><LanguageProvider initialLanguage={language}><BookingProvider>{children}</BookingProvider></LanguageProvider></body>
     </html>
   );
 }

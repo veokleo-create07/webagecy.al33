@@ -1,5 +1,7 @@
 "use client";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
+import { BrandLogo } from "@/components/ui/brand-logo";
+import { LanguageSwitcher, useLanguage } from "@/components/language-provider";
 import { useBooking } from "@/components/booking/booking-provider";
 
 import { useEffect, useRef, useState, type MouseEvent } from "react";
@@ -11,6 +13,7 @@ const navigation = [
 ];
 
 export function SiteHeader() {
+  const { t } = useLanguage();
   const openBooking = useBooking();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCompact, setIsCompact] = useState(false);
@@ -152,14 +155,17 @@ export function SiteHeader() {
       <div className="glass-nav">
         <span className={styles.volume} aria-hidden="true" />
         <div className="glass-nav__topline">
-          <a className="wordmark" href="#top" aria-label="KREU WEB, home" onClick={closeMenu}>
-            <span className={styles.mark} aria-hidden="true"><img src="/brand/kreu-chrome-mark.png" alt="" width="500" height="500" /></span>
+          <div className={styles.brandGroup}>
+          <a className="wordmark" href="#top" aria-label={t("KREU WEB, home")} onClick={closeMenu}>
+            <BrandLogo className={styles.mark} decorative />
           </a>
+          <LanguageSwitcher />
+          </div>
 
-          <nav className="site-nav site-nav--desktop" aria-label="Primary navigation">
+          <nav className="site-nav site-nav--desktop" aria-label={t("Primary navigation")}>
             {navigation.map((item) => (
               <a key={item.href} href={item.href}>
-                {item.label}
+                {t(item.label)}
               </a>
             ))}
           </nav>
@@ -170,7 +176,7 @@ export function SiteHeader() {
             aria-haspopup="dialog"
             onClick={goToContact}
           >
-            <span className={styles.controlLabel}><span>Book a discovery call</span><span className="header-shimmer__arrow" aria-hidden="true"><ArrowIcon /></span></span>
+            <span className={styles.controlLabel}><span>{t("Book a discovery call")}</span><span className="header-shimmer__arrow" aria-hidden="true"><ArrowIcon /></span></span>
           </button>
 
           <button
@@ -179,13 +185,13 @@ export function SiteHeader() {
             type="button"
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-label={t(isMenuOpen ? "Close menu" : "Open menu")}
             onClick={event => {
               focusMenuOnOpen.current = event.detail === 0;
               setIsMenuOpen(open => !open);
             }}
           >
-            <span>{isMenuOpen ? "Close" : "Menu"}</span>
+            <span>{t(isMenuOpen ? "Close" : "Menu")}</span>
             <span className="menu-toggle__glyph" aria-hidden="true">
               <i />
               <i />
@@ -194,7 +200,7 @@ export function SiteHeader() {
         </div>
 
         <div className="mobile-menu" id="mobile-menu" aria-hidden={!isMenuOpen} inert={!isMenuOpen}>
-          <nav aria-label="Mobile navigation">
+          <nav aria-label={t("Mobile navigation")}>
             {navigation.map((item, index) => (
               <a
                 ref={index === 0 ? firstMenuLink : undefined}
@@ -203,7 +209,7 @@ export function SiteHeader() {
                 tabIndex={isMenuOpen ? 0 : -1}
                 onClick={closeMenu}
               >
-                <span>{item.label}</span>
+                <span>{t(item.label)}</span>
               </a>
             ))}
             <button
@@ -213,7 +219,7 @@ export function SiteHeader() {
               tabIndex={isMenuOpen ? 0 : -1}
               onClick={goToContact}
             >
-              <span className={styles.controlLabel}><span>Book a discovery call</span></span>
+              <span className={styles.controlLabel}><span>{t("Book a discovery call")}</span></span>
             </button>
           </nav>
         </div>

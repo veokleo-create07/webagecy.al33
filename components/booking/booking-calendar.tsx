@@ -2,11 +2,14 @@
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { dayKey, type Slot } from "@/lib/booking";
+import { useLanguage } from "@/components/language-provider";
+import { calendarWeekdays, localizedDate } from "@/lib/localization";
 import styles from "./booking.module.css";
 
 type Props = { slots: Slot[]; timezone: string; selected: Slot | null; onSelect: (slot: Slot | null) => void; disabled: boolean; status?: ReactNode };
 
 export function BookingCalendar({ slots, timezone, selected, onSelect, disabled, status }: Props) {
+  const { t, locale, language } = useLanguage();
   const today = dayKey(new Date(), timezone);
   const [month, setMonth] = useState(() => slots[0] ? dayKey(slots[0].startsAt, timezone).slice(0, 7) : today.slice(0, 7));
   const [selectedDay, setSelectedDay] = useState(selected ? dayKey(selected.startsAt, timezone) : "");
@@ -36,19 +39,19 @@ export function BookingCalendar({ slots, timezone, selected, onSelect, disabled,
     const next = new Date(Date.UTC(year, number - 1 + delta, 1));
     setMonth(next.toISOString().slice(0, 7));
   };
-  const dayLabel = (key: string) => new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }).format(new Date(`${key}T12:00:00Z`));
-  const timeLabel = (value: string) => new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: timezone }).format(new Date(value));
+  const dayLabel = (key: string) => localizedDate(language, `${key}T12:00:00Z`, "UTC", "day");
+  const timeLabel = (value: string) => new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZone: timezone }).format(new Date(value));
 
   return (
     <div className={styles.calendar}>
       <div>
         <div className={styles.monthHeader}>
-          <button type="button" className={styles.monthControl} aria-label="Previous month" disabled={disabled || month <= months[0]} onClick={() => move(-1)}><Chevron back /></button>
-          <p aria-live="polite">{new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric", timeZone: "UTC" }).format(monthDate)}</p>
-          <button type="button" className={styles.monthControl} aria-label="Next month" disabled={disabled || month >= months[months.length - 1]} onClick={() => move(1)}><Chevron /></button>
+          <button type="button" className={styles.monthControl} aria-label={t("Previous month")} disabled={disabled || month <= months[0]} onClick={() => move(-1)}><Chevron back /></button>
+          <p aria-live="polite">{localizedDate(language, monthDate, "UTC", "month")}</p>
+          <button type="button" className={styles.monthControl} aria-label={t("Next month")} disabled={disabled || month >= months[months.length - 1]} onClick={() => move(1)}><Chevron /></button>
         </div>
-        <div className={styles.days} role="group" aria-label="Choose a date">
-          {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => <span key={i} aria-hidden="true" className={styles.weekday}>{day}</span>)}
+        <div className={styles.days} role="group" aria-label={t("Choose a date")}>
+          {calendarWeekdays(language).map((day, i) => <span key={i} aria-hidden="true" className={styles.weekday}>{day}</span>)}
           {Array.from({ length: offset }, (_, i) => <span key={`blank-${i}`} />)}
           {Array.from({ length }, (_, i) => {
             const key = `${month}-${String(i + 1).padStart(2, "0")}`;
@@ -58,9 +61,9 @@ export function BookingCalendar({ slots, timezone, selected, onSelect, disabled,
         </div>
       </div>
       <div className={styles.times}>
-        <p className={styles.label}>{selectedDay ? dayLabel(selectedDay) : "Available times"}</p>
-        {status || (!selectedDay && <p className={styles.hint}>There are no available times to select.</p>)}
-        <div className={styles.timeGrid} role="group" aria-label="Choose a time">
+        <p className={styles.label}>{selectedDay ? dayLabel(selectedDay) : t("Available times")}</p>
+        {status || (!selectedDay && <p className={styles.hint}>{t("There are no available times to select.")}</p>)}
+        <div className={styles.timeGrid} role="group" aria-label={t("Choose a time")}>
           {(byDay.get(selectedDay) ?? []).map(slot => <button type="button" key={slot.id} className={styles.time} disabled={disabled} aria-pressed={selected?.id === slot.id} onClick={() => onSelect(slot)}>{timeLabel(slot.startsAt)}<span>{Math.round((Date.parse(slot.endsAt) - Date.parse(slot.startsAt)) / 60000)} min</span></button>)}
         </div>
       </div>

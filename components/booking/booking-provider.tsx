@@ -3,10 +3,16 @@
 import { createContext, useContext, useState, type ComponentPropsWithRef, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import styles from "./booking.module.css";
+import { useLanguage } from "@/components/language-provider";
+
+function BookingLoading() {
+  const { t } = useLanguage();
+  return <div className={styles.loading} role="status">{t("Opening booking…")}</div>;
+}
 
 const BookingFlow = dynamic(() => import("./booking-flow"), {
   ssr: false,
-  loading: () => <div className={styles.loading} role="status">Opening booking…</div>,
+  loading: BookingLoading,
 });
 const BookingContext = createContext<((opener?: HTMLElement) => void) | null>(null);
 

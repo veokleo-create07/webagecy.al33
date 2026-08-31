@@ -1,0 +1,5 @@
+.switcher { display: inline-flex; align-items: center; flex-shrink: 0; color: #a4a79f; font-size: .7rem; letter-spacing: .02em; }
+.switcher button { min-height: 44px; padding: 0 .35rem; background: none; border: 0; color: inherit; font: inherit; cursor: pointer; }
+.switcher button[aria-pressed="true"] { color: #f2f0e9; }
+.switcher button:focus-visible { outline: 1px solid currentColor; outline-offset: -2px; border-radius: 4px; }
+.switcher span { opacity: .4; }

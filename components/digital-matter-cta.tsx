@@ -1,6 +1,7 @@
 "use client";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { BookingLink } from "@/components/booking/booking-provider";
+import { useLanguage } from "@/components/language-provider";
 
 import { type CSSProperties, type PointerEvent, useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -60,6 +61,7 @@ function GlassFragment({ fragment, index }: { fragment: Fragment; index: number 
 }
 
 export function FinalCTA() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -196,9 +198,9 @@ export function FinalCTA() {
       </div>
 
       <div ref={contentRef} className="final-cta__content magnetic-cta__content">
-        <p className="final-cta__eyebrow">Ready to build?</p>
-        <h2 id="contact-title">Premium websites that move businesses forward.</h2>
-        <p className="final-cta__subline">Strategy, design and development crafted to turn strong businesses into stronger digital brands.</p>
+        <p className="final-cta__eyebrow">{t("Ready to build?")}</p>
+        <h2 id="contact-title">{t("Premium websites that move businesses forward.")}</h2>
+        <p className="final-cta__subline">{t("Strategy, design and development crafted to turn strong businesses into stronger digital brands.")}</p>
         <BookingLink
           ref={buttonRef}
           className="final-cta__button magnetic-cta__button"
@@ -209,7 +211,7 @@ export function FinalCTA() {
           }}
           style={{ "--lens-x": "50%", "--lens-y": "20%" } as CSSProperties}
         >
-          <span>Book a discovery call</span><span aria-hidden="true"><ArrowIcon /></span>
+          <span>{t("Book a discovery call")}</span><span aria-hidden="true"><ArrowIcon /></span>
         </BookingLink>
       </div>
     </section>

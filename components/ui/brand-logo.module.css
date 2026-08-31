@@ -1,0 +1,20 @@
+.logo {
+  position: relative;
+  display: block;
+  width: 58px;
+  aspect-ratio: 58 / 38;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Crop the transparent padding, keeping the existing approved mark intact. */
+.logo img {
+  position: absolute;
+  max-width: none;
+  width: 127.586%;
+  height: auto;
+  left: -18.966%;
+  top: -44.737%;
+}
+
+.footer { width: clamp(120px, 16vw, 220px); }

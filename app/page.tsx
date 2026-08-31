@@ -1,3 +1,5 @@
+"use client";
+import { useLanguage } from "@/components/language-provider";
 import { FoundationReveal } from "@/components/foundation-reveal";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { BookingLink } from "@/components/booking/booking-provider";
@@ -8,6 +10,7 @@ import { FinalCTA } from "@/components/digital-matter-cta";
 import Footer1 from "@/components/ui/footer-section-1";
 
 export default function Home() {
+  const { t } = useLanguage();
   return (
     <main id="top">
       <FoundationReveal />
@@ -24,20 +27,20 @@ export default function Home() {
 
           <div className="hero__content">
             <h1 id="hero-title" className="hero__headline" data-intro>
-              <span>We build websites that get</span>
-              <span>businesses taken seriously.</span>
+              <span>{t("We build websites that get")}</span>
+              <span>{t("businesses taken seriously.")}</span>
             </h1>
 
             <p className="hero__intro" data-intro>
-              High-converting websites for ambitious businesses across Albania &amp; Kosovo.
+              {t("High-converting websites for ambitious businesses across Albania & Kosovo.")}
             </p>
 
             <div className="hero__actions" data-intro>
               <BookingLink className="hero__primary">
-                Book a discovery call <span aria-hidden="true"><ArrowIcon /></span>
+                {t("Book a discovery call")} <span aria-hidden="true"><ArrowIcon /></span>
               </BookingLink>
               <a className="hero__secondary" href="#work">
-                View our work <span aria-hidden="true"><ArrowIcon direction="down" /></span>
+                {t("View our work")} <span aria-hidden="true"><ArrowIcon direction="down" /></span>
               </a>
             </div>
           </div>

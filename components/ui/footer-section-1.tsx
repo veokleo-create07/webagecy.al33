@@ -1,6 +1,8 @@
 "use client";
 
 import { SocialCloud } from "@/components/ui/footer-section-1-utils/social-cloud";
+import { BrandLogo } from "@/components/ui/brand-logo";
+import { LanguageSwitcher, useLanguage } from "@/components/language-provider";
 import { motion, useReducedMotion, type Variants } from "motion/react";
 
 const navigation = [
@@ -10,6 +12,7 @@ const navigation = [
 ];
 
 export default function Footer1() {
+  const { t } = useLanguage();
   const reduceMotion = useReducedMotion();
 
   const containerVariants: Variants = {
@@ -39,20 +42,15 @@ export default function Footer1() {
         className="mx-auto mb-14 flex w-full max-w-[1440px] flex-col items-center gap-9 px-5 text-center sm:mb-16 sm:gap-10 sm:px-8"
       >
         <motion.div variants={itemVariants} className="flex flex-col items-center">
-          <p
-            className="whitespace-nowrap text-[clamp(3.2rem,10.5vw,10rem)] font-normal leading-[0.82] tracking-[-0.067em] text-[#f2f0e9]"
-            style={{ fontFamily: '"Aspekta", var(--font-inter-tight), "Arial Narrow", Arial, sans-serif' }}
-          >
-            KREU WEB
-          </p>
+          <BrandLogo size="footer" />
           <p className="mt-7 text-[0.8rem] font-normal uppercase tracking-[0.09em] text-white/55 sm:mt-9 sm:text-[0.72rem] sm:tracking-[0.12em] sm:text-white/35">
-            Web design · Development · Digital presence
+            {t("Web design · Development · Digital presence")}
           </p>
         </motion.div>
 
         <motion.nav
           variants={itemVariants}
-          aria-label="Footer navigation"
+          aria-label={t("Footer navigation")}
           className="relative z-10 flex flex-wrap justify-center gap-x-2 gap-y-2 text-sm font-normal sm:gap-x-3 sm:text-[0.95rem]"
         >
           {navigation.map(item => (
@@ -63,7 +61,7 @@ export default function Footer1() {
               whileHover={reduceMotion ? undefined : { y: -2 }}
               whileTap={reduceMotion ? undefined : { scale: .97 }}
             >
-              <span className="relative z-10">{item.label}</span>
+              <span className="relative z-10">{t(item.label)}</span>
               <motion.span
                 aria-hidden="true"
                 className="absolute inset-0 -z-0 rounded-full border border-white/10 bg-white/[0.045]"
@@ -77,6 +75,7 @@ export default function Footer1() {
 
         <motion.div variants={itemVariants} className="flex flex-col items-center gap-5">
           <SocialCloud />
+          <LanguageSwitcher />
           <a
             href="mailto:hello@kreuweb.com"
             className="text-sm text-white/60 sm:text-white/42 transition-colors duration-300 hover:text-white/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/45"
@@ -99,8 +98,8 @@ export default function Footer1() {
         viewport={{ once: true }}
         variants={itemVariants}
       >
-        <p>© {new Date().getFullYear()} Kreu Web. All rights reserved.</p>
-        <p>Websites built to move businesses forward.</p>
+        <p>© {new Date().getFullYear()} Kreu Web. {t("All rights reserved.")}</p>
+        <p>{t("Websites built to move businesses forward.")}</p>
       </motion.div>
     </footer>
   );

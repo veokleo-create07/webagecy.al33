@@ -1,6 +1,7 @@
 "use client";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { BookingLink } from "@/components/booking/booking-provider";
+import { useLanguage } from "@/components/language-provider";
 
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
@@ -43,19 +44,21 @@ const projects = [
 ] as const;
 
 function NovaConcept() {
+  const { t } = useLanguage();
   return (
     <div className="demo-concept-site demo-concept-nova">
-      <img loading="lazy" decoding="async" src="/portfolio/nova-detail.jpg" alt="Contemporary luxury residence architecture" />
+      <img loading="lazy" decoding="async" src="/portfolio/nova-detail.jpg" alt={t("Contemporary luxury residence architecture")} />
       <div className="demo-concept-shade" />
-      <header><b>Park &amp; Stone</b><nav><span>Residences</span><span>Architecture</span><span>Neighbourhood</span></nav><span>Private viewings <ArrowIcon inline /></span></header>
-      <div className="demo-nova-hero"><p>Private residences · Tirana</p><h3>Life, framed<br />by architecture.</h3><span>Explore availability <ArrowIcon direction="down-right" inline /></span></div>
-      <div className="demo-nova-detail"><img loading="lazy" decoding="async" src="/portfolio/nova-main.jpg" alt="" /><span>Residence 04<br />Three bedrooms · 186 m²</span></div>
-      <div className="demo-nova-status"><span>Now selling</span><span>Completion · Autumn 2027</span></div>
+      <header><b>Park &amp; Stone</b><nav><span>{t("Residences")}</span><span>{t("Architecture")}</span><span>{t("Neighbourhood")}</span></nav><span>{t("Private viewings")} <ArrowIcon inline /></span></header>
+      <div className="demo-nova-hero"><p>{t("Private residences · Tirana")}</p><h3>{t("Life, framed")}<br />{t("by architecture.")}</h3><span>{t("Explore availability")} <ArrowIcon direction="down-right" inline /></span></div>
+      <div className="demo-nova-detail"><img loading="lazy" decoding="async" src="/portfolio/nova-main.jpg" alt="" /><span>{t("Residence 04")}<br />{t("Three bedrooms · 186 m²")}</span></div>
+      <div className="demo-nova-status"><span>{t("Now selling")}</span><span>{t("Completion · Autumn 2027")}</span></div>
     </div>
   );
 }
 
 function StillConcept() {
+  const { t } = useLanguage();
   return (
     <div className={appStyles.scene}>
       <img
@@ -65,7 +68,7 @@ function StillConcept() {
         sizes="auto, (max-width: 768px) 100vw, 90vw"
         width={1536}
         height={1024}
-        alt="Still focus and planning app on a graphite smartphone in a softly lit charcoal workspace"
+        alt={t("Still focus and planning app on a graphite smartphone in a softly lit charcoal workspace")}
         loading="lazy"
         decoding="async"
       />
@@ -74,38 +77,41 @@ function StillConcept() {
 }
 
 function LumeConcept() {
+  const { t } = useLanguage();
   return (
     <div className="demo-concept-site demo-concept-lume">
-      <header><b>Westside°</b><nav><span>Treatments</span><span>Doctors</span><span>Philosophy</span></nav><span>Book a consultation <ArrowIcon inline /></span></header>
-      <div className="demo-lume-copy"><span>Skin intelligence · Tirana</span><h3>Results you see.<br /><i>Restraint you feel.</i></h3><p>Doctor-led aesthetic medicine designed around skin health, natural expression, and long-term confidence.</p><b>Meet your skin <ArrowIcon direction="right" inline /></b></div>
-      <div className="demo-lume-main"><img loading="lazy" decoding="async" src="/portfolio/lume-portrait.jpg" alt="Portrait focused on natural skin" /></div>
-      <div className="demo-lume-detail"><img loading="lazy" decoding="async" src="/portfolio/lume-detail.jpg" alt="" /><span>Precision peel<br />45 min · From €120</span></div>
+      <header><b>Westside°</b><nav><span>{t("Treatments")}</span><span>{t("Doctors")}</span><span>{t("Philosophy")}</span></nav><span>{t("Book a consultation")} <ArrowIcon inline /></span></header>
+      <div className="demo-lume-copy"><span>{t("Skin intelligence · Tirana")}</span><h3>{t("Results you see.")}<br /><i>{t("Restraint you feel.")}</i></h3><p>{t("Doctor-led aesthetic medicine designed around skin health, natural expression, and long-term confidence.")}</p><b>{t("Meet your skin")} <ArrowIcon direction="right" inline /></b></div>
+      <div className="demo-lume-main"><img loading="lazy" decoding="async" src="/portfolio/lume-portrait.jpg" alt={t("Portrait focused on natural skin")} /></div>
+      <div className="demo-lume-detail"><img loading="lazy" decoding="async" src="/portfolio/lume-detail.jpg" alt="" /><span>{t("Precision peel")}<br />{t("45 min · From €120")}</span></div>
     </div>
   );
 }
 
 function NoirConcept() {
+  const { t } = useLanguage();
   return (
     <div className="demo-concept-site demo-concept-noir">
-      <img loading="lazy" decoding="async" className="demo-noir-image" src="/portfolio/noir-main-2.jpg" alt="Contemporary fine dining room" />
+      <img loading="lazy" decoding="async" className="demo-noir-image" src="/portfolio/noir-main-2.jpg" alt={t("Contemporary fine dining room")} />
       <div className="demo-concept-shade" />
-      <header><span>Menu &nbsp; Cellar &nbsp; Story</span><b>The Oak House</b><span>Reserve a table <ArrowIcon inline /></span></header>
-      <div className="demo-noir-copy"><p>Tirana · Dinner, Tuesday—Sunday</p><h3>The night<br /><i>has a flavour.</i></h3><span>Discover the menu <ArrowIcon direction="right" inline /></span></div>
-      <div className="demo-noir-detail"><img loading="lazy" decoding="async" src="/portfolio/noir-main.jpg" alt="" /><span>Chef’s table<br />Eight seasonal courses</span></div>
-      <div className="demo-noir-hours"><span>Rruga e Durrësit, Tirana</span><span>18:30 — Late</span></div>
+      <header><span>{t("Menu   Cellar   Story")}</span><b>The Oak House</b><span>{t("Reserve a table")} <ArrowIcon inline /></span></header>
+      <div className="demo-noir-copy"><p>{t("Tirana · Dinner, Tuesday—Sunday")}</p><h3>{t("The night")}<br /><i>{t("has a flavour.")}</i></h3><span>{t("Discover the menu")} <ArrowIcon direction="right" inline /></span></div>
+      <div className="demo-noir-detail"><img loading="lazy" decoding="async" src="/portfolio/noir-main.jpg" alt="" /><span>{t("Chef’s table")}<br />{t("Eight seasonal courses")}</span></div>
+      <div className="demo-noir-hours"><span>{t("Rruga e Durrësit, Tirana")}</span><span>{t("18:30 — Late")}</span></div>
     </div>
   );
 }
 
 function VelorConcept() {
+  const { t } = useLanguage();
   return (
     <div className="demo-concept-site demo-concept-velor">
-      <img loading="lazy" decoding="async" className="demo-velor-image" src="/portfolio/velor-main.jpg" alt="Black performance car in motion" />
+      <img loading="lazy" decoding="async" className="demo-velor-image" src="/portfolio/velor-main.jpg" alt={t("Black performance car in motion")} />
       <div className="demo-concept-shade" />
-      <header><b>First Class Rentals</b><nav><span>Fleet</span><span>Membership</span><span>Destinations</span></nav><span>Reserve <ArrowIcon inline /></span></header>
-      <div className="demo-velor-copy"><p>Porsche Panamera Turbo · Tirana</p><h3>Performance,<br />on your terms.</h3><span>Configure your drive <ArrowIcon direction="right" inline /></span></div>
-      <div className="demo-velor-specs"><span>550 PS</span><span>0—100 · 3.8 sec</span><span>From €680 / day</span><span>24 / 7 concierge</span></div>
-      <div className="demo-velor-detail"><img loading="lazy" decoding="async" src="/portfolio/velor-detail-2.jpg" alt="" /><span>Also available<br />Bugatti Chiron</span></div>
+      <header><b>First Class Rentals</b><nav><span>{t("Fleet")}</span><span>{t("Membership")}</span><span>{t("Destinations")}</span></nav><span>{t("Reserve")} <ArrowIcon inline /></span></header>
+      <div className="demo-velor-copy"><p>{t("Porsche Panamera Turbo · Tirana")}</p><h3>{t("Performance,")}<br />{t("on your terms.")}</h3><span>{t("Configure your drive")} <ArrowIcon direction="right" inline /></span></div>
+      <div className="demo-velor-specs"><span>550 PS</span><span>0—100 · 3.8 sec</span><span>{t("From €680 / day")}</span><span>{t("24 / 7 concierge")}</span></div>
+      <div className="demo-velor-detail"><img loading="lazy" decoding="async" src="/portfolio/velor-detail-2.jpg" alt="" /><span>{t("Also available")}<br />Bugatti Chiron</span></div>
     </div>
   );
 }
@@ -119,6 +125,7 @@ const concepts = {
 };
 
 function RentalMotion({ suspended }: { suspended: boolean }) {
+  const { t } = useLanguage();
   const scene = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [paused, setPaused] = useState(false);
@@ -145,16 +152,16 @@ function RentalMotion({ suspended }: { suspended: boolean }) {
       <div className={styles.motionScene} aria-hidden="true">
         <img className={styles.motionCar} src="/portfolio/velor-main.jpg" alt="" loading="lazy" decoding="async" />
         <span className={styles.motionBrand}>First Class / Rentals</span>
-        <div className={styles.motionType}>First class.<br /><i>Every mile.</i></div>
+        <div className={styles.motionType}>{t("First class.")}<br /><i>{t("Every mile.")}</i></div>
         <div className={styles.motionRail}><span /></div>
         <div className={styles.motionInterface}>
-          <span>Your next drive</span><span>Explore the fleet <ArrowIcon inline /></span>
+          <span>{t("Your next drive")}</span><span>{t("Explore the fleet")} <ArrowIcon inline /></span>
         </div>
       </div>
       <button
         className={styles.pause}
         type="button"
-        aria-label={paused ? "Play First Class motion" : "Pause First Class motion"}
+        aria-label={t(paused ? "Play First Class motion" : "Pause First Class motion")}
         aria-pressed={paused}
         onClick={() => setPaused(value => !value)}
       >
@@ -165,6 +172,7 @@ function RentalMotion({ suspended }: { suspended: boolean }) {
 }
 
 export function SelectedWork() {
+  const { t } = useLanguage();
   const showcase = useRef<HTMLElement>(null);
   const [active, setActive] = useState<(typeof projects)[number] | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -240,7 +248,7 @@ export function SelectedWork() {
   }, [active]);
 
   return (
-    <section ref={showcase} className={styles.showcase} id="work" aria-label="Selected website concepts">
+    <section ref={showcase} className={styles.showcase} id="work" aria-label={t("Selected website concepts")}>
       <div className={styles.composition}>
         {projects.map((project, index) => {
           const Concept = concepts[project.slug];
@@ -272,12 +280,12 @@ export function SelectedWork() {
                 </div>
                 <div className={styles.caption}>
                   <h3 id={`work-${project.slug}`}>{project.name}</h3>
-                  <p id={`category-${project.slug}`}>{project.category}</p>
+                  <p id={`category-${project.slug}`}>{t(project.category)}</p>
                 </div>
                 <button
                   className={styles.projectTrigger}
                   type="button"
-                  aria-label={`Preview ${project.name} — ${project.category}`}
+                  aria-label={`${t("Preview")} ${project.name} — ${t(project.category)}`}
                   aria-haspopup="dialog"
                   onClick={event => {
                     trigger.current = event.currentTarget;
@@ -291,8 +299,8 @@ export function SelectedWork() {
           );
         })}
         <BookingLink className={styles.callTile}>
-          <span className={styles.callEyebrow}>Your next chapter</span>
-          <span className={styles.callLabel}>Book a discovery call <span aria-hidden="true"><ArrowIcon /></span></span>
+          <span className={styles.callEyebrow}>{t("Your next chapter")}</span>
+          <span className={styles.callLabel}>{t("Book a discovery call")} <span aria-hidden="true"><ArrowIcon /></span></span>
         </BookingLink>
       </div>
 
@@ -314,17 +322,17 @@ export function SelectedWork() {
           <>
             <div className={styles.modalHeader}>
               <div>
-                <p>{active.category} · Design concept</p>
+                <p>{t(active.category)} · {t("Design concept")}</p>
                 <h2 id="project-preview-title">{active.name}</h2>
               </div>
               <button ref={closeButton} className={styles.close} type="button" onClick={() => dialog.current?.close()}>
-                Close <span aria-hidden="true">×</span>
+                {t("Close")} <span aria-hidden="true">×</span>
               </button>
             </div>
             <div className={styles.modalMedia} aria-hidden="true">
               <div className={conceptStyles.preview}><ActiveConcept /></div>
             </div>
-            <p className={styles.modalDescription} id="project-preview-description">{active.description}</p>
+            <p className={styles.modalDescription} id="project-preview-description">{t(active.description)}</p>
           </>
         )}
       </dialog>
