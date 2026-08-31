@@ -7,6 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./selected-work.module.css";
 import conceptStyles from "./project-concepts.module.css";
+import appStyles from "./mobile-app-concept.module.css";
 
 const projects = [
   {
@@ -17,9 +18,9 @@ const projects = [
   },
   {
     slug: "maison",
-    name: "The Mercer Shop",
-    category: "Luxury E-commerce",
-    description: "A fashion-led storefront where editorial desire becomes effortless commerce.",
+    name: "Still",
+    category: "Mobile App / Software",
+    description: "A considered mobile app concept for focused work, daily planning, and a little more clarity.",
   },
   {
     slug: "lume",
@@ -54,15 +55,20 @@ function NovaConcept() {
   );
 }
 
-function MaisonConcept() {
+function StillConcept() {
   return (
-    <div className="demo-concept-site demo-concept-maison">
-      <header><span>Shop · Editorial · About</span><b>The Mercer Shop</b><span>Search &nbsp; Bag (0)</span></header>
-      <div className="demo-maison-wordmark">MERCER</div>
-      <div className="demo-maison-main"><img loading="lazy" decoding="async" src="/portfolio/maison-detail.jpg" alt="Fashion editorial in Milan" /><span>Issue 06 · Milano</span></div>
-      <div className="demo-maison-copy"><p>The city edition</p><h3>Poise in<br /><i>motion.</i></h3><span>Discover the story <ArrowIcon direction="right" inline /></span></div>
-      <div className="demo-maison-detail"><img loading="lazy" decoding="async" src="/portfolio/maison-main.jpg" alt="" /><span>New season · Look 14</span></div>
-      <div className="demo-maison-product"><span>Silk column coat</span><span>Exclusive online</span><span>€ 1,280</span></div>
+    <div className={appStyles.scene}>
+      <img
+        className={appStyles.image}
+        src="/portfolio/still-app.webp"
+        srcSet="/portfolio/still-app-small.webp 640w, /portfolio/still-app.webp 1536w"
+        sizes="auto, (max-width: 768px) 100vw, 90vw"
+        width={1536}
+        height={1024}
+        alt="Still focus and planning app on a graphite smartphone in a softly lit charcoal workspace"
+        loading="lazy"
+        decoding="async"
+      />
     </div>
   );
 }
@@ -106,7 +112,7 @@ function VelorConcept() {
 
 const concepts = {
   nova: NovaConcept,
-  maison: MaisonConcept,
+  maison: StillConcept,
   lume: LumeConcept,
   noir: NoirConcept,
   velor: VelorConcept,
