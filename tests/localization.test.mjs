@@ -39,6 +39,10 @@ test("conversion copy is consistent without changing booking revenue values", ()
   assert.equal(translate("sq", "Book discovery call"), "Rezervo një konsultë");
   assert.equal(translate("sq", "Book a consultation"), "Rezervo një konsultë");
   for (const range of ["Under €10k", "€10k–€50k", "€50k–€100k", "€100k+"]) assert.ok(Object.hasOwn(albanian, range));
+  assert.deepEqual(
+    ["Under €10k", "€10k–€50k", "€50k–€100k", "€100k+"].map(range => translate("sq", range)),
+    ["Nën €10.000", "€10.000–€50.000", "€50.000–€100.000", "€100.000+"],
+  );
 });
 
 test("Albanian calendar formatting localizes dates without changing timezone", () => {
