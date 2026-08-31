@@ -30,7 +30,7 @@ export default function Footer1() {
   };
 
   return (
-    <footer className="w-full overflow-hidden bg-[#090a09] py-12 text-[#f2f0e9] sm:py-16">
+    <footer className="w-full overflow-hidden bg-[#090a09] pt-8 pb-12 text-[#f2f0e9] sm:pt-12 sm:pb-16">
       <motion.div
         initial="hidden"
         whileInView="visible"

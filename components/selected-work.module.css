@@ -1,7 +1,11 @@
 .showcase {
   position: relative;
-  padding-block: 1.25rem 2.5rem;
+  padding-block: .75rem 2rem;
   scroll-margin-top: 7rem;
+}
+
+@media (max-width: 767px) {
+  .showcase { padding-bottom: 1.5rem; }
 }
 
 .composition {
