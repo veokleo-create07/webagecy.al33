@@ -303,12 +303,6 @@
   border-bottom: 1px solid rgba(63, 69, 65, 0.28);
 }
 
-.preview :global(.demo-lume-treatments span::after) {
-  content: "↗";
-  font-family: var(--font-sans);
-  font-size: 0.62em;
-}
-
 .preview :global(.demo-concept-noir) {
   background: #100f0e;
   color: #f0e7d8;

@@ -1,4 +1,5 @@
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from "react";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
 
 type SharedProps = {
   children: React.ReactNode;
@@ -26,7 +27,7 @@ export function Button(props: LinkButtonProps | NativeButtonProps) {
       <a className={classes} {...linkProps}>
         <span>{children}</span>
         <span aria-hidden="true" className="button__arrow">
-          ↗
+          <ArrowIcon />
         </span>
       </a>
     );
@@ -44,7 +45,7 @@ export function Button(props: LinkButtonProps | NativeButtonProps) {
     <button className={classes} {...buttonProps}>
       <span>{children}</span>
       <span aria-hidden="true" className="button__arrow">
-        ↗
+        <ArrowIcon />
       </span>
     </button>
   );

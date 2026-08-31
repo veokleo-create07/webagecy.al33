@@ -1,4 +1,5 @@
 "use client";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
 
 import { useEffect, useRef, useState } from "react";
 import styles from "./site-header.module.css";
@@ -170,7 +171,7 @@ export function SiteHeader() {
             className={`header-shimmer ${styles.opticalControl}`}
             onClick={goToContact}
           >
-            <span className={styles.controlLabel}><span>Start a project</span><span className="header-shimmer__arrow" aria-hidden="true">↗</span></span>
+            <span className={styles.controlLabel}><span>Start a project</span><span className="header-shimmer__arrow" aria-hidden="true"><ArrowIcon /></span></span>
           </button>
 
           <button

@@ -1064,12 +1064,6 @@ a:focus-visible {
   border-bottom: 1px solid rgba(63, 69, 65, 0.28);
 }
 
-.lume-treatments span::after {
-  content: "↗";
-  font-family: var(--font-sans);
-  font-size: 0.62em;
-}
-
 .concept-noir {
   background: #100f0e;
   color: #f0e7d8;

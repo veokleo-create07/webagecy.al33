@@ -1,4 +1,5 @@
 "use client";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
 
 import { type CSSProperties, type PointerEvent, useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -208,7 +209,7 @@ export function FinalCTA() {
           }}
           style={{ "--lens-x": "50%", "--lens-y": "20%" } as CSSProperties}
         >
-          <span>Book a call</span><span aria-hidden="true">↗</span>
+          <span>Book a call</span><span aria-hidden="true"><ArrowIcon /></span>
         </a>
       </div>
     </section>

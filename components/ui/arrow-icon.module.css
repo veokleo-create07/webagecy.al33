@@ -1,0 +1,19 @@
+.icon {
+  display: inline-block;
+  width: max(16px, 1em);
+  height: max(16px, 1em);
+  flex-shrink: 0;
+  vertical-align: -0.125em;
+}
+
+@media (max-width: 767px) {
+  .icon {
+    width: clamp(16px, 1em, 20px);
+    height: clamp(16px, 1em, 20px);
+  }
+}
+
+.icon.inline {
+  width: 1em;
+  height: 1em;
+}

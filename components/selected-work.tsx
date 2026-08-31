@@ -1,4 +1,5 @@
 "use client";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
 
 import { useEffect, useRef, useState } from "react";
 import styles from "./selected-work.module.css";
@@ -42,8 +43,8 @@ function NovaConcept() {
     <div className="demo-concept-site demo-concept-nova">
       <img loading="lazy" decoding="async" src="/portfolio/nova-detail.jpg" alt="Contemporary luxury residence architecture" />
       <div className="demo-concept-shade" />
-      <header><b>Park &amp; Stone</b><nav><span>Residences</span><span>Architecture</span><span>Neighbourhood</span></nav><span>Private viewings ↗</span></header>
-      <div className="demo-nova-hero"><p>Private residences · Tirana</p><h3>Life, framed<br />by architecture.</h3><span>Explore availability ↘</span></div>
+      <header><b>Park &amp; Stone</b><nav><span>Residences</span><span>Architecture</span><span>Neighbourhood</span></nav><span>Private viewings <ArrowIcon inline /></span></header>
+      <div className="demo-nova-hero"><p>Private residences · Tirana</p><h3>Life, framed<br />by architecture.</h3><span>Explore availability <ArrowIcon direction="down-right" inline /></span></div>
       <div className="demo-nova-detail"><img loading="lazy" decoding="async" src="/portfolio/nova-main.jpg" alt="" /><span>Residence 04<br />Three bedrooms · 186 m²</span></div>
       <div className="demo-nova-status"><span>Now selling</span><span>Completion · Autumn 2027</span></div>
     </div>
@@ -56,7 +57,7 @@ function MaisonConcept() {
       <header><span>Shop · Editorial · About</span><b>The Mercer Shop</b><span>Search &nbsp; Bag (0)</span></header>
       <div className="demo-maison-wordmark">MERCER</div>
       <div className="demo-maison-main"><img loading="lazy" decoding="async" src="/portfolio/maison-detail.jpg" alt="Fashion editorial in Milan" /><span>Issue 06 · Milano</span></div>
-      <div className="demo-maison-copy"><p>The city edition</p><h3>Poise in<br /><i>motion.</i></h3><span>Discover the story →</span></div>
+      <div className="demo-maison-copy"><p>The city edition</p><h3>Poise in<br /><i>motion.</i></h3><span>Discover the story <ArrowIcon direction="right" inline /></span></div>
       <div className="demo-maison-detail"><img loading="lazy" decoding="async" src="/portfolio/maison-main.jpg" alt="" /><span>New season · Look 14</span></div>
       <div className="demo-maison-product"><span>Silk column coat</span><span>Exclusive online</span><span>€ 1,280</span></div>
     </div>
@@ -66,8 +67,8 @@ function MaisonConcept() {
 function LumeConcept() {
   return (
     <div className="demo-concept-site demo-concept-lume">
-      <header><b>Westside°</b><nav><span>Treatments</span><span>Doctors</span><span>Philosophy</span></nav><span>Book a consultation ↗</span></header>
-      <div className="demo-lume-copy"><span>Skin intelligence · Tirana</span><h3>Results you see.<br /><i>Restraint you feel.</i></h3><p>Doctor-led aesthetic medicine designed around skin health, natural expression, and long-term confidence.</p><b>Meet your skin →</b></div>
+      <header><b>Westside°</b><nav><span>Treatments</span><span>Doctors</span><span>Philosophy</span></nav><span>Book a consultation <ArrowIcon inline /></span></header>
+      <div className="demo-lume-copy"><span>Skin intelligence · Tirana</span><h3>Results you see.<br /><i>Restraint you feel.</i></h3><p>Doctor-led aesthetic medicine designed around skin health, natural expression, and long-term confidence.</p><b>Meet your skin <ArrowIcon direction="right" inline /></b></div>
       <div className="demo-lume-main"><img loading="lazy" decoding="async" src="/portfolio/lume-portrait.jpg" alt="Portrait focused on natural skin" /></div>
       <div className="demo-lume-detail"><img loading="lazy" decoding="async" src="/portfolio/lume-detail.jpg" alt="" /><span>Precision peel<br />45 min · From €120</span></div>
     </div>
@@ -79,8 +80,8 @@ function NoirConcept() {
     <div className="demo-concept-site demo-concept-noir">
       <img loading="lazy" decoding="async" className="demo-noir-image" src="/portfolio/noir-main-2.jpg" alt="Contemporary fine dining room" />
       <div className="demo-concept-shade" />
-      <header><span>Menu &nbsp; Cellar &nbsp; Story</span><b>The Oak House</b><span>Reserve a table ↗</span></header>
-      <div className="demo-noir-copy"><p>Tirana · Dinner, Tuesday—Sunday</p><h3>The night<br /><i>has a flavour.</i></h3><span>Discover the menu →</span></div>
+      <header><span>Menu &nbsp; Cellar &nbsp; Story</span><b>The Oak House</b><span>Reserve a table <ArrowIcon inline /></span></header>
+      <div className="demo-noir-copy"><p>Tirana · Dinner, Tuesday—Sunday</p><h3>The night<br /><i>has a flavour.</i></h3><span>Discover the menu <ArrowIcon direction="right" inline /></span></div>
       <div className="demo-noir-detail"><img loading="lazy" decoding="async" src="/portfolio/noir-main.jpg" alt="" /><span>Chef’s table<br />Eight seasonal courses</span></div>
       <div className="demo-noir-hours"><span>Rruga e Durrësit, Tirana</span><span>18:30 — Late</span></div>
     </div>
@@ -92,8 +93,8 @@ function VelorConcept() {
     <div className="demo-concept-site demo-concept-velor">
       <img loading="lazy" decoding="async" className="demo-velor-image" src="/portfolio/velor-main.jpg" alt="Black performance car in motion" />
       <div className="demo-concept-shade" />
-      <header><b>First Class Rentals</b><nav><span>Fleet</span><span>Membership</span><span>Destinations</span></nav><span>Reserve ↗</span></header>
-      <div className="demo-velor-copy"><p>Porsche Panamera Turbo · Tirana</p><h3>Performance,<br />on your terms.</h3><span>Configure your drive →</span></div>
+      <header><b>First Class Rentals</b><nav><span>Fleet</span><span>Membership</span><span>Destinations</span></nav><span>Reserve <ArrowIcon inline /></span></header>
+      <div className="demo-velor-copy"><p>Porsche Panamera Turbo · Tirana</p><h3>Performance,<br />on your terms.</h3><span>Configure your drive <ArrowIcon direction="right" inline /></span></div>
       <div className="demo-velor-specs"><span>550 PS</span><span>0—100 · 3.8 sec</span><span>From €680 / day</span><span>24 / 7 concierge</span></div>
       <div className="demo-velor-detail"><img loading="lazy" decoding="async" src="/portfolio/velor-detail-2.jpg" alt="" /><span>Also available<br />Bugatti Chiron</span></div>
     </div>
@@ -138,7 +139,7 @@ function RentalMotion({ suspended }: { suspended: boolean }) {
         <div className={styles.motionType}>First class.<br /><i>Every mile.</i></div>
         <div className={styles.motionRail}><span /></div>
         <div className={styles.motionInterface}>
-          <span>Your next drive</span><span>Explore the fleet ↗</span>
+          <span>Your next drive</span><span>Explore the fleet <ArrowIcon inline /></span>
         </div>
       </div>
       <button
@@ -216,14 +217,14 @@ export function SelectedWork() {
                   setActive(project);
                 }}
               >
-                <span className={styles.view} aria-hidden="true">↗</span>
+                <span className={styles.view} aria-hidden="true"><ArrowIcon /></span>
               </button>
             </article>
           );
         })}
         <a className={styles.callTile} href="mailto:hello@kreuweb.com">
           <span className={styles.callEyebrow}>Your next chapter</span>
-          <span className={styles.callLabel}>Book a call <span aria-hidden="true">↗</span></span>
+          <span className={styles.callLabel}>Book a call <span aria-hidden="true"><ArrowIcon /></span></span>
         </a>
       </div>
 

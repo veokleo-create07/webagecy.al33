@@ -1,3 +1,5 @@
+import { ArrowIcon } from "@/components/ui/arrow-icon";
+
 const services = [
   "Strategy & Design",
   "Web Development",
@@ -17,7 +19,7 @@ export function Services() {
           </p>
           <a className="services__cta" href="mailto:hello@kreuweb.com">
             <span>Book a call</span>
-            <span aria-hidden="true">↗</span>
+            <span aria-hidden="true"><ArrowIcon /></span>
           </a>
         </header>
 

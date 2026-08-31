@@ -1,4 +1,5 @@
 import { FoundationReveal } from "@/components/foundation-reveal";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { SiteHeader } from "@/components/site-header";
 import { SelectedWork } from "@/components/selected-work";
 import { Services } from "@/components/services";
@@ -32,10 +33,10 @@ export default function Home() {
 
             <div className="hero__actions" data-intro>
               <a className="hero__primary" href="#contact">
-                Start a project <span aria-hidden="true">↗</span>
+                Start a project <span aria-hidden="true"><ArrowIcon /></span>
               </a>
               <a className="hero__secondary" href="#work">
-                View our work <span aria-hidden="true">↓</span>
+                View our work <span aria-hidden="true"><ArrowIcon direction="down" /></span>
               </a>
             </div>
           </div>
