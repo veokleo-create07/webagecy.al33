@@ -170,7 +170,7 @@ export function SiteHeader() {
             aria-haspopup="dialog"
             onClick={goToContact}
           >
-            <span className={styles.controlLabel}><span>Start a project</span><span className="header-shimmer__arrow" aria-hidden="true"><ArrowIcon /></span></span>
+            <span className={styles.controlLabel}><span>Book a discovery call</span><span className="header-shimmer__arrow" aria-hidden="true"><ArrowIcon /></span></span>
           </button>
 
           <button
@@ -213,7 +213,7 @@ export function SiteHeader() {
               tabIndex={isMenuOpen ? 0 : -1}
               onClick={goToContact}
             >
-              <span className={styles.controlLabel}><span>Start a project</span></span>
+              <span className={styles.controlLabel}><span>Book a discovery call</span></span>
             </button>
           </nav>
         </div>

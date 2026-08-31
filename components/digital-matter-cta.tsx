@@ -209,7 +209,7 @@ export function FinalCTA() {
           }}
           style={{ "--lens-x": "50%", "--lens-y": "20%" } as CSSProperties}
         >
-          <span>Book a call</span><span aria-hidden="true"><ArrowIcon /></span>
+          <span>Book a discovery call</span><span aria-hidden="true"><ArrowIcon /></span>
         </BookingLink>
       </div>
     </section>

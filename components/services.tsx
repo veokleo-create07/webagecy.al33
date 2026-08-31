@@ -19,7 +19,7 @@ export function Services() {
             built to move your business forward.
           </p>
           <BookingLink className="services__cta">
-            <span>Book a call</span>
+            <span>Book a discovery call</span>
             <span aria-hidden="true"><ArrowIcon /></span>
           </BookingLink>
         </header>

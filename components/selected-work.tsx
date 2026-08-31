@@ -225,7 +225,7 @@ export function SelectedWork() {
         })}
         <BookingLink className={styles.callTile}>
           <span className={styles.callEyebrow}>Your next chapter</span>
-          <span className={styles.callLabel}>Book a call <span aria-hidden="true"><ArrowIcon /></span></span>
+          <span className={styles.callLabel}>Book a discovery call <span aria-hidden="true"><ArrowIcon /></span></span>
         </BookingLink>
       </div>
 

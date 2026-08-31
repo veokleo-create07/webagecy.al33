@@ -34,7 +34,7 @@ export default function Home() {
 
             <div className="hero__actions" data-intro>
               <BookingLink className="hero__primary">
-                Start a project <span aria-hidden="true"><ArrowIcon /></span>
+                Book a discovery call <span aria-hidden="true"><ArrowIcon /></span>
               </BookingLink>
               <a className="hero__secondary" href="#work">
                 View our work <span aria-hidden="true"><ArrowIcon direction="down" /></span>
