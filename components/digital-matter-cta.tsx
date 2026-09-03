@@ -44,7 +44,9 @@ const ctaConfig = {
   tablet: { distance: .7, rotation: .55, depth: .45, blur: 1, from: .82, arc: .65 },
   mobile: { distance: .54, rotation: .22, depth: .12, blur: 0, from: .68, arc: .35 },
 } as const;
-const mobileFragments = new Set([0, 1, 2, 4, 7, 8, 9, 11]);
+const desktopFragments = new Set([0, 1, 2, 3, 4, 7, 8, 9, 11]);
+const tabletFragments = new Set([0, 1, 2, 4, 7, 8, 9, 11]);
+const mobileFragments = new Set([0, 1, 2, 7, 8, 9]);
 
 function GlassFragment({ fragment, index }: { fragment: Fragment; index: number }) {
   return (
@@ -64,81 +66,107 @@ type AppLanguage = "sq" | "en";
 
 const appInterface = {
   en: {
-    overview: "Operations",
+    overview: "Operations overview",
     greeting: "Good morning, Erion",
-    live: "Live",
-    active: "Active shipments",
-    activeNote: "3 require attention",
-    onTime: "On time",
+    date: "Tuesday, 3 September",
+    operational: "Network stable",
+    active: "Active deliveries",
+    activeNote: "Across 7 active routes",
     delivered: "Delivered today",
-    exceptions: "Exceptions",
-    performance: "Route performance",
-    sevenDays: "Last 7 days",
+    delayed: "Delayed",
+    fleet: "Fleet available",
+    performance: "On-time performance",
+    sevenDays: "This week",
     recent: "Recent shipments",
     viewAll: "View all",
-    routes: ["Tirana / Prishtina", "Durrës / Skopje", "Bari / Tirana"],
+    routes: ["Tirana · Prishtina", "Durrës · Skopje", "Milan · Tirana"],
+    etas: ["14:30", "17:45", "Tomorrow"],
+    drivers: ["AK", "EL", "NM"],
     transit: "In transit",
     scheduled: "Scheduled",
+    etaShort: "ETA",
+    navigation: ["Dashboard", "Shipments", "Fleet", "Clients", "Profile"],
     detail: "Shipment details",
+    liveTracking: "Live tracking",
+    updated: "Updated 1 min ago",
     from: "From",
     to: "To",
     eta: "Estimated arrival",
     progress: "Route progress",
-    cargo: "Cargo details",
-    cargoType: "FTL · 3 pallets",
+    cargo: "Cargo",
+    cargoType: "3 EUR pallets",
     weight: "Weight",
     weightValue: "1,240 kg",
     volume: "Volume",
     volumeValue: "8.6 m³",
-    service: "Service",
-    priority: "Priority",
+    service: "Service level",
+    priority: "Express",
+    vehicle: "Vehicle",
+    vehicleValue: "Actros · 01-482-KS",
     driver: "Assigned driver",
     client: "Client",
-    contact: "Contact driver",
+    timeline: "Checkpoints",
+    pickedUp: "Collected in Tirana",
+    border: "Border cleared",
+    arriving: "Arrival in Prishtina",
+    contact: "Contact client",
     arrival: "24 May · 14:30",
     origin: "Tirana, AL",
     destination: "Prishtina, XK",
   },
   sq: {
-    overview: "Operacionet",
+    overview: "Përmbledhja e operacioneve",
     greeting: "Mirëmëngjes, Erion",
-    live: "Live",
+    date: "E martë, 3 shtator",
+    operational: "Rrjeti stabil",
     active: "Dërgesa aktive",
-    activeNote: "3 kërkojnë vëmendje",
-    onTime: "Në orar",
+    activeNote: "Në 7 linja aktive",
     delivered: "Dorëzuar sot",
-    exceptions: "Me vonesë",
-    performance: "Performanca e rrugëve",
-    sevenDays: "7 ditët e fundit",
+    delayed: "Me vonesë",
+    fleet: "Flota e lirë",
+    performance: "Dërgesa në orar",
+    sevenDays: "Këtë javë",
     recent: "Dërgesat e fundit",
     viewAll: "Shiko të gjitha",
-    routes: ["Tiranë / Prishtinë", "Durrës / Shkup", "Bari / Tiranë"],
-    transit: "Në tranzit",
+    routes: ["Tiranë · Prishtinë", "Durrës · Shkup", "Milano · Tiranë"],
+    etas: ["14:30", "17:45", "Nesër"],
+    drivers: ["AK", "EL", "NM"],
+    transit: "Në transit",
     scheduled: "Planifikuar",
+    etaShort: "Mbërrin",
+    navigation: ["Përmbledhje", "Dërgesat", "Flota", "Klientët", "Profili"],
     detail: "Detajet e dërgesës",
+    liveTracking: "Gjurmim live",
+    updated: "Përditësuar 1 min më parë",
     from: "Nga",
     to: "Në",
     eta: "Mbërritja e parashikuar",
     progress: "Ecuria e rrugës",
-    cargo: "Detajet e ngarkesës",
-    cargoType: "FTL · 3 paleta",
+    cargo: "Ngarkesa",
+    cargoType: "3 paleta EUR",
     weight: "Pesha",
     weightValue: "1.240 kg",
     volume: "Volumi",
     volumeValue: "8,6 m³",
-    service: "Shërbimi",
-    priority: "Prioritar",
+    service: "Niveli i shërbimit",
+    priority: "Express",
+    vehicle: "Automjeti",
+    vehicleValue: "Actros · 01-482-KS",
     driver: "Korrieri",
     client: "Klienti",
-    contact: "Kontakto korrierin",
+    timeline: "Pikat e rrugës",
+    pickedUp: "Marrë në Tiranë",
+    border: "Kaloi kufirin",
+    arriving: "Mbërritja në Prishtinë",
+    contact: "Kontakto klientin",
     arrival: "24 maj · 14:30",
     origin: "Tiranë, AL",
     destination: "Prishtinë, XK",
   },
 } as const;
 
-function MeridianMark() {
-  return <span className="meridian-mark"><i />MERIDIAN</span>;
+function NexaWordmark() {
+  return <span className="nexa-wordmark">NEXA</span>;
 }
 
 function PhoneStatusBar() {
@@ -158,11 +186,11 @@ function DashboardScreen({ language }: { language: AppLanguage }) {
       <PhoneStatusBar />
       <div className="logistics-app__header">
         <span className="logistics-app__menu" aria-hidden="true"><i /><i /></span>
-        <MeridianMark />
-        <span className="logistics-app__alert" aria-hidden="true" />
+        <NexaWordmark />
+        <span className="logistics-app__profile">EK</span>
       </div>
       <div className="logistics-app__body">
-        <div className="logistics-title-row"><span><small>{copy.overview}</small><h3>{copy.greeting}</h3></span><i>{copy.live}</i></div>
+        <div className="logistics-title-row"><span><small>{copy.date}</small><h3>{copy.greeting}</h3></span><i>{copy.operational}</i></div>
         <section className="logistics-metric">
           <div><span>{copy.active}</span><strong>24</strong><small>{copy.activeNote}</small></div>
           <div className="logistics-trend">
@@ -175,20 +203,27 @@ function DashboardScreen({ language }: { language: AppLanguage }) {
           </div>
         </section>
         <div className="logistics-summary">
-          <span><small>{copy.onTime}</small><strong>96.8%</strong><i>+1.7%</i></span>
           <span><small>{copy.delivered}</small><strong>48</strong><i>+12</i></span>
-          <span><small>{copy.exceptions}</small><strong>3</strong><i>−2</i></span>
+          <span><small>{copy.delayed}</small><strong>3</strong><i>−2</i></span>
+          <span><small>{copy.fleet}</small><strong>18/22</strong><i>82%</i></span>
         </div>
-        <div className="logistics-performance-heading"><span>{copy.performance}</span><small>{copy.sevenDays}</small></div>
+        <div className="logistics-performance-heading"><span>{copy.performance}</span><small>96.8% · {copy.sevenDays}</small></div>
         <div className="logistics-performance"><i style={{ height: "44%" }} /><i style={{ height: "63%" }} /><i style={{ height: "54%" }} /><i style={{ height: "78%" }} /><i style={{ height: "71%" }} /><i style={{ height: "89%" }} /><i style={{ height: "94%" }} /></div>
         <div className="logistics-list-heading"><span>{copy.recent}</span><small>{copy.viewAll}</small></div>
         <div className="logistics-shipments">
-          {["MRD 4812", "MRD 4809", "MRD 4804"].map((id, index) => (
-            <div key={id}><span className="shipment-route"><b>{id}</b><small>{copy.routes[index]}</small></span><span className={`shipment-status shipment-status--${index === 1 ? "scheduled" : "transit"}`}><i />{index === 1 ? copy.scheduled : copy.transit}</span></div>
+          {["NXA-2841", "NXA-2837", "NXA-2829"].map((id, index) => (
+            <div key={id}>
+              <span className="shipment-route"><b>{id}</b><small>{copy.routes[index]}</small></span>
+              <span className="shipment-eta"><small>{copy.etaShort}</small><b>{copy.etas[index]}</b></span>
+              <span className="shipment-driver">{copy.drivers[index]}</span>
+              <span className={`shipment-status shipment-status--${index === 1 ? "scheduled" : "transit"}`}><i />{index === 1 ? copy.scheduled : copy.transit}</span>
+            </div>
           ))}
         </div>
       </div>
-      <div className="logistics-tabbar" aria-hidden="true"><i className="is-active" /><i /><i className="is-add">+</i><i /><i /></div>
+      <div className="logistics-tabbar">
+        {copy.navigation.map((item, index) => <span key={item} className={index === 0 ? "is-active" : ""}><i data-icon={index} />{item}</span>)}
+      </div>
     </div>
   );
 }
@@ -198,16 +233,21 @@ function TrackingScreen({ language }: { language: AppLanguage }) {
   return (
     <div className="logistics-app logistics-app--tracking">
       <PhoneStatusBar />
-      <div className="tracking-heading"><span aria-hidden="true">‹</span><MeridianMark /><i /></div>
-      <div className="tracking-title"><span><small>{copy.detail}</small><strong>MRD 4812</strong></span><i><b />{copy.transit}</i></div>
+      <div className="tracking-heading"><span aria-hidden="true">‹</span><NexaWordmark /><i aria-hidden="true"><b /><b /><b /></i></div>
+      <div className="tracking-title"><span><small>{copy.detail}</small><strong>NXA-2841</strong></span><i><b />{copy.transit}</i></div>
       <div className="tracking-map">
         <span className="tracking-map__grid" />
+        <div className="tracking-map__meta"><span><i />{copy.liveTracking}</span><small>{copy.updated}</small></div>
         <svg viewBox="0 0 220 190" aria-hidden="true">
-          <path className="tracking-map__roads" d="M-8 38 C42 52 65 24 109 40 S178 78 230 48 M12 122 C53 105 90 132 126 112 S181 81 226 100 M54 -4 C61 43 37 82 58 126 S86 167 76 196 M170 -8 C146 36 170 68 154 111 S130 159 144 198" />
-          <path className="tracking-map__route" d="M27 155 L67 139 L65 109 L111 109 L113 70 L164 70 L180 39" />
+          <path className="tracking-map__roads" d="M-8 38 C42 52 65 24 109 40 S178 78 230 48 M12 122 C53 105 90 132 126 112 S181 81 226 100 M-5 164 C41 143 69 177 112 156 S179 121 230 139 M54 -4 C61 43 37 82 58 126 S86 167 76 196 M170 -8 C146 36 170 68 154 111 S130 159 144 198 M102 -8 C93 41 112 75 94 118 S97 173 112 199" />
+          <path className="tracking-map__route-shadow" d="M27 155 C48 150 66 139 65 111 S92 101 111 92 S112 70 137 68 S164 56 180 39" />
+          <path className="tracking-map__route" d="M27 155 C48 150 66 139 65 111 S92 101 111 92 S112 70 137 68 S164 56 180 39" />
           <circle cx="27" cy="155" r="5" /><circle cx="180" cy="39" r="5" />
-          <rect x="103" y="91" width="18" height="18" rx="4" transform="rotate(16 112 100)" />
+          <circle className="tracking-map__checkpoint" cx="66" cy="111" r="3" /><circle className="tracking-map__checkpoint" cx="137" cy="68" r="3" />
+          <rect x="102" y="83" width="18" height="18" rx="4" transform="rotate(16 111 92)" />
         </svg>
+        <span className="tracking-map__city tracking-map__city--from">{copy.origin.split(",")[0]}</span>
+        <span className="tracking-map__city tracking-map__city--to">{copy.destination.split(",")[0]}</span>
       </div>
       <div className="tracking-card">
         <div className="tracking-route"><span><small>{copy.from}</small><b>{copy.origin}</b></span><i aria-hidden="true"><svg viewBox="0 0 28 8"><path d="M1 4h24M21 1l4 3-4 3" /></svg></i><span><small>{copy.to}</small><b>{copy.destination}</b></span></div>
@@ -215,13 +255,19 @@ function TrackingScreen({ language }: { language: AppLanguage }) {
         <div className="tracking-progress"><i /></div>
         <div className="tracking-progress-label"><span>{copy.progress}</span><strong>73%</strong></div>
       </div>
-      <div className="tracking-details">
-        <div className="tracking-details__title"><strong>{copy.cargo}</strong><small>{copy.cargoType}</small></div>
+      <div className="tracking-specs">
+        <span><small>{copy.cargo}</small><b>{copy.cargoType}</b></span>
         <span><small>{copy.weight}</small><b>{copy.weightValue}</b></span>
         <span><small>{copy.volume}</small><b>{copy.volumeValue}</b></span>
         <span><small>{copy.service}</small><b>{copy.priority}</b></span>
+        <span className="tracking-specs__wide"><small>{copy.vehicle}</small><b>{copy.vehicleValue}</b></span>
+        <span className="tracking-specs__wide"><small>{copy.client}</small><b>Alba Trade</b></span>
       </div>
-      <div className="tracking-party"><span className="tracking-avatar">AK</span><span><small>{copy.driver}</small><b>Ardit Krasniqi</b></span><i><small>{copy.client}</small><b>Alba Trade</b></i></div>
+      <div className="tracking-party"><span className="tracking-avatar">AK</span><span><small>{copy.driver}</small><b>Ardit Krasniqi</b></span><i><b>4.9</b><small>184 trips</small></i></div>
+      <div className="tracking-timeline">
+        <strong>{copy.timeline}</strong>
+        <div><span className="is-done"><i /><b>{copy.pickedUp}</b><small>08:10</small></span><span className="is-current"><i /><b>{copy.border}</b><small>11:42</small></span><span><i /><b>{copy.arriving}</b><small>14:30</small></span></div>
+      </div>
       <div className="tracking-contact">{copy.contact}</div>
     </div>
   );
@@ -290,7 +336,7 @@ export function FinalCTA() {
             section.style.setProperty("--magnetic-glow", String(.025 + progress * .045));
             elements.forEach((element, index) => {
               const spec = fragments[index];
-              const visible = mode === "desktop" || (mode === "tablet" ? !spec.quiet : mobileFragments.has(index));
+              const visible = mode === "desktop" ? desktopFragments.has(index) : mode === "tablet" ? tabletFragments.has(index) : mobileFragments.has(index);
               if (!visible) {
                 element.style.opacity = "0";
                 return;
@@ -335,7 +381,7 @@ export function FinalCTA() {
               z: mode === "desktop" ? -34 + rearProgress * 10 : 0,
               rotateX: (mode === "desktop" ? -8 : -2) * (1 - rearProgress),
               rotateY: (mode === "desktop" ? -15 + rearProgress * 7 : -3 + rearProgress * 2),
-              rotateZ: mode === "desktop" ? 5.5 : 2.5,
+              rotateZ: mode === "desktop" ? 4 : 2,
               scale: .9 + rearProgress * .1,
             });
             if (frontPhone) gsap.set(frontPhone, {
@@ -345,7 +391,7 @@ export function FinalCTA() {
               z: mode === "desktop" ? 42 + frontProgress * 28 : 6,
               rotateX: (mode === "desktop" ? -10 + frontProgress * 8 : -2 + frontProgress),
               rotateY: (mode === "desktop" ? 17 - frontProgress * 12 : 4 - frontProgress * 2),
-              rotateZ: mode === "desktop" ? -4.25 : -2,
+              rotateZ: mode === "desktop" ? -3 : -1.5,
               scale: .88 + frontProgress * .12,
             });
             gsap.set(button, { opacity: buttonProgress, y: 12 * (1 - buttonProgress) });
