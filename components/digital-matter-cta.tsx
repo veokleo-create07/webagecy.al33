@@ -60,6 +60,87 @@ function GlassFragment({ fragment, index }: { fragment: Fragment; index: number 
   );
 }
 
+type AppLanguage = "sq" | "en";
+
+const appInterface = {
+  en: {
+    overview: "Operations",
+    greeting: "Good morning, Erion",
+    live: "Live",
+    active: "Active shipments",
+    activeNote: "3 require attention",
+    onTime: "On time",
+    delivered: "Delivered today",
+    exceptions: "Exceptions",
+    performance: "Route performance",
+    sevenDays: "Last 7 days",
+    recent: "Recent shipments",
+    viewAll: "View all",
+    routes: ["Tirana / Prishtina", "Durrës / Skopje", "Bari / Tirana"],
+    transit: "In transit",
+    scheduled: "Scheduled",
+    detail: "Shipment details",
+    from: "From",
+    to: "To",
+    eta: "Estimated arrival",
+    progress: "Route progress",
+    cargo: "Cargo details",
+    cargoType: "FTL · 3 pallets",
+    weight: "Weight",
+    weightValue: "1,240 kg",
+    volume: "Volume",
+    volumeValue: "8.6 m³",
+    service: "Service",
+    priority: "Priority",
+    driver: "Assigned driver",
+    client: "Client",
+    contact: "Contact driver",
+    arrival: "24 May · 14:30",
+    origin: "Tirana, AL",
+    destination: "Prishtina, XK",
+  },
+  sq: {
+    overview: "Operacionet",
+    greeting: "Mirëmëngjes, Erion",
+    live: "Live",
+    active: "Dërgesa aktive",
+    activeNote: "3 kërkojnë vëmendje",
+    onTime: "Në orar",
+    delivered: "Dorëzuar sot",
+    exceptions: "Me vonesë",
+    performance: "Performanca e rrugëve",
+    sevenDays: "7 ditët e fundit",
+    recent: "Dërgesat e fundit",
+    viewAll: "Shiko të gjitha",
+    routes: ["Tiranë / Prishtinë", "Durrës / Shkup", "Bari / Tiranë"],
+    transit: "Në tranzit",
+    scheduled: "Planifikuar",
+    detail: "Detajet e dërgesës",
+    from: "Nga",
+    to: "Në",
+    eta: "Mbërritja e parashikuar",
+    progress: "Ecuria e rrugës",
+    cargo: "Detajet e ngarkesës",
+    cargoType: "FTL · 3 paleta",
+    weight: "Pesha",
+    weightValue: "1.240 kg",
+    volume: "Volumi",
+    volumeValue: "8,6 m³",
+    service: "Shërbimi",
+    priority: "Prioritar",
+    driver: "Korrieri",
+    client: "Klienti",
+    contact: "Kontakto korrierin",
+    arrival: "24 maj · 14:30",
+    origin: "Tiranë, AL",
+    destination: "Prishtinë, XK",
+  },
+} as const;
+
+function MeridianMark() {
+  return <span className="meridian-mark"><i />MERIDIAN</span>;
+}
+
 function PhoneStatusBar() {
   return (
     <div className="logistics-statusbar">
@@ -70,32 +151,40 @@ function PhoneStatusBar() {
   );
 }
 
-function DashboardScreen() {
+function DashboardScreen({ language }: { language: AppLanguage }) {
+  const copy = appInterface[language];
   return (
     <div className="logistics-app logistics-app--dashboard">
       <PhoneStatusBar />
       <div className="logistics-app__header">
         <span className="logistics-app__menu" aria-hidden="true"><i /><i /></span>
-        <span className="logistics-app__mark">K.</span>
+        <MeridianMark />
         <span className="logistics-app__alert" aria-hidden="true" />
       </div>
       <div className="logistics-app__body">
-        <p className="logistics-kicker">Operations overview</p>
-        <h3>Good morning, Erion.</h3>
+        <div className="logistics-title-row"><span><small>{copy.overview}</small><h3>{copy.greeting}</h3></span><i>{copy.live}</i></div>
         <section className="logistics-metric">
-          <div><span>Active deliveries</span><strong>24</strong><small>↑ 18% today</small></div>
-          <svg viewBox="0 0 120 58" aria-hidden="true"><path d="M4 50 C22 47 25 33 39 35 S58 48 69 33 S89 25 96 18 S108 8 116 6" /></svg>
+          <div><span>{copy.active}</span><strong>24</strong><small>{copy.activeNote}</small></div>
+          <div className="logistics-trend">
+            <svg viewBox="0 0 132 68" aria-hidden="true">
+              <path className="logistics-chart-grid" d="M2 13 H130 M2 34 H130 M2 55 H130" />
+              <path className="logistics-chart-line" d="M4 55 C17 52 23 40 35 43 S53 53 65 37 S80 25 91 29 S106 17 116 16 S124 9 130 7" />
+              <circle cx="130" cy="7" r="3" />
+            </svg>
+            <span>+8.4%</span>
+          </div>
         </section>
-        <p className="logistics-section-label">Summary</p>
         <div className="logistics-summary">
-          <span><small>In transit</small><strong>16</strong><i>↑ 12%</i></span>
-          <span><small>Delivered</small><strong>48</strong><i>↑ 25%</i></span>
-          <span><small>Pending</small><strong>6</strong><i>↓ 8%</i></span>
+          <span><small>{copy.onTime}</small><strong>96.8%</strong><i>+1.7%</i></span>
+          <span><small>{copy.delivered}</small><strong>48</strong><i>+12</i></span>
+          <span><small>{copy.exceptions}</small><strong>3</strong><i>−2</i></span>
         </div>
-        <div className="logistics-list-heading"><span>Recent shipments</span><small>View all</small></div>
+        <div className="logistics-performance-heading"><span>{copy.performance}</span><small>{copy.sevenDays}</small></div>
+        <div className="logistics-performance"><i style={{ height: "44%" }} /><i style={{ height: "63%" }} /><i style={{ height: "54%" }} /><i style={{ height: "78%" }} /><i style={{ height: "71%" }} /><i style={{ height: "89%" }} /><i style={{ height: "94%" }} /></div>
+        <div className="logistics-list-heading"><span>{copy.recent}</span><small>{copy.viewAll}</small></div>
         <div className="logistics-shipments">
-          {["ALB2314", "ALB2313", "ALB2312"].map((id, index) => (
-            <div key={id}><span><b>#{id}</b><small>{index === 0 ? "Tirana → Prishtina" : index === 1 ? "Durrës → Skopje" : "Bari → Tirana"}</small></span><i>{index === 1 ? "Pending" : "In transit"}</i></div>
+          {["MRD 4812", "MRD 4809", "MRD 4804"].map((id, index) => (
+            <div key={id}><span className="shipment-route"><b>{id}</b><small>{copy.routes[index]}</small></span><span className={`shipment-status shipment-status--${index === 1 ? "scheduled" : "transit"}`}><i />{index === 1 ? copy.scheduled : copy.transit}</span></div>
           ))}
         </div>
       </div>
@@ -104,11 +193,13 @@ function DashboardScreen() {
   );
 }
 
-function TrackingScreen() {
+function TrackingScreen({ language }: { language: AppLanguage }) {
+  const copy = appInterface[language];
   return (
     <div className="logistics-app logistics-app--tracking">
       <PhoneStatusBar />
-      <div className="tracking-heading"><span aria-hidden="true">‹</span><strong>Shipment details</strong><i /></div>
+      <div className="tracking-heading"><span aria-hidden="true">‹</span><MeridianMark /><i /></div>
+      <div className="tracking-title"><span><small>{copy.detail}</small><strong>MRD 4812</strong></span><i><b />{copy.transit}</i></div>
       <div className="tracking-map">
         <span className="tracking-map__grid" />
         <svg viewBox="0 0 220 190" aria-hidden="true">
@@ -119,25 +210,24 @@ function TrackingScreen() {
         </svg>
       </div>
       <div className="tracking-card">
-        <div className="tracking-card__top"><strong>#ALB2314</strong><span>In transit</span></div>
-        <div className="tracking-route"><span><small>From</small><b>Tirana, AL</b></span><i>→</i><span><small>To</small><b>Prishtina, XK</b></span></div>
-        <div className="tracking-arrival"><small>Estimated arrival</small><strong>24 May 2026 · 14:30</strong></div>
+        <div className="tracking-route"><span><small>{copy.from}</small><b>{copy.origin}</b></span><i aria-hidden="true"><svg viewBox="0 0 28 8"><path d="M1 4h24M21 1l4 3-4 3" /></svg></i><span><small>{copy.to}</small><b>{copy.destination}</b></span></div>
+        <div className="tracking-arrival"><small>{copy.eta}</small><strong>{copy.arrival}</strong></div>
         <div className="tracking-progress"><i /></div>
-        <div className="tracking-progress-label"><span>Route progress</span><strong>73%</strong></div>
+        <div className="tracking-progress-label"><span>{copy.progress}</span><strong>73%</strong></div>
       </div>
       <div className="tracking-details">
-        <strong>Information</strong>
-        <span><small>Weight</small><b>1200 kg</b></span>
-        <span><small>Volume</small><b>2.4 m³</b></span>
-        <span><small>Service</small><b>Standard</b></span>
-        <span><small>Client</small><b>Alba Trade</b></span>
+        <div className="tracking-details__title"><strong>{copy.cargo}</strong><small>{copy.cargoType}</small></div>
+        <span><small>{copy.weight}</small><b>{copy.weightValue}</b></span>
+        <span><small>{copy.volume}</small><b>{copy.volumeValue}</b></span>
+        <span><small>{copy.service}</small><b>{copy.priority}</b></span>
       </div>
-      <div className="tracking-contact">Contact client</div>
+      <div className="tracking-party"><span className="tracking-avatar">AK</span><span><small>{copy.driver}</small><b>Ardit Krasniqi</b></span><i><small>{copy.client}</small><b>Alba Trade</b></i></div>
+      <div className="tracking-contact">{copy.contact}</div>
     </div>
   );
 }
 
-function PhoneDevice({ variant }: { variant: "front" | "rear" }) {
+function PhoneDevice({ variant, language }: { variant: "front" | "rear"; language: AppLanguage }) {
   return (
     <div className={`coded-phone-position coded-phone-position--${variant}`} data-phone={variant}>
       <div className={`coded-phone coded-phone--${variant}`}>
@@ -146,7 +236,7 @@ function PhoneDevice({ variant }: { variant: "front" | "rear" }) {
         <span className="coded-phone__button coded-phone__button--power" />
         <div className="coded-phone__rim">
           <div className="coded-phone__screen">
-            {variant === "front" ? <DashboardScreen /> : <TrackingScreen />}
+            {variant === "front" ? <DashboardScreen language={language} /> : <TrackingScreen language={language} />}
             <span className="coded-phone__screen-reflection" />
           </div>
         </div>
@@ -156,7 +246,7 @@ function PhoneDevice({ variant }: { variant: "front" | "rear" }) {
 }
 
 export function FinalCTA() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -360,8 +450,8 @@ export function FinalCTA() {
 
         <div ref={visualRef} className="magnetic-cta__visual" aria-hidden="true">
           <div ref={deviceStageRef} className="magnetic-device">
-            <PhoneDevice variant="rear" />
-            <PhoneDevice variant="front" />
+            <PhoneDevice variant="rear" language={language} />
+            <PhoneDevice variant="front" language={language} />
             <span className="magnetic-device__contact-shadow" />
             <span className="magnetic-device__reflection" />
           </div>
