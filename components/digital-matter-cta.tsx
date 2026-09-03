@@ -65,12 +65,16 @@ export function FinalCTA() {
   const sectionRef = useRef<HTMLElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const visualRef = useRef<HTMLDivElement>(null);
+  const deviceStageRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
     const content = contentRef.current;
-    if (!section || !content) return;
+    const visual = visualRef.current;
+    const button = buttonRef.current;
+    if (!section || !content || !visual || !button) return;
 
     gsap.registerPlugin(ScrollTrigger);
     const media = gsap.matchMedia();
@@ -124,8 +128,23 @@ export function FinalCTA() {
               path.style.opacity = String(local * (mode === "desktop" ? .28 : mode === "tablet" ? .2 : .12));
             });
 
-            const clarity = ease(clamp((progress - .08) / .7));
-            gsap.set(content, { opacity: .58 + clarity * .42, y: 12 * (1 - clarity), scale: .99 + clarity * .01 });
+            const copyProgress = ease(clamp((progress - .14) / .44));
+            const deviceProgress = ease(clamp((progress - .2) / .58));
+            const buttonProgress = ease(clamp((progress - .48) / .25));
+            gsap.set(content, {
+              opacity: copyProgress,
+              x: (mode === "desktop" ? -34 : 0) * (1 - copyProgress),
+              y: (mode === "desktop" ? 8 : 18) * (1 - copyProgress),
+            });
+            gsap.set(visual, {
+              opacity: deviceProgress,
+              x: (mode === "desktop" ? 76 : 0) * (1 - deviceProgress),
+              y: (mode === "desktop" ? 12 : 28) * (1 - deviceProgress),
+              rotateX: (mode === "desktop" ? -3.5 : -1) * (1 - deviceProgress),
+              rotateY: (mode === "desktop" ? 10 : 2) * (1 - deviceProgress),
+              scale: .92 + deviceProgress * .08,
+            });
+            gsap.set(button, { opacity: buttonProgress, y: 12 * (1 - buttonProgress) });
           };
 
           render(state.progress);
@@ -157,11 +176,16 @@ export function FinalCTA() {
 
   const handleFieldParallax = (event: PointerEvent<HTMLElement>) => {
     const field = fieldRef.current;
-    if (!field || !window.matchMedia("(min-width: 1025px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return;
+    const deviceStage = deviceStageRef.current;
+    if (!field || !deviceStage || !window.matchMedia("(min-width: 1025px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return;
     const x = (event.clientX / window.innerWidth - .5) * 7;
     const y = (event.clientY / window.innerHeight - .5) * 5;
     field.style.setProperty("--field-x", `${x}px`);
     field.style.setProperty("--field-y", `${y}px`);
+    deviceStage.style.setProperty("--device-rx", `${-y * .16}deg`);
+    deviceStage.style.setProperty("--device-ry", `${x * .18}deg`);
+    deviceStage.style.setProperty("--device-x", `${x * .38}px`);
+    deviceStage.style.setProperty("--device-y", `${y * .32}px`);
   };
 
   const handleLens = (event: PointerEvent<HTMLAnchorElement>) => {
@@ -182,6 +206,10 @@ export function FinalCTA() {
       onPointerLeave={() => {
         fieldRef.current?.style.setProperty("--field-x", "0px");
         fieldRef.current?.style.setProperty("--field-y", "0px");
+        deviceStageRef.current?.style.setProperty("--device-rx", "0deg");
+        deviceStageRef.current?.style.setProperty("--device-ry", "0deg");
+        deviceStageRef.current?.style.setProperty("--device-x", "0px");
+        deviceStageRef.current?.style.setProperty("--device-y", "0px");
       }}
     >
       <div className="magnetic-cta__atmosphere" aria-hidden="true" />
@@ -197,22 +225,37 @@ export function FinalCTA() {
         </div>
       </div>
 
-      <div ref={contentRef} className="final-cta__content magnetic-cta__content">
-        <p className="final-cta__eyebrow">{t("For the next stage.")}</p>
-        <h2 id="contact-title">{t("Make your business harder to ignore.")}</h2>
-        <p className="final-cta__subline">{t("A considered digital presence designed to consolidate trust, increase relevance and open new opportunities for the business.")}</p>
-        <BookingLink
-          ref={buttonRef}
-          className="final-cta__button magnetic-cta__button"
-          onPointerMove={handleLens}
-          onPointerLeave={() => {
-            buttonRef.current?.style.setProperty("--lens-x", "50%");
-            buttonRef.current?.style.setProperty("--lens-y", "20%");
-          }}
-          style={{ "--lens-x": "50%", "--lens-y": "20%" } as CSSProperties}
-        >
-          <span>{t("Book a discovery call")}</span><span aria-hidden="true"><ArrowIcon /></span>
-        </BookingLink>
+      <div className="magnetic-cta__layout">
+        <div ref={contentRef} className="final-cta__content magnetic-cta__content">
+          <p className="final-cta__eyebrow">{t("For the next stage.")}</p>
+          <h2 id="contact-title">{t("Make your business harder to ignore.")}</h2>
+          <p className="final-cta__subline">{t("A considered digital presence designed to consolidate trust, increase relevance and open new opportunities for the business.")}</p>
+          <BookingLink
+            ref={buttonRef}
+            className="final-cta__button magnetic-cta__button"
+            onPointerMove={handleLens}
+            onPointerLeave={() => {
+              buttonRef.current?.style.setProperty("--lens-x", "50%");
+              buttonRef.current?.style.setProperty("--lens-y", "20%");
+            }}
+            style={{ "--lens-x": "50%", "--lens-y": "20%" } as CSSProperties}
+          >
+            <span>{t("Book a discovery call")}</span><span aria-hidden="true"><ArrowIcon /></span>
+          </BookingLink>
+        </div>
+
+        <div ref={visualRef} className="magnetic-cta__visual" aria-hidden="true">
+          <div ref={deviceStageRef} className="magnetic-device">
+            <div className="magnetic-device__plane magnetic-device__plane--rear">
+              <img src="/cta/kreu-mobile-app.png" alt="" loading="lazy" decoding="async" />
+            </div>
+            <div className="magnetic-device__plane magnetic-device__plane--front">
+              <img src="/cta/kreu-mobile-app.png" alt="" loading="lazy" decoding="async" />
+            </div>
+            <span className="magnetic-device__contact-shadow" />
+            <span className="magnetic-device__reflection" />
+          </div>
+        </div>
       </div>
     </section>
   );

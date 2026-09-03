@@ -2344,8 +2344,8 @@ a:focus-visible {
   perspective: 1250px;
   transform: translate3d(var(--field-x), var(--field-y), 0);
   transition: transform 900ms var(--ease-out);
-  -webkit-mask-image: radial-gradient(ellipse 34% 43% at 50% 50%, transparent 0 56%, #000 76%);
-  mask-image: radial-gradient(ellipse 34% 43% at 50% 50%, transparent 0 56%, #000 76%);
+  -webkit-mask-image: radial-gradient(ellipse 29% 44% at 25% 50%, transparent 0 58%, #000 82%);
+  mask-image: radial-gradient(ellipse 29% 44% at 25% 50%, transparent 0 58%, #000 82%);
 }
 
 .magnetic-field__depth {
@@ -2460,18 +2460,120 @@ a:focus-visible {
   opacity: 0.65;
 }
 
-.magnetic-cta__content {
+.magnetic-cta__layout {
   position: relative;
   z-index: 8;
-  width: min(76vw, 72rem);
+  display: grid;
+  width: min(92vw, 96rem);
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  align-items: center;
+  gap: clamp(2rem, 4.5vw, 6rem);
+}
+
+.magnetic-cta__content {
+  width: 100%;
+  margin: 0;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .magnetic-cta__content h2 {
-  max-width: 12.5ch;
-  font-size: clamp(3.6rem, 6.7vw, 7.5rem);
+  max-width: 9.5ch;
+  font-size: clamp(3.4rem, 5vw, 6.5rem);
   font-weight: 400;
   letter-spacing: -0.068em;
   line-height: 0.88;
+}
+
+.magnetic-cta__content .final-cta__subline {
+  max-width: 31rem;
+  margin-right: 0;
+  margin-left: 0;
+  text-wrap: pretty;
+}
+
+.magnetic-cta__visual {
+  position: relative;
+  z-index: 7;
+  width: 100%;
+  min-width: 0;
+  perspective: 1500px;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+.magnetic-device {
+  --device-rx: 0deg;
+  --device-ry: 0deg;
+  --device-x: 0px;
+  --device-y: 0px;
+  position: relative;
+  width: min(59vw, 57rem);
+  aspect-ratio: 1280 / 852;
+  margin-inline: auto;
+  transform: translate3d(var(--device-x), var(--device-y), 0) rotateX(var(--device-rx)) rotateY(var(--device-ry));
+  transform-style: preserve-3d;
+  transition: transform 1000ms var(--ease-out);
+  will-change: transform;
+  mix-blend-mode: screen;
+  -webkit-mask-image: radial-gradient(ellipse 76% 82% at 50% 50%, #000 46%, rgba(0, 0, 0, 0.94) 68%, transparent 100%);
+  mask-image: radial-gradient(ellipse 76% 82% at 50% 50%, #000 46%, rgba(0, 0, 0, 0.94) 68%, transparent 100%);
+}
+
+.magnetic-device__plane {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.magnetic-device__plane img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  user-select: none;
+}
+
+.magnetic-device__plane--rear {
+  z-index: 1;
+  clip-path: polygon(50% 6%, 90% 6%, 91% 100%, 48% 100%);
+  transform: translate3d(1.2%, 1.5%, -28px) rotateY(-1.2deg);
+  filter: drop-shadow(0 2rem 2.4rem rgba(0, 0, 0, 0.44));
+}
+
+.magnetic-device__plane--front {
+  z-index: 2;
+  clip-path: polygon(16% 0, 61% 0, 61% 100%, 10% 100%);
+  transform: translateZ(42px) rotateY(0.8deg);
+  filter: drop-shadow(0 2.7rem 3.2rem rgba(0, 0, 0, 0.54));
+}
+
+.magnetic-device__contact-shadow {
+  position: absolute;
+  z-index: 0;
+  right: 8%;
+  bottom: 2%;
+  left: 10%;
+  height: 12%;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.64);
+  filter: blur(24px);
+  transform: translateZ(-55px);
+}
+
+.magnetic-device__reflection {
+  position: absolute;
+  z-index: 3;
+  top: 9%;
+  right: 15%;
+  width: 44%;
+  height: 52%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.025);
+  filter: blur(22px);
+  transform: translateZ(56px) rotate(-17deg);
+  pointer-events: none;
 }
 
 .magnetic-cta__button {
@@ -3763,6 +3865,16 @@ a:focus-visible {
   .workflow-node p {
     font-size: clamp(0.9rem, 2vw, 1rem);
   }
+
+  .magnetic-cta__layout {
+    width: min(92vw, 64rem);
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(1rem, 3vw, 2.5rem);
+  }
+
+  .magnetic-device {
+    width: min(58vw, 42rem);
+  }
 }
 
 @media (max-width: 767px) {
@@ -3770,6 +3882,66 @@ a:focus-visible {
   .final-cta__subline { font-size: 1rem; }
   .services { scroll-margin-top: 1.5rem; }
   .services__pin { padding-top: 4rem; }
+
+  .magnetic-cta {
+    min-height: 100svh;
+    padding: 2.75rem 1.1rem 2rem;
+  }
+
+  .magnetic-cta__layout {
+    width: min(91vw, 35rem);
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(0.45rem, 1.5vh, 0.9rem);
+  }
+
+  .magnetic-cta__content {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+  }
+
+  .magnetic-cta__content h2 {
+    max-width: 12ch;
+    font-size: clamp(2.55rem, 8.8vw, 3.65rem);
+  }
+
+  .magnetic-cta__content .final-cta__subline {
+    max-width: 31rem;
+    margin-inline: auto;
+    font-size: 0.88rem;
+  }
+
+  .magnetic-cta__visual {
+    width: 100%;
+    max-width: 34rem;
+    margin-inline: auto;
+  }
+
+  .magnetic-device {
+    width: min(100%, 55svh);
+  }
+
+  .magnetic-cta__button {
+    margin-top: 1rem;
+  }
+
+  .magnetic-device__plane--rear {
+    transform: translate3d(0.6%, 0.8%, -8px);
+  }
+
+  .magnetic-device__plane--front {
+    transform: translateZ(10px);
+  }
+
+  .magnetic-device__reflection {
+    filter: blur(14px);
+    transform: translateZ(12px) rotate(-17deg);
+  }
+
+  .magnetic-field {
+    -webkit-mask-image: radial-gradient(ellipse 48% 37% at 50% 35%, transparent 0 61%, #000 84%);
+    mask-image: radial-gradient(ellipse 48% 37% at 50% 35%, transparent 0 61%, #000 84%);
+  }
 }
 
 /* Short touch viewports do not pin the CTA; let its content set the height.
