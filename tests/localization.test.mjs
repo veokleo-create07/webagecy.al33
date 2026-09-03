@@ -49,12 +49,12 @@ test("approved Albanian brand copy remains exact", () => {
   const approved = {
     "Build a business": "Ndërto një biznes",
     "people take seriously.": "që merret seriozisht.",
-    "We strengthen how your business is seen, trusted and chosen — so it can grow with more confidence.": "E forcojmë mënyrën si biznesi juaj shihet, fitohet besimi dhe zgjidhet — që të rritet me më shumë siguri.",
+    "We articulate your business with greater clarity, authority and credibility — so it is perceived at the level it deserves.": "E artikulojmë biznesin tuaj me më shumë qartësi, autoritet dhe besueshmëri — që të perceptohet në nivelin që meriton.",
     "View our work": "Shiko projektet",
     "Web Development": "Web Development",
-    "Everything should move the business forward.": "Çdo gjë duhet ta çojë biznesin përpara.",
-    "More trust. More attention. More growth.": "Më shumë besim. Më shumë vëmendje. Më shumë rritje.",
-    "Ready for what’s next?": "Gati për hapin tjetër?",
+    "Every decision should serve the business.": "Çdo vendim duhet t’i shërbejë biznesit.",
+    "Authority. Differentiation. Growth.": "Autoritet. Diferencim. Rritje.",
+    "For the next stage.": "Për etapën e radhës.",
     "Make your business harder to ignore.": "Bëje biznesin tënd të pamundur për t’u anashkaluar.",
     "Do you currently have a website?": "A keni aktualisht një website?",
     "What’s your current monthly business revenue?": "Sa është xhiroja mujore e biznesit tuaj?",
@@ -70,10 +70,10 @@ test("approved Albanian brand copy remains exact", () => {
 
 test("outcome-focused English and Albanian copy remains paired", () => {
   const approved = {
-    "Strategy, design, technology and growth working together to make your business stronger, clearer and easier to choose.": "Strategjia, dizajni, teknologjia dhe rritja punojnë së bashku për ta bërë biznesin më të fortë, më të qartë dhe më të lehtë për t’u zgjedhur.",
-    "Build the kind of presence that earns trust, creates demand and opens the door to bigger opportunities.": "Ndërto një prezencë që fiton besim, krijon interes dhe hap mundësi më të mëdha për biznesin.",
+    "Integrated strategy, design and technology for clearer positioning, sharper differentiation and greater competitive relevance.": "Strategji, dizajn dhe teknologji të integruara për një pozicionim më të qartë, diferencim më të dallueshëm dhe relevancë më të lartë në treg.",
+    "A considered digital presence designed to consolidate trust, increase relevance and open new opportunities for the business.": "Një prezencë digjitale e menduar për të konsoliduar besimin, për të rritur relevancën dhe për të hapur mundësi të reja për biznesin.",
     "Design · Development · Growth · Software": "Dizajn · Zhvillim · Rritje · Software",
-    "Built for businesses that want to go further.": "Për biznese që duan të shkojnë më tej.",
+    "For businesses defined by ambition.": "Për biznese me ambicie.",
     "A few details. Then we talk about where your business can go next.": "Disa detaje. Pastaj flasim për hapin e radhës të biznesit tuaj.",
   };
   for (const [english, shqip] of Object.entries(approved)) {

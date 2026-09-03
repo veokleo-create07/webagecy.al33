@@ -16,9 +16,9 @@ export function Services() {
     <section className="services" id="expertise" aria-labelledby="services-title">
       <div className="services__pin">
         <header className="services__header">
-          <h2 id="services-title">{t("Everything should move the business forward.")}</h2>
+          <h2 id="services-title">{t("Every decision should serve the business.")}</h2>
           <p>
-            {t("Strategy, design, technology and growth working together to make your business stronger, clearer and easier to choose.")}
+            {t("Integrated strategy, design and technology for clearer positioning, sharper differentiation and greater competitive relevance.")}
           </p>
           <BookingLink className="services__cta">
             <span>{t("Book a discovery call")}</span>
@@ -39,7 +39,7 @@ export function Services() {
               {index === services.length - 1 && (
                 <div className="workflow-node workflow-node--outcome" data-workflow-node>
                   <i aria-hidden="true" />
-                  <p>{t("More trust. More attention. More growth.")}</p>
+                  <p>{t("Authority. Differentiation. Growth.")}</p>
                 </div>
               )}
             </div>

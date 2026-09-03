@@ -99,7 +99,7 @@ export default function Footer1() {
         variants={itemVariants}
       >
         <p>© {new Date().getFullYear()} Kreu Web. {t("All rights reserved.")}</p>
-        <p>{t("Built for businesses that want to go further.")}</p>
+        <p>{t("For businesses defined by ambition.")}</p>
       </motion.div>
     </footer>
   );

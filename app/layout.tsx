@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const language = (await cookies()).get(languageCookie)?.value === "en" ? "en" : "sq";
   return {
     title: translate(language, "KREU WEB — Built for progress"),
-    description: translate(language, "We strengthen how your business is seen, trusted and chosen — so it can grow with more confidence."),
+    description: translate(language, "We articulate your business with greater clarity, authority and credibility — so it is perceived at the level it deserves."),
   };
 }
 
