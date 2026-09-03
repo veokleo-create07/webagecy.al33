@@ -149,7 +149,7 @@ export async function createBooking(input: BookingInput, requestKey: string): Pr
         method: "POST",
         body: JSON.stringify({ eventTypeId, start: normalized.start,
           attendee: { name: normalized.fullName, email: normalized.email, timeZone: normalized.timezone, language: "en" },
-          bookingFieldsResponses: { title: `Discovery call — ${normalized.businessName}` },
+          bookingFieldsResponses: { title: `Discovery call: ${normalized.businessName}` },
           metadata: metadataFor(normalized, requestToken, payloadToken),
           // Never bypass Cal's conflict checks, availability windows or limits.
           allowConflicts: false, allowBookingOutOfBounds: false,

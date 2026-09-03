@@ -49,7 +49,7 @@ test("approved Albanian brand copy remains exact", () => {
   const approved = {
     "Build a business": "Ndërto një biznes",
     "people take seriously.": "që merret seriozisht.",
-    "We articulate your business with greater clarity, authority and credibility — so it is perceived at the level it deserves.": "E artikulojmë biznesin tuaj me më shumë qartësi, autoritet dhe besueshmëri — që të perceptohet në nivelin që meriton.",
+    "We articulate your business with greater clarity, authority and credibility. It is perceived at the level it deserves.": "E artikulojmë biznesin tuaj me më shumë qartësi, autoritet dhe besueshmëri. Kështu perceptohet në nivelin që meriton.",
     "View our work": "Shiko projektet",
     "Web Development": "Web Development",
     "Every decision should serve the business.": "Çdo vendim duhet t’i shërbejë biznesit.",

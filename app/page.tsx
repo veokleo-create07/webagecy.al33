@@ -32,7 +32,7 @@ export default function Home() {
             </h1>
 
             <p className="hero__intro" data-intro>
-              {t("We articulate your business with greater clarity, authority and credibility — so it is perceived at the level it deserves.")}
+              {t("We articulate your business with greater clarity, authority and credibility. It is perceived at the level it deserves.")}
             </p>
 
             <div className="hero__actions" data-intro>

@@ -39,7 +39,7 @@ const projects = [
     slug: "velor",
     name: "First Class Rentals",
     category: "Car Rental",
-    description: "A performance-driven booking experience for exceptional cars.",
+    description: "A booking experience engineered around performance and exceptional cars.",
   },
 ] as const;
 
@@ -81,7 +81,7 @@ function LumeConcept() {
   return (
     <div className="demo-concept-site demo-concept-lume">
       <header><b>Westside°</b><nav><span>{t("Treatments")}</span><span>{t("Doctors")}</span><span>{t("Philosophy")}</span></nav><span>{t("Book a consultation")} <ArrowIcon inline /></span></header>
-      <div className="demo-lume-copy"><span>{t("Skin intelligence · Tirana")}</span><h3>{t("Results you see.")}<br /><i>{t("Restraint you feel.")}</i></h3><p>{t("Doctor-led aesthetic medicine designed around skin health, natural expression, and long-term confidence.")}</p><b>{t("Meet your skin")} <ArrowIcon direction="right" inline /></b></div>
+      <div className="demo-lume-copy"><span>{t("Skin intelligence · Tirana")}</span><h3>{t("Results you see.")}<br /><i>{t("Restraint you feel.")}</i></h3><p>{t("Aesthetic medicine led by doctors and designed around skin health, natural expression and lasting confidence.")}</p><b>{t("Meet your skin")} <ArrowIcon direction="right" inline /></b></div>
       <div className="demo-lume-main"><img loading="lazy" decoding="async" src="/portfolio/lume-portrait.jpg" alt={t("Portrait focused on natural skin")} /></div>
       <div className="demo-lume-detail"><img loading="lazy" decoding="async" src="/portfolio/lume-detail.jpg" alt="" /><span>{t("Precision peel")}<br />{t("45 min · From €120")}</span></div>
     </div>
@@ -97,7 +97,7 @@ function NoirConcept() {
       <header><span>{t("Menu   Cellar   Story")}</span><b>The Oak House</b><span>{t("Reserve a table")} <ArrowIcon inline /></span></header>
       <div className="demo-noir-copy"><p>{t("Tirana · Dinner, Tuesday—Sunday")}</p><h3>{t("The night")}<br /><i>{t("has a flavour.")}</i></h3><span>{t("Discover the menu")} <ArrowIcon direction="right" inline /></span></div>
       <div className="demo-noir-detail"><img loading="lazy" decoding="async" src="/portfolio/noir-main.jpg" alt="" /><span>{t("Chef’s table")}<br />{t("Eight seasonal courses")}</span></div>
-      <div className="demo-noir-hours"><span>{t("Rruga e Durrësit, Tirana")}</span><span>{t("18:30 — Late")}</span></div>
+      <div className="demo-noir-hours"><span>{t("Rruga e Durrësit, Tirana")}</span><span>{t("From 18:30 until late")}</span></div>
     </div>
   );
 }
@@ -285,7 +285,7 @@ export function SelectedWork() {
                 <button
                   className={styles.projectTrigger}
                   type="button"
-                  aria-label={`${t("Preview")} ${project.name} — ${t(project.category)}`}
+                  aria-label={`${t("Preview")} ${project.name}, ${t(project.category)}`}
                   aria-haspopup="dialog"
                   onClick={event => {
                     trigger.current = event.currentTarget;
