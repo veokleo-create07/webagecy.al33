@@ -224,7 +224,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
                     {t(pending ? "Confirming your call…" : step === 6 ? "Book discovery call" : "Continue")}<ArrowIcon direction={step === 6 ? "up-right" : "right"} />
                   </button>
                 </div>
-                <p className={styles.privacy}>{t(step === 6 ? "Your details are sent securely when you book. No mailing lists." : "A few details. A focused conversation.")}</p>
+                <p className={styles.privacy}>{t(step === 6 ? "Your details are sent securely when you book. No mailing lists." : "A few details. Then we talk about where your business can go next.")}</p>
               </form>}
             </motion.div>
           </AnimatePresence>

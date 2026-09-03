@@ -198,9 +198,9 @@ export function FinalCTA() {
       </div>
 
       <div ref={contentRef} className="final-cta__content magnetic-cta__content">
-        <p className="final-cta__eyebrow">{t("Ready to build?")}</p>
-        <h2 id="contact-title">{t("Premium websites that move businesses forward.")}</h2>
-        <p className="final-cta__subline">{t("Strategy, design and development crafted to turn strong businesses into stronger digital brands.")}</p>
+        <p className="final-cta__eyebrow">{t("Ready for what’s next?")}</p>
+        <h2 id="contact-title">{t("Make your business harder to ignore.")}</h2>
+        <p className="final-cta__subline">{t("Build the kind of presence that earns trust, creates demand and opens the door to bigger opportunities.")}</p>
         <BookingLink
           ref={buttonRef}
           className="final-cta__button magnetic-cta__button"

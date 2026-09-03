@@ -27,12 +27,12 @@ export default function Home() {
 
           <div className="hero__content">
             <h1 id="hero-title" className="hero__headline" data-intro>
-              <span>{t("We build websites that get")}</span>
-              <span>{t("businesses taken seriously.")}</span>
+              <span>{t("Build a business")}</span>
+              <span>{t("people take seriously.")}</span>
             </h1>
 
             <p className="hero__intro" data-intro>
-              {t("High-converting websites for ambitious businesses across Albania & Kosovo.")}
+              {t("We strengthen how your business is seen, trusted and chosen — so it can grow with more confidence.")}
             </p>
 
             <div className="hero__actions" data-intro>

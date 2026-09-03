@@ -47,14 +47,15 @@ test("conversion copy is consistent without changing booking revenue values", ()
 
 test("approved Albanian brand copy remains exact", () => {
   const approved = {
-    "We build websites that get": "Ndërtojmë website që e bëjnë",
-    "businesses taken seriously.": "biznesin tuaj të merret seriozisht.",
-    "High-converting websites for ambitious businesses across Albania & Kosovo.": "Website të krijuara për të sjellë rezultate, për biznese me ambicie në Shqipëri dhe Kosovë.",
+    "Build a business": "Ndërto një biznes",
+    "people take seriously.": "që merret seriozisht.",
+    "We strengthen how your business is seen, trusted and chosen — so it can grow with more confidence.": "E forcojmë mënyrën si biznesi juaj shihet, fitohet besimi dhe zgjidhet — që të rritet me më shumë siguri.",
     "View our work": "Shiko projektet",
     "Web Development": "Web Development",
-    "Stronger digital presence": "Prezencë digjitale më e fortë",
-    "Ready to build?": "GATI PËR TA NISUR?",
-    "Premium websites that move businesses forward.": "Website premium që e çojnë biznesin përpara.",
+    "Everything should move the business forward.": "Çdo gjë duhet ta çojë biznesin përpara.",
+    "More trust. More attention. More growth.": "Më shumë besim. Më shumë vëmendje. Më shumë rritje.",
+    "Ready for what’s next?": "Gati për hapin tjetër?",
+    "Make your business harder to ignore.": "Bëje biznesin tënd të pamundur për t’u anashkaluar.",
     "Do you currently have a website?": "A keni aktualisht një website?",
     "What’s your current monthly business revenue?": "Sa është xhiroja mujore e biznesit tuaj?",
     "What should we know before the call?": "Çfarë duhet të dimë para se të flasim?",
@@ -65,6 +66,20 @@ test("approved Albanian brand copy remains exact", () => {
     "Join call": "Bashkohu në takim",
   };
   for (const [english, shqip] of Object.entries(approved)) assert.equal(translate("sq", english), shqip);
+});
+
+test("outcome-focused English and Albanian copy remains paired", () => {
+  const approved = {
+    "Strategy, design, technology and growth working together to make your business stronger, clearer and easier to choose.": "Strategjia, dizajni, teknologjia dhe rritja punojnë së bashku për ta bërë biznesin më të fortë, më të qartë dhe më të lehtë për t’u zgjedhur.",
+    "Build the kind of presence that earns trust, creates demand and opens the door to bigger opportunities.": "Ndërto një prezencë që fiton besim, krijon interes dhe hap mundësi më të mëdha për biznesin.",
+    "Design · Development · Growth · Software": "Dizajn · Zhvillim · Rritje · Software",
+    "Built for businesses that want to go further.": "Për biznese që duan të shkojnë më tej.",
+    "A few details. Then we talk about where your business can go next.": "Disa detaje. Pastaj flasim për hapin e radhës të biznesit tuaj.",
+  };
+  for (const [english, shqip] of Object.entries(approved)) {
+    assert.equal(translate("en", english), english);
+    assert.equal(translate("sq", english), shqip);
+  }
 });
 
 test("Albanian calendar formatting localizes dates without changing timezone", () => {

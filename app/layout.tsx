@@ -15,8 +15,8 @@ const interTight = Inter_Tight({
 export async function generateMetadata(): Promise<Metadata> {
   const language = (await cookies()).get(languageCookie)?.value === "en" ? "en" : "sq";
   return {
-    title: translate(language, "KREU WEB — Digital experiences with intent"),
-    description: translate(language, "KREU WEB is an independent digital agency shaping distinctive websites for ambitious brands."),
+    title: translate(language, "KREU WEB — Built for progress"),
+    description: translate(language, "We strengthen how your business is seen, trusted and chosen — so it can grow with more confidence."),
   };
 }
 

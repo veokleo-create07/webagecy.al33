@@ -44,7 +44,7 @@ export default function Footer1() {
         <motion.div variants={itemVariants} className="flex flex-col items-center">
           <BrandLogo size="footer" />
           <p className="mt-7 text-[0.8rem] font-normal uppercase tracking-[0.09em] text-white/55 sm:mt-9 sm:text-[0.72rem] sm:tracking-[0.12em] sm:text-white/35">
-            {t("Web design · Development · Digital presence")}
+            {t("Design · Development · Growth · Software")}
           </p>
         </motion.div>
 
@@ -99,7 +99,7 @@ export default function Footer1() {
         variants={itemVariants}
       >
         <p>© {new Date().getFullYear()} Kreu Web. {t("All rights reserved.")}</p>
-        <p>{t("Websites built to move businesses forward.")}</p>
+        <p>{t("Built for businesses that want to go further.")}</p>
       </motion.div>
     </footer>
   );
