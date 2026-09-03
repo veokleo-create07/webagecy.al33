@@ -60,6 +60,101 @@ function GlassFragment({ fragment, index }: { fragment: Fragment; index: number 
   );
 }
 
+function PhoneStatusBar() {
+  return (
+    <div className="logistics-statusbar">
+      <span>9:41</span>
+      <i className="logistics-island" />
+      <span className="logistics-system-icons" aria-hidden="true"><i /><i /><i /></span>
+    </div>
+  );
+}
+
+function DashboardScreen() {
+  return (
+    <div className="logistics-app logistics-app--dashboard">
+      <PhoneStatusBar />
+      <div className="logistics-app__header">
+        <span className="logistics-app__menu" aria-hidden="true"><i /><i /></span>
+        <span className="logistics-app__mark">K.</span>
+        <span className="logistics-app__alert" aria-hidden="true" />
+      </div>
+      <div className="logistics-app__body">
+        <p className="logistics-kicker">Operations overview</p>
+        <h3>Good morning, Erion.</h3>
+        <section className="logistics-metric">
+          <div><span>Active deliveries</span><strong>24</strong><small>↑ 18% today</small></div>
+          <svg viewBox="0 0 120 58" aria-hidden="true"><path d="M4 50 C22 47 25 33 39 35 S58 48 69 33 S89 25 96 18 S108 8 116 6" /></svg>
+        </section>
+        <p className="logistics-section-label">Summary</p>
+        <div className="logistics-summary">
+          <span><small>In transit</small><strong>16</strong><i>↑ 12%</i></span>
+          <span><small>Delivered</small><strong>48</strong><i>↑ 25%</i></span>
+          <span><small>Pending</small><strong>6</strong><i>↓ 8%</i></span>
+        </div>
+        <div className="logistics-list-heading"><span>Recent shipments</span><small>View all</small></div>
+        <div className="logistics-shipments">
+          {["ALB2314", "ALB2313", "ALB2312"].map((id, index) => (
+            <div key={id}><span><b>#{id}</b><small>{index === 0 ? "Tirana → Prishtina" : index === 1 ? "Durrës → Skopje" : "Bari → Tirana"}</small></span><i>{index === 1 ? "Pending" : "In transit"}</i></div>
+          ))}
+        </div>
+      </div>
+      <div className="logistics-tabbar" aria-hidden="true"><i className="is-active" /><i /><i className="is-add">+</i><i /><i /></div>
+    </div>
+  );
+}
+
+function TrackingScreen() {
+  return (
+    <div className="logistics-app logistics-app--tracking">
+      <PhoneStatusBar />
+      <div className="tracking-heading"><span aria-hidden="true">‹</span><strong>Shipment details</strong><i /></div>
+      <div className="tracking-map">
+        <span className="tracking-map__grid" />
+        <svg viewBox="0 0 220 190" aria-hidden="true">
+          <path className="tracking-map__roads" d="M-8 38 C42 52 65 24 109 40 S178 78 230 48 M12 122 C53 105 90 132 126 112 S181 81 226 100 M54 -4 C61 43 37 82 58 126 S86 167 76 196 M170 -8 C146 36 170 68 154 111 S130 159 144 198" />
+          <path className="tracking-map__route" d="M27 155 L67 139 L65 109 L111 109 L113 70 L164 70 L180 39" />
+          <circle cx="27" cy="155" r="5" /><circle cx="180" cy="39" r="5" />
+          <rect x="103" y="91" width="18" height="18" rx="4" transform="rotate(16 112 100)" />
+        </svg>
+      </div>
+      <div className="tracking-card">
+        <div className="tracking-card__top"><strong>#ALB2314</strong><span>In transit</span></div>
+        <div className="tracking-route"><span><small>From</small><b>Tirana, AL</b></span><i>→</i><span><small>To</small><b>Prishtina, XK</b></span></div>
+        <div className="tracking-arrival"><small>Estimated arrival</small><strong>24 May 2026 · 14:30</strong></div>
+        <div className="tracking-progress"><i /></div>
+        <div className="tracking-progress-label"><span>Route progress</span><strong>73%</strong></div>
+      </div>
+      <div className="tracking-details">
+        <strong>Information</strong>
+        <span><small>Weight</small><b>1200 kg</b></span>
+        <span><small>Volume</small><b>2.4 m³</b></span>
+        <span><small>Service</small><b>Standard</b></span>
+        <span><small>Client</small><b>Alba Trade</b></span>
+      </div>
+      <div className="tracking-contact">Contact client</div>
+    </div>
+  );
+}
+
+function PhoneDevice({ variant }: { variant: "front" | "rear" }) {
+  return (
+    <div className={`coded-phone-position coded-phone-position--${variant}`} data-phone={variant}>
+      <div className={`coded-phone coded-phone--${variant}`}>
+        <span className="coded-phone__button coded-phone__button--top" />
+        <span className="coded-phone__button coded-phone__button--middle" />
+        <span className="coded-phone__button coded-phone__button--power" />
+        <div className="coded-phone__rim">
+          <div className="coded-phone__screen">
+            {variant === "front" ? <DashboardScreen /> : <TrackingScreen />}
+            <span className="coded-phone__screen-reflection" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function FinalCTA() {
   const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
@@ -74,6 +169,8 @@ export function FinalCTA() {
     const content = contentRef.current;
     const visual = visualRef.current;
     const button = buttonRef.current;
+    const frontPhone = section?.querySelector<HTMLElement>('[data-phone="front"]');
+    const rearPhone = section?.querySelector<HTMLElement>('[data-phone="rear"]');
     if (!section || !content || !visual || !button) return;
 
     gsap.registerPlugin(ScrollTrigger);
@@ -129,7 +226,9 @@ export function FinalCTA() {
             });
 
             const copyProgress = ease(clamp((progress - .14) / .44));
-            const deviceProgress = ease(clamp((progress - .2) / .58));
+            const rearProgress = ease(clamp((progress - .18) / .5));
+            const frontProgress = ease(clamp((progress - .27) / .48));
+            const deviceProgress = Math.max(rearProgress, frontProgress);
             const buttonProgress = ease(clamp((progress - .48) / .25));
             gsap.set(content, {
               opacity: copyProgress,
@@ -138,11 +237,26 @@ export function FinalCTA() {
             });
             gsap.set(visual, {
               opacity: deviceProgress,
-              x: (mode === "desktop" ? 76 : 0) * (1 - deviceProgress),
-              y: (mode === "desktop" ? 12 : 28) * (1 - deviceProgress),
-              rotateX: (mode === "desktop" ? -3.5 : -1) * (1 - deviceProgress),
-              rotateY: (mode === "desktop" ? 10 : 2) * (1 - deviceProgress),
-              scale: .92 + deviceProgress * .08,
+            });
+            if (rearPhone) gsap.set(rearPhone, {
+              opacity: rearProgress,
+              x: (mode === "desktop" ? 92 : 24) * (1 - rearProgress),
+              y: (mode === "desktop" ? 34 : 22) * (1 - rearProgress),
+              z: mode === "desktop" ? -34 + rearProgress * 10 : 0,
+              rotateX: (mode === "desktop" ? -8 : -2) * (1 - rearProgress),
+              rotateY: (mode === "desktop" ? -15 + rearProgress * 7 : -3 + rearProgress * 2),
+              rotateZ: mode === "desktop" ? 5.5 : 2.5,
+              scale: .9 + rearProgress * .1,
+            });
+            if (frontPhone) gsap.set(frontPhone, {
+              opacity: frontProgress,
+              x: (mode === "desktop" ? 112 : 28) * (1 - frontProgress),
+              y: (mode === "desktop" ? 46 : 28) * (1 - frontProgress),
+              z: mode === "desktop" ? 42 + frontProgress * 28 : 6,
+              rotateX: (mode === "desktop" ? -10 + frontProgress * 8 : -2 + frontProgress),
+              rotateY: (mode === "desktop" ? 17 - frontProgress * 12 : 4 - frontProgress * 2),
+              rotateZ: mode === "desktop" ? -4.25 : -2,
+              scale: .88 + frontProgress * .12,
             });
             gsap.set(button, { opacity: buttonProgress, y: 12 * (1 - buttonProgress) });
           };
@@ -246,12 +360,8 @@ export function FinalCTA() {
 
         <div ref={visualRef} className="magnetic-cta__visual" aria-hidden="true">
           <div ref={deviceStageRef} className="magnetic-device">
-            <div className="magnetic-device__plane magnetic-device__plane--rear">
-              <img src="/cta/kreu-mobile-app.png" alt="" loading="lazy" decoding="async" />
-            </div>
-            <div className="magnetic-device__plane magnetic-device__plane--front">
-              <img src="/cta/kreu-mobile-app.png" alt="" loading="lazy" decoding="async" />
-            </div>
+            <PhoneDevice variant="rear" />
+            <PhoneDevice variant="front" />
             <span className="magnetic-device__contact-shadow" />
             <span className="magnetic-device__reflection" />
           </div>

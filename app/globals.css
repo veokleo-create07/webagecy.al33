@@ -2509,44 +2509,219 @@ a:focus-visible {
   --device-y: 0px;
   position: relative;
   width: min(59vw, 57rem);
-  aspect-ratio: 1280 / 852;
+  aspect-ratio: 1.28;
   margin-inline: auto;
   transform: translate3d(var(--device-x), var(--device-y), 0) rotateX(var(--device-rx)) rotateY(var(--device-ry));
   transform-style: preserve-3d;
   transition: transform 1000ms var(--ease-out);
   will-change: transform;
-  mix-blend-mode: screen;
-  -webkit-mask-image: radial-gradient(ellipse 76% 82% at 50% 50%, #000 46%, rgba(0, 0, 0, 0.94) 68%, transparent 100%);
-  mask-image: radial-gradient(ellipse 76% 82% at 50% 50%, #000 46%, rgba(0, 0, 0, 0.94) 68%, transparent 100%);
 }
 
-.magnetic-device__plane {
+.coded-phone-position {
+  position: absolute;
+  width: 44%;
+  aspect-ratio: 0.5;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+.coded-phone-position--rear {
+  top: 12%;
+  right: 5%;
+  z-index: 1;
+}
+
+.coded-phone-position--front {
+  top: 0;
+  left: 9%;
+  z-index: 2;
+}
+
+.coded-phone {
   position: absolute;
   inset: 0;
+  padding: 2.3%;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 13% / 6.5%;
+  background: linear-gradient(112deg, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0.08) 8%, rgba(10, 10, 10, 0.96) 29%, rgba(95, 95, 93, 0.82) 74%, rgba(12, 12, 12, 0.98));
+  box-shadow: 0 3.4rem 5rem rgba(0, 0, 0, 0.54), 0 1rem 1.7rem rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.2), inset 0.12rem 0 0 rgba(255, 255, 255, 0.24), inset -0.13rem 0 0 rgba(0, 0, 0, 0.84);
   transform-style: preserve-3d;
-  will-change: transform;
+  animation: coded-phone-float 8s ease-in-out infinite alternate;
 }
 
-.magnetic-device__plane img {
+.coded-phone--rear {
+  animation-delay: -3.6s;
+  animation-duration: 9.5s;
+}
+
+.coded-phone__rim {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  mix-blend-mode: screen;
-  user-select: none;
+  padding: 1.5%;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  border-radius: 12% / 6%;
+  background: #050505;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.92), inset 0 0.2rem 0.45rem rgba(255, 255, 255, 0.08);
 }
 
-.magnetic-device__plane--rear {
-  z-index: 1;
-  clip-path: polygon(50% 6%, 90% 6%, 91% 100%, 48% 100%);
-  transform: translate3d(1.2%, 1.5%, -28px) rotateY(-1.2deg);
-  filter: drop-shadow(0 2rem 2.4rem rgba(0, 0, 0, 0.44));
+.coded-phone__screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 11% / 5.5%;
+  background: #f2f2f0;
+  color: #171716;
+  container-type: inline-size;
+  transform: translateZ(2px);
 }
 
-.magnetic-device__plane--front {
-  z-index: 2;
-  clip-path: polygon(16% 0, 61% 0, 61% 100%, 10% 100%);
-  transform: translateZ(42px) rotateY(0.8deg);
-  filter: drop-shadow(0 2.7rem 3.2rem rgba(0, 0, 0, 0.54));
+.coded-phone__button {
+  position: absolute;
+  left: -1.5%;
+  width: 1.4%;
+  border-radius: 999px 0 0 999px;
+  background: rgba(112, 112, 110, 0.88);
+  box-shadow: inset 1px 0 rgba(255, 255, 255, 0.34);
+}
+
+.coded-phone__button--top { top: 18%; height: 7%; }
+.coded-phone__button--middle { top: 28%; height: 11%; }
+.coded-phone__button--power { top: 25%; right: -1.5%; left: auto; width: 1.4%; height: 16%; border-radius: 0 999px 999px 0; }
+
+.coded-phone__screen-reflection {
+  position: absolute;
+  z-index: 9;
+  inset: -24% 45% 38% -36%;
+  background: linear-gradient(118deg, transparent 24%, rgba(255, 255, 255, 0.24) 48%, transparent 72%);
+  opacity: 0.45;
+  transform: rotate(-7deg);
+  pointer-events: none;
+}
+
+.logistics-app {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: #f2f2f0;
+  color: #171716;
+  font-size: 3.2cqw;
+  line-height: 1.2;
+}
+
+.logistics-statusbar {
+  position: relative;
+  display: flex;
+  height: 7.8%;
+  padding: 4.5% 7% 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  font-size: 2.9cqw;
+  font-weight: 600;
+}
+
+.logistics-island {
+  position: absolute;
+  top: 17%;
+  left: 50%;
+  width: 29%;
+  height: 48%;
+  border-radius: 999px;
+  background: #050505;
+  transform: translateX(-50%);
+}
+
+.logistics-system-icons { display: flex; gap: 1.1cqw; align-items: center; }
+.logistics-system-icons i { display: block; width: 2.1cqw; height: 1.8cqw; border-radius: 0.4cqw; background: #171716; }
+.logistics-system-icons i:first-child { width: 2.8cqw; clip-path: polygon(0 100%, 22% 70%, 43% 82%, 68% 32%, 100% 0, 100% 100%); }
+.logistics-system-icons i:last-child { width: 4.3cqw; border: 0.35cqw solid #171716; background: transparent; }
+
+.logistics-app__header {
+  display: grid;
+  height: 6.5%;
+  padding-inline: 7%;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+.logistics-app__menu { display: grid; width: 4cqw; gap: 1cqw; }
+.logistics-app__menu i { height: 0.45cqw; border-radius: 999px; background: #171716; }
+.logistics-app__menu i:last-child { width: 66%; }
+.logistics-app__mark { font-size: 4.2cqw; font-weight: 650; letter-spacing: -0.08em; }
+.logistics-app__alert { justify-self: end; width: 3.7cqw; height: 4cqw; border: 0.45cqw solid #171716; border-radius: 48% 48% 38% 38%; }
+
+.logistics-app__body { flex: 1; min-height: 0; padding: 3% 7% 0; }
+.logistics-kicker { margin: 0 0 1.2%; color: rgba(23, 23, 22, 0.48); font-size: 2.4cqw; }
+.logistics-app__body > h3 { margin: 0 0 4%; font-size: 4.8cqw; font-weight: 620; letter-spacing: -0.055em; }
+
+.logistics-metric { display: flex; min-height: 21%; padding: 5%; align-items: flex-end; justify-content: space-between; border: 1px solid rgba(23, 23, 22, 0.07); border-radius: 5cqw; background: rgba(255, 255, 255, 0.77); box-shadow: 0 2.5cqw 7cqw rgba(0, 0, 0, 0.07); }
+.logistics-metric div { display: flex; flex-direction: column; }
+.logistics-metric span { font-size: 2.4cqw; font-weight: 560; }
+.logistics-metric strong { margin-top: 1cqw; font-size: 9.5cqw; font-weight: 560; letter-spacing: -0.07em; line-height: 0.9; }
+.logistics-metric small { margin-top: 2cqw; color: #635bff; font-size: 2.15cqw; font-weight: 560; }
+.logistics-metric svg { width: 43%; overflow: visible; }
+.logistics-metric path { fill: none; stroke: #746cff; stroke-width: 3; stroke-linecap: round; }
+
+.logistics-section-label { margin: 5% 0 2.5%; font-size: 2.55cqw; font-weight: 600; }
+.logistics-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.4%; }
+.logistics-summary > span { display: flex; min-width: 0; padding: 12% 10%; flex-direction: column; border: 1px solid rgba(23, 23, 22, 0.06); border-radius: 3cqw; background: rgba(255, 255, 255, 0.76); box-shadow: 0 1.5cqw 4cqw rgba(0, 0, 0, 0.05); }
+.logistics-summary small { overflow: hidden; color: rgba(23, 23, 22, 0.48); font-size: 1.85cqw; white-space: nowrap; text-overflow: ellipsis; }
+.logistics-summary strong { margin-block: 1.4cqw; font-size: 5.4cqw; font-weight: 560; }
+.logistics-summary i { color: #635bff; font-size: 1.8cqw; font-style: normal; }
+
+.logistics-list-heading { display: flex; margin: 5% 0 2%; align-items: center; justify-content: space-between; font-size: 2.4cqw; font-weight: 600; }
+.logistics-list-heading small { color: #635bff; font-size: 2cqw; font-weight: 520; }
+.logistics-shipments { overflow: hidden; border: 1px solid rgba(23, 23, 22, 0.06); border-radius: 3cqw; background: rgba(255, 255, 255, 0.6); }
+.logistics-shipments > div { display: flex; padding: 3% 4%; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(23, 23, 22, 0.06); }
+.logistics-shipments > div:last-child { border-bottom: 0; }
+.logistics-shipments span { display: flex; flex-direction: column; gap: 0.7cqw; }
+.logistics-shipments b { font-size: 2.15cqw; font-weight: 620; }
+.logistics-shipments small { color: rgba(23, 23, 22, 0.54); font-size: 1.75cqw; }
+.logistics-shipments i { padding: 1.3cqw 1.7cqw; border-radius: 999px; background: rgba(99, 91, 255, 0.09); color: #635bff; font-size: 1.55cqw; font-style: normal; }
+
+.logistics-tabbar { display: flex; height: 8%; padding: 0 8% 3%; align-items: center; justify-content: space-between; border-top: 1px solid rgba(23, 23, 22, 0.06); }
+.logistics-tabbar i { width: 4cqw; height: 4cqw; border: 0.45cqw solid rgba(23, 23, 22, 0.58); border-radius: 1.1cqw; }
+.logistics-tabbar i.is-active { border-color: #635bff; }
+.logistics-tabbar i.is-add { display: grid; width: 9cqw; height: 9cqw; place-items: center; border-color: rgba(99, 91, 255, 0.36); border-radius: 50%; color: #635bff; font-size: 6cqw; font-style: normal; line-height: 1; }
+
+.tracking-heading { display: grid; height: 7%; padding-inline: 6.5%; grid-template-columns: 1fr auto 1fr; align-items: center; border-bottom: 1px solid rgba(23, 23, 22, 0.06); }
+.tracking-heading span { font-size: 6cqw; font-weight: 280; }
+.tracking-heading strong { font-size: 2.65cqw; font-weight: 620; }
+.tracking-map { position: relative; height: 31%; overflow: hidden; background: rgba(214, 216, 217, 0.42); }
+.tracking-map__grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(23, 23, 22, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(23, 23, 22, 0.05) 1px, transparent 1px); background-size: 9cqw 9cqw; transform: rotate(-8deg) scale(1.2); }
+.tracking-map svg { position: absolute; inset: 4% 2%; width: 96%; height: 92%; }
+.tracking-map__roads { fill: none; stroke: rgba(23, 23, 22, 0.13); stroke-width: 1.4; }
+.tracking-map__route { fill: none; stroke: #635bff; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.tracking-map circle { fill: #f2f2f0; stroke: #635bff; stroke-width: 3; }
+.tracking-map rect { fill: #171716; stroke: #f2f2f0; stroke-width: 2; }
+
+.tracking-card { position: relative; z-index: 2; width: 88%; margin: -8% auto 0; padding: 5%; border: 1px solid rgba(23, 23, 22, 0.06); border-radius: 4cqw; background: rgba(255, 255, 255, 0.94); box-shadow: 0 2.5cqw 8cqw rgba(0, 0, 0, 0.08); }
+.tracking-card__top { display: flex; align-items: center; justify-content: space-between; }
+.tracking-card__top strong { font-size: 2.8cqw; }
+.tracking-card__top span { padding: 1.5cqw 2.1cqw; border-radius: 999px; background: rgba(99, 91, 255, 0.09); color: #635bff; font-size: 1.8cqw; }
+.tracking-route { display: grid; margin-top: 5%; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 3%; }
+.tracking-route span { display: flex; min-width: 0; flex-direction: column; gap: 1cqw; }
+.tracking-route small, .tracking-arrival small, .tracking-progress-label span { color: rgba(23, 23, 22, 0.43); font-size: 1.75cqw; }
+.tracking-route b { overflow: hidden; font-size: 2.15cqw; font-weight: 560; white-space: nowrap; text-overflow: ellipsis; }
+.tracking-route i { font-size: 3cqw; font-style: normal; }
+.tracking-arrival { display: flex; margin-top: 5%; flex-direction: column; gap: 1cqw; }
+.tracking-arrival strong { font-size: 2.35cqw; font-weight: 580; }
+.tracking-progress { height: 1.1cqw; margin-top: 5%; overflow: hidden; border-radius: 999px; background: rgba(23, 23, 22, 0.08); }
+.tracking-progress i { display: block; width: 73%; height: 100%; border-radius: inherit; background: #635bff; }
+.tracking-progress-label { display: flex; margin-top: 2%; justify-content: space-between; }
+.tracking-progress-label strong { font-size: 1.9cqw; }
+.tracking-details { display: flex; width: 88%; margin: 4% auto 0; flex-direction: column; gap: 2cqw; }
+.tracking-details > strong { margin-bottom: 1cqw; font-size: 2.5cqw; }
+.tracking-details span { display: flex; justify-content: space-between; }
+.tracking-details small { color: rgba(23, 23, 22, 0.43); font-size: 1.8cqw; }
+.tracking-details b { font-size: 1.85cqw; font-weight: 540; }
+.tracking-contact { width: 84%; margin: auto auto 4%; padding: 3.3%; border: 1px solid rgba(23, 23, 22, 0.08); border-radius: 999px; text-align: center; font-size: 2.2cqw; font-weight: 560; box-shadow: 0 1cqw 4cqw rgba(0, 0, 0, 0.05); }
+
+@keyframes coded-phone-float {
+  from { transform: translate3d(0, -0.35rem, 0); }
+  to { transform: translate3d(0, 0.45rem, 0); }
 }
 
 .magnetic-device__contact-shadow {
@@ -3925,14 +4100,6 @@ a:focus-visible {
     margin-top: 1rem;
   }
 
-  .magnetic-device__plane--rear {
-    transform: translate3d(0.6%, 0.8%, -8px);
-  }
-
-  .magnetic-device__plane--front {
-    transform: translateZ(10px);
-  }
-
   .magnetic-device__reflection {
     filter: blur(14px);
     transform: translateZ(12px) rotate(-17deg);
@@ -3952,4 +4119,5 @@ a:focus-visible {
 
 @media (prefers-reduced-motion: reduce) {
   .magnetic-cta { min-height: 0; }
+  .coded-phone { animation: none; }
 }
