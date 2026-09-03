@@ -4,7 +4,7 @@ Albanian (`sq`, regional formatting `sq-AL`) is the default. English remains ava
 
 Use `useLanguage().t()` for user-facing copy and maintain the natural Albanian version in `lib/localization.ts`. English phrases are stable dictionary keys. Translate presentation only: never change customer input, booking enum values, project slugs, URLs or brand names. Calendar and confirmation dates use the selected locale and retain Europe/Tirane time.
 
-The Albanian copy is written for business owners, with concise headlines rather than literal translations. Industry terms deliberately retained: Web, Software, Mobile, SEO, Marketing, online, email and Peeling. Brand names, Instagram, contact addresses and the IANA timezone name stay unchanged. No E-commerce or Google Meet labels are currently displayed; preserve these names if introduced.
+The Albanian copy is written for business owners, with concise headlines rather than literal translations. Industry terms deliberately retained: website, Web Development, Software, Mobile, SEO, Marketing, online, email and Peeling. Brand names, Instagram, contact addresses and the IANA timezone name stay unchanged. No E-commerce or Google Meet labels are currently displayed; preserve these names if introduced.
 
 The original Still product photograph has English interface text baked into the pixels. Its category, description and accessible image description are localized. A separately approved Albanian image is needed to localize the photographed interface without altering the project visual; the original asset has not been modified.
 

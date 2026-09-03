@@ -36,13 +36,35 @@ test("all explicit UI translation keys and validation messages are covered", () 
 
 test("conversion copy is consistent without changing booking revenue values", () => {
   assert.equal(translate("sq", "Book a discovery call"), "Rezervo një konsultë");
-  assert.equal(translate("sq", "Book discovery call"), "Rezervo një konsultë");
+  assert.equal(translate("sq", "Book discovery call"), "Rezervo konsultën");
   assert.equal(translate("sq", "Book a consultation"), "Rezervo një konsultë");
   for (const range of ["Under €10k", "€10k–€50k", "€50k–€100k", "€100k+"]) assert.ok(Object.hasOwn(albanian, range));
   assert.deepEqual(
     ["Under €10k", "€10k–€50k", "€50k–€100k", "€100k+"].map(range => translate("sq", range)),
-    ["Nën €10.000", "€10.000–€50.000", "€50.000–€100.000", "€100.000+"],
+    ["Nën €10k", "€10.000–€50.000", "€50.000–€100.000", "€100.000+"],
   );
+});
+
+test("approved Albanian brand copy remains exact", () => {
+  const approved = {
+    "We build websites that get": "Ndërtojmë website që e bëjnë",
+    "businesses taken seriously.": "biznesin tuaj të merret seriozisht.",
+    "High-converting websites for ambitious businesses across Albania & Kosovo.": "Website të krijuara për të sjellë rezultate, për biznese me ambicie në Shqipëri dhe Kosovë.",
+    "View our work": "Shiko projektet",
+    "Web Development": "Web Development",
+    "Stronger digital presence": "Prezencë digjitale më e fortë",
+    "Ready to build?": "GATI PËR TA NISUR?",
+    "Premium websites that move businesses forward.": "Website premium që e çojnë biznesin përpara.",
+    "Do you currently have a website?": "A keni aktualisht një website?",
+    "What’s your current monthly business revenue?": "Sa është xhiroja mujore e biznesit tuaj?",
+    "What should we know before the call?": "Çfarë duhet të dimë para se të flasim?",
+    "A little context": "Pak kontekst",
+    "Book discovery call": "Rezervo konsultën",
+    "Back": "Kthehu",
+    "You’re booked.": "Konsulta u rezervua.",
+    "Join call": "Bashkohu në takim",
+  };
+  for (const [english, shqip] of Object.entries(approved)) assert.equal(translate("sq", english), shqip);
 });
 
 test("Albanian calendar formatting localizes dates without changing timezone", () => {
