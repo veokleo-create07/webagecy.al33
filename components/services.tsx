@@ -53,7 +53,7 @@ const copy: Record<Language, {
 };
 
 function DesignWorld() {
-  return <div className={styles.designWorld} aria-hidden="true">
+  return <div className={styles.designWorld} data-engine-layer aria-hidden="true">
     <span className={styles.typeGrid} />
     <span className={styles.brandPlaneBack}>K</span>
     <span className={styles.brandPlaneMiddle}>Aa</span>
@@ -63,7 +63,7 @@ function DesignWorld() {
 }
 
 function WebWorld({ language }: { language: Language }) {
-  return <div className={styles.webWorld} aria-hidden="true">
+  return <div className={styles.webWorld} data-engine-layer aria-hidden="true">
     <div className={styles.codePlane}><i /><i /><i /><i /><i /></div>
     <div className={styles.browserWindow}>
       <div className={styles.browserChrome}><span>kreu.system</span><i /><i /></div>
@@ -77,7 +77,8 @@ function WebWorld({ language }: { language: Language }) {
 }
 
 function MarketingWorld({ language }: { language: Language }) {
-  return <div className={styles.marketingWorld} aria-hidden="true">
+  return <div className={styles.marketingWorld} data-engine-layer aria-hidden="true">
+    <span className={styles.chartPlane} />
     <div className={styles.metricRow}>
       <span>{language === "sq" ? "Kërkim organik" : "Organic search"}<strong>68.4%</strong></span>
       <span>{language === "sq" ? "Relevancë" : "Relevance"}<strong>{language === "sq" ? "E lartë" : "High"}</strong></span>
@@ -95,7 +96,7 @@ function MarketingWorld({ language }: { language: Language }) {
 }
 
 function SoftwareWorld({ language }: { language: Language }) {
-  return <div className={styles.softwareWorld} aria-hidden="true">
+  return <div className={styles.softwareWorld} data-engine-layer aria-hidden="true">
     <div className={styles.systemPlane}><span>{language === "sq" ? "Operacionet" : "Operations"}</span><i /><i /><i /></div>
     <div className={styles.appPhone}>
       <div className={styles.phoneTop}><span>OS</span><i /></div>
@@ -143,9 +144,11 @@ function ServiceModule({ service, language, className, dimmed, active, onEnter, 
 
 function Core() {
   return <div className={styles.coreStage} data-engine-core aria-label="KREU">
+    <div className={styles.coreAura} data-engine-core-light aria-hidden="true" />
     <div className={styles.coreReflection} aria-hidden="true" />
+    <div className={styles.coreNodes} aria-hidden="true"><i /><i /><i /><i /></div>
     <div className={styles.coreCube}>
-      <div className={`${styles.cubeFace} ${styles.cubeFront}`}><span>KREU</span><i /></div>
+      <div className={`${styles.cubeFace} ${styles.cubeFront}`}><b aria-hidden="true" /><span>KREU</span><i /></div>
       <div className={`${styles.cubeFace} ${styles.cubeBack}`} aria-hidden="true" />
       <div className={`${styles.cubeFace} ${styles.cubeRight}`} aria-hidden="true" />
       <div className={`${styles.cubeFace} ${styles.cubeLeft}`} aria-hidden="true" />
@@ -156,10 +159,17 @@ function Core() {
 }
 
 const desktopPaths = [
-  "M350 218 C432 218 471 293 557 352",
-  "M872 209 C794 218 746 290 643 352",
-  "M348 573 C425 561 474 490 557 428",
-  "M860 550 C786 543 731 474 643 428",
+  "M430 236 C482 245 505 286 558 326",
+  "M775 244 C731 249 704 287 642 326",
+  "M438 495 C484 484 511 440 558 404",
+  "M766 474 C721 465 692 432 642 404",
+];
+
+const desktopNodes = [
+  { start: [430, 236], end: [558, 326] },
+  { start: [775, 244], end: [642, 326] },
+  { start: [438, 495], end: [558, 404] },
+  { start: [766, 474], end: [642, 404] },
 ];
 
 const mobilePaths = [
@@ -175,8 +185,16 @@ function Connections({ active }: { active: number | null }) {
       {desktopPaths.map((path, index) => <g key={path} className={active === index ? styles.connectionActive : undefined}>
         <path d={path} pathLength="1" data-engine-path />
         <path d={path} pathLength="1" className={styles.signalPath} />
-        <circle cx={index % 2 === 0 ? 557 : 643} cy={index < 2 ? 352 : 428} r="3" />
+        <circle className={styles.moduleNode} cx={desktopNodes[index].start[0]} cy={desktopNodes[index].start[1]} r="2.4" />
+        <circle cx={desktopNodes[index].end[0]} cy={desktopNodes[index].end[1]} r="3" />
       </g>)}
+      <g className={styles.coreBranches}>
+        <path d="M558 326 C580 342 585 350 600 365" data-engine-path />
+        <path d="M642 326 C620 342 615 350 600 365" data-engine-path />
+        <path d="M558 404 C579 391 586 380 600 365" data-engine-path />
+        <path d="M642 404 C620 390 614 378 600 365" data-engine-path />
+        <circle cx="600" cy="365" r="4" />
+      </g>
     </svg>
     <svg className={`${styles.connections} ${styles.mobileConnections}`} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
       {mobilePaths.map((path, index) => <g key={path} className={active === index ? styles.connectionActive : undefined}><path d={path} pathLength="1" data-engine-path /><path d={path} pathLength="1" className={styles.signalPath} /></g>)}
@@ -207,10 +225,20 @@ export function Services() {
       });
       timeline
         .from("[data-engine-header] > *", { y: 24, opacity: 0, duration: .72, stagger: .08 }, 0)
-        .from("[data-engine-core]", { y: 18, scale: .82, opacity: 0, duration: .9 }, .28)
-        .from("[data-engine-path]", { strokeDashoffset: 1, duration: 1.05, stagger: .08, ease: "power2.inOut" }, .52)
-        .from("[data-engine-module]", { y: 26, scale: .965, opacity: 0, duration: .82, stagger: .12 }, .76)
-        .from("[data-engine-result]", { y: 16, opacity: 0, duration: .62 }, 1.18);
+        .from("[data-engine-core]", { y: 14, scale: .76, opacity: 0, duration: .86 }, .25)
+        .from("[data-engine-core-light]", { scale: .45, opacity: 0, duration: .75 }, .48)
+        .from("[data-engine-path]", { strokeDashoffset: 1, duration: .95, stagger: .035, ease: "power2.inOut" }, .58)
+        .from("[data-engine-module]", {
+          x: (index) => [46, -46, 40, -38][index] ?? 0,
+          y: (index) => [34, 32, -30, -28][index] ?? 0,
+          scale: .92,
+          opacity: 0,
+          filter: "blur(7px)",
+          duration: .86,
+          stagger: .1,
+        }, .78)
+        .from("[data-engine-layer] > *", { y: 10, z: -18, opacity: 0, duration: .58, stagger: .025 }, 1.02)
+        .from("[data-engine-result]", { y: 16, opacity: 0, duration: .62 }, 1.28);
     }, section);
     return () => context.revert();
   }, []);
