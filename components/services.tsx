@@ -1,146 +1,253 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react";
-import { BookingLink } from "@/components/booking/booking-provider";
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLanguage } from "@/components/language-provider";
-import { ArrowIcon } from "@/components/ui/arrow-icon";
 import type { Language } from "@/lib/localization";
 import styles from "./services.module.css";
 
-type Service = { name: string; headline: string; subline: string; benefits: string[] };
+type Service = {
+  key: "design" | "web" | "marketing" | "software";
+  title: string;
+  lines: [string, string];
+};
 
-const serviceCopy: Record<Language, { headline: string; intro: string; services: Service[] }> = {
-  en: {
-    headline: "Five disciplines. One considered system.",
-    intro: "From positioning to product, every discipline serves the same result: a business with greater authority and momentum.",
+const copy: Record<Language, {
+  eyebrow: string;
+  aside: string;
+  headline: string;
+  subline: string;
+  result: string;
+  resultLabel: string;
+  services: Service[];
+}> = {
+  sq: {
+    eyebrow: "01   THE DIGITAL ENGINE",
+    aside: "Të gjitha shërbimet, të lidhura.",
+    headline: "Çdo vendim duhet t’i shërbejë biznesit.",
+    subline: "Strategji, dizajn dhe teknologji të integruara për një pozicionim më të qartë, diferencim më të dallueshëm dhe relevancë më të lartë në treg.",
+    resultLabel: "REZULTATI",
+    result: "Një sistem i vetëm. Një biznes më i pozicionuar.",
     services: [
-      { name: "Strategy & Design", headline: "Own a position the market can recognize.", subline: "We turn ambition into a clear identity and a design system that makes every touchpoint feel deliberate.", benefits: ["Sharper market positioning", "A coherent visual language", "Decisions grounded in business value"] },
-      { name: "Web Development", headline: "Make credibility tangible.", subline: "Fast, refined digital experiences that give people confidence in the business from the first interaction.", benefits: ["High performance by default", "Purposeful interaction design", "Scalable, maintainable foundations"] },
-      { name: "Marketing", headline: "Turn attention into qualified demand.", subline: "Focused campaigns and content systems designed to reach the right audience with a reason to respond.", benefits: ["A precise campaign narrative", "Creative built for each channel", "Clear paths from interest to action"] },
-      { name: "SEO", headline: "Be present when intent is highest.", subline: "Search strategy that compounds visibility, relevance and trust where your audience is already looking.", benefits: ["Demand-led search strategy", "Technical clarity and structure", "Sustained organic relevance"] },
-      { name: "Software & Apps", headline: "Build the system the business can grow on.", subline: "Considered software that removes friction, strengthens operations and creates room for the next stage.", benefits: ["Workflows shaped around the business", "Intuitive product experiences", "Architecture built to evolve"] },
+      { key: "design", title: "Dizajn & Strategji", lines: ["Identitet i qartë.", "Përvojë që lë gjurmë."] },
+      { key: "web", title: "Web Development", lines: ["Faqe që performojnë.", "Të ndërtuara për rritje."] },
+      { key: "marketing", title: "Marketing & SEO", lines: ["Vizibilitet me qëllim.", "Rritje e matshme."] },
+      { key: "software", title: "Software & Apps", lines: ["Sisteme që thjeshtojnë.", "Produkte që shkallëzohen."] },
     ],
   },
-  sq: {
-    headline: "Pesë disiplina. Një sistem i menduar.",
-    intro: "Nga pozicionimi te produkti, çdo disiplinë i shërben të njëjtit rezultat: një biznesi me më shumë autoritet dhe ritëm.",
+  en: {
+    eyebrow: "01   THE DIGITAL ENGINE",
+    aside: "All services working together.",
+    headline: "Every decision should serve the business.",
+    subline: "Integrated strategy, design and technology for clearer positioning, sharper differentiation and greater competitive relevance.",
+    resultLabel: "THE RESULT",
+    result: "One system. A better-positioned business.",
     services: [
-      { name: "Strategji & Dizajn", headline: "Krijo një pozicion që tregu e dallon.", subline: "Ambicien e kthejmë në identitet të qartë dhe në një sistem dizajni ku çdo pikë kontakti ndihet e menduar.", benefits: ["Pozicionim më i dallueshëm", "Gjuhë vizuale koherente", "Vendime me vlerë për biznesin"] },
-      { name: "Web Development", headline: "Ktheje besueshmërinë në përvojë.", subline: "Përvoja digjitale të shpejta dhe të kuruara që krijojnë siguri për biznesin që në kontaktin e parë.", benefits: ["Performancë e lartë", "Ndërveprime me qëllim", "Bazë teknike e shkallëzueshme"] },
-      { name: "Marketing", headline: "Ktheje vëmendjen në kërkesë reale.", subline: "Fushata dhe sisteme përmbajtjeje që arrijnë audiencën e duhur dhe i japin arsye për të vepruar.", benefits: ["Narrativë e qartë e fushatës", "Creative për çdo kanal", "Rrugë e qartë drejt veprimit"] },
-      { name: "SEO", headline: "Ji i pranishëm kur kërkesa ka peshë.", subline: "Strategji kërkimi që ndërton dukshmëri, relevancë dhe besim aty ku audienca juaj tashmë po kërkon.", benefits: ["Strategji e bazuar në kërkesë", "Strukturë teknike e qartë", "Relevancë organike afatgjatë"] },
-      { name: "Software & Aplikacione", headline: "Ndërto sistemin mbi të cilin rritet biznesi.", subline: "Software i menduar për të hequr pengesat, për të forcuar operacionet dhe për t’i hapur rrugë etapës së radhës.", benefits: ["Procese sipas mënyrës si punon biznesi", "Përvoja produkti intuitive", "Arkitekturë e ndërtuar për të evoluar"] },
+      { key: "design", title: "Design & Strategy", lines: ["A distinct identity.", "An experience that leaves a mark."] },
+      { key: "web", title: "Web Development", lines: ["Sites that perform.", "Built for growth."] },
+      { key: "marketing", title: "Marketing & SEO", lines: ["Visibility with purpose.", "Measurable growth."] },
+      { key: "software", title: "Software & Apps", lines: ["Systems that simplify.", "Products that scale."] },
     ],
   },
 };
 
-function StrategyVisual({ language }: { language: Language }) {
-  return <div className={`${styles.visualCanvas} ${styles.strategyVisual}`}>
-    <div className={styles.canvasMeta}><span>{language === "sq" ? "Pozicionim" : "Positioning"}</span><span>KR / SYSTEM</span></div>
-    <div className={styles.strategyWord}>{language === "sq" ? "Qartësi" : "Clarity"}</div>
-    <div className={styles.strategyGrid} aria-hidden="true" />
-    <div className={styles.strategyNote}><span>{language === "sq" ? "Ideja qendrore" : "Central idea"}</span><strong>{language === "sq" ? "Një identitet që mban peshë." : "An identity with consequence."}</strong></div>
-    <div className={styles.strategyMark} aria-hidden="true"><i /><i /><i /></div>
+function DesignWorld() {
+  return <div className={styles.designWorld} aria-hidden="true">
+    <span className={styles.typeGrid} />
+    <span className={styles.brandPlaneBack}>K</span>
+    <span className={styles.brandPlaneMiddle}>Aa</span>
+    <span className={styles.brandPlaneFront}>Aa<i>Aspekta 400</i></span>
+    <span className={styles.designRule} />
   </div>;
 }
 
-function WebVisual({ language }: { language: Language }) {
-  return <div className={`${styles.visualCanvas} ${styles.webVisual}`}>
-    <div className={styles.browserBar}><span>KREU / BUILD</span><span>{language === "sq" ? "Në zhvillim" : "In development"}</span></div>
-    <div className={styles.webHero}><span>{language === "sq" ? "Përvojë digjitale" : "Digital experience"}</span><strong>{language === "sq" ? "E qartë në çdo pikë." : "Clear at every point."}</strong></div>
-    <div className={styles.webMedia} aria-hidden="true"><span /><span /></div>
-    <div className={styles.webFooter}><span>Performance</span><span>Interaction</span><span>Scale</span></div>
-  </div>;
-}
-
-function MarketingVisual({ language }: { language: Language }) {
-  return <div className={`${styles.visualCanvas} ${styles.marketingVisual}`}>
-    <div className={styles.canvasMeta}><span>{language === "sq" ? "Fushata" : "Campaign"}</span><span>LIVE</span></div>
-    <div className={styles.campaignStatement}><span>{language === "sq" ? "Vëmendje" : "Attention"}</span><strong>{language === "sq" ? "me drejtim." : "with direction."}</strong></div>
-    <div className={styles.campaignRail} aria-hidden="true"><i /><i /><i /><i /></div>
-    <div className={styles.campaignDetails}>
-      <span>{language === "sq" ? "Mesazhi" : "Message"}<b>{language === "sq" ? "I fokusuar" : "Focused"}</b></span>
-      <span>{language === "sq" ? "Audienca" : "Audience"}<b>{language === "sq" ? "E përcaktuar" : "Defined"}</b></span>
-      <span>{language === "sq" ? "Veprimi" : "Action"}<b>{language === "sq" ? "I matshëm" : "Measurable"}</b></span>
+function WebWorld({ language }: { language: Language }) {
+  return <div className={styles.webWorld} aria-hidden="true">
+    <div className={styles.codePlane}><i /><i /><i /><i /><i /></div>
+    <div className={styles.browserWindow}>
+      <div className={styles.browserChrome}><span>kreu.system</span><i /><i /></div>
+      <div className={styles.browserContent}>
+        <span>{language === "sq" ? "Përvojë digjitale" : "Digital experience"}</span>
+        <strong>{language === "sq" ? "Qartësi që performon." : "Clarity that performs."}</strong>
+        <i /><i /><i />
+      </div>
     </div>
   </div>;
 }
 
-function SeoVisual({ language }: { language: Language }) {
-  const terms = language === "sq" ? ["Kërkesë me qëllim", "Relevancë në treg", "Autoritet organik"] : ["High intent demand", "Market relevance", "Organic authority"];
-  return <div className={`${styles.visualCanvas} ${styles.seoVisual}`}>
-    <div className={styles.searchHeader}><span>{language === "sq" ? "Dukshmëria në kërkim" : "Search visibility"}</span><i aria-hidden="true" /></div>
-    <div className={styles.searchResults}>{terms.map((term, index) => <div key={term}><span>{term}</span><b>{String(index + 1).padStart(2, "0")}</b></div>)}</div>
-    <svg className={styles.searchGraph} viewBox="0 0 520 180" role="img" aria-label={language === "sq" ? "Grafik i relevancës organike" : "Organic relevance chart"}>
-      <path d="M8 157 C78 151 103 128 159 133 C220 139 235 85 301 96 C358 105 391 48 510 25" />
-      <path className={styles.graphShadow} d="M8 167 C78 161 103 138 159 143 C220 149 235 95 301 106 C358 115 391 58 510 35" />
+function MarketingWorld({ language }: { language: Language }) {
+  return <div className={styles.marketingWorld} aria-hidden="true">
+    <div className={styles.metricRow}>
+      <span>{language === "sq" ? "Kërkim organik" : "Organic search"}<strong>68.4%</strong></span>
+      <span>{language === "sq" ? "Relevancë" : "Relevance"}<strong>{language === "sq" ? "E lartë" : "High"}</strong></span>
+    </div>
+    <svg viewBox="0 0 380 150" className={styles.growthChart}>
+      <path className={styles.chartShadow} d="M8 135 C64 131 78 112 123 116 C176 121 190 74 237 84 C282 93 302 45 372 18" />
+      <path d="M8 135 C64 131 78 112 123 116 C176 121 190 74 237 84 C282 93 302 45 372 18" />
     </svg>
-    <div className={styles.graphCaption}><span>{language === "sq" ? "Relevancë organike" : "Organic relevance"}</span><span>{language === "sq" ? "Në rritje" : "Compounding"}</span></div>
-  </div>;
-}
-
-function SoftwareVisual({ language }: { language: Language }) {
-  return <div className={`${styles.visualCanvas} ${styles.softwareVisual}`}>
-    <div className={styles.productShell}>
-      <aside><strong>OS</strong><i /><i /><i /><i /></aside>
-      <div className={styles.productMain}><div className={styles.productHeader}><span>{language === "sq" ? "Operacionet" : "Operations"}</span><b>{language === "sq" ? "Sistemi aktiv" : "System active"}</b></div><div className={styles.productMetric}><span>{language === "sq" ? "Rrjedha e punës" : "Workflow health"}</span><strong>96.4%</strong></div><div className={styles.productRows} aria-hidden="true"><i /><i /><i /></div></div>
+    <div className={styles.rankingRows}>
+      <span><i>{language === "sq" ? "Synimi i kërkimit" : "Search intent"}</i><b>↑ 8</b></span>
+      <span><i>{language === "sq" ? "Sinjali i tregut" : "Market signal"}</i><b>↑ 5</b></span>
+      <span><i>{language === "sq" ? "Autoritet" : "Authority"}</i><b>↑ 3</b></span>
     </div>
-    <div className={styles.mobileProduct}><span>OS</span><strong>{language === "sq" ? "Në kontroll" : "In control"}</strong><i /><i /><i /></div>
   </div>;
 }
 
-const visuals = [StrategyVisual, WebVisual, MarketingVisual, SeoVisual, SoftwareVisual];
-
-function ServiceDetails({ service, reducedMotion }: { service: Service; reducedMotion: boolean }) {
-  return <motion.div className={styles.details} initial={reducedMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={reducedMotion ? undefined : { opacity: 0, y: -12 }} transition={{ duration: reducedMotion ? 0 : 0.42, ease: [0.22, 1, 0.36, 1] }}>
-    <p className={styles.activeName}>{service.name}</p><h3>{service.headline}</h3><p className={styles.serviceSubline}>{service.subline}</p><ul>{service.benefits.map(benefit => <li key={benefit}>{benefit}</li>)}</ul>
-  </motion.div>;
+function SoftwareWorld({ language }: { language: Language }) {
+  return <div className={styles.softwareWorld} aria-hidden="true">
+    <div className={styles.systemPlane}><span>{language === "sq" ? "Operacionet" : "Operations"}</span><i /><i /><i /></div>
+    <div className={styles.appPhone}>
+      <div className={styles.phoneTop}><span>OS</span><i /></div>
+      <p>{language === "sq" ? "Sistemi aktiv" : "System active"}</p>
+      <strong>24</strong>
+      <small>{language === "sq" ? "procese në rrjedhë" : "live workflows"}</small>
+      <div className={styles.phoneRows}><i /><i /><i /></div>
+    </div>
+    <div className={styles.productPlane}><span>API</span><strong>{language === "sq" ? "Lidhur" : "Connected"}</strong><i /></div>
+  </div>;
 }
 
-function ServiceVisual({ index, language, reducedMotion }: { index: number; language: Language; reducedMotion: boolean }) {
-  const Visual = visuals[index];
-  return <motion.div className={styles.visualFrame} initial={reducedMotion ? false : { opacity: 0, scale: 0.975, x: 22, rotateY: -2.5 }} animate={{ opacity: 1, scale: 1, x: 0, rotateY: 0 }} exit={reducedMotion ? undefined : { opacity: 0, scale: 0.988, x: -12, rotateY: 1.5 }} transition={{ duration: reducedMotion ? 0 : 0.58, ease: [0.22, 1, 0.36, 1] }}><Visual language={language} /></motion.div>;
+function ServiceWorld({ serviceKey, language }: { serviceKey: Service["key"]; language: Language }) {
+  if (serviceKey === "design") return <DesignWorld />;
+  if (serviceKey === "web") return <WebWorld language={language} />;
+  if (serviceKey === "marketing") return <MarketingWorld language={language} />;
+  return <SoftwareWorld language={language} />;
+}
+
+function ServiceModule({ service, language, className, dimmed, active, onEnter, onLeave }: {
+  service: Service;
+  language: Language;
+  className: string;
+  dimmed: boolean;
+  active: boolean;
+  onEnter: () => void;
+  onLeave: () => void;
+}) {
+  return <article
+    className={`${styles.serviceModule} ${className}${dimmed ? ` ${styles.moduleDimmed}` : ""}${active ? ` ${styles.moduleActive}` : ""}`}
+    data-engine-module
+    tabIndex={0}
+    onMouseEnter={onEnter}
+    onMouseLeave={onLeave}
+    onFocus={onEnter}
+    onBlur={onLeave}
+  >
+    <div className={styles.moduleSurface}>
+      <header><h3>{service.title}</h3><span aria-hidden="true" /></header>
+      <ServiceWorld serviceKey={service.key} language={language} />
+      <footer><p>{service.lines[0]}<br />{service.lines[1]}</p><span>KREU / {service.key.toUpperCase()}</span></footer>
+    </div>
+  </article>;
+}
+
+function Core() {
+  return <div className={styles.coreStage} data-engine-core aria-label="KREU">
+    <div className={styles.coreReflection} aria-hidden="true" />
+    <div className={styles.coreCube}>
+      <div className={`${styles.cubeFace} ${styles.cubeFront}`}><span>KREU</span><i /></div>
+      <div className={`${styles.cubeFace} ${styles.cubeBack}`} aria-hidden="true" />
+      <div className={`${styles.cubeFace} ${styles.cubeRight}`} aria-hidden="true" />
+      <div className={`${styles.cubeFace} ${styles.cubeLeft}`} aria-hidden="true" />
+      <div className={`${styles.cubeFace} ${styles.cubeTop}`} aria-hidden="true" />
+      <div className={`${styles.cubeFace} ${styles.cubeBottom}`} aria-hidden="true" />
+    </div>
+  </div>;
+}
+
+const desktopPaths = [
+  "M350 218 C432 218 471 293 557 352",
+  "M872 209 C794 218 746 290 643 352",
+  "M348 573 C425 561 474 490 557 428",
+  "M860 550 C786 543 731 474 643 428",
+];
+
+const mobilePaths = [
+  "M50 9 C50 17 23 18 18 27",
+  "M50 9 C50 27 78 30 82 43",
+  "M50 9 C50 46 25 55 18 65",
+  "M50 9 C50 63 77 75 82 84",
+];
+
+function Connections({ active }: { active: number | null }) {
+  return <>
+    <svg className={`${styles.connections} ${styles.desktopConnections}`} viewBox="0 0 1200 780" preserveAspectRatio="none" aria-hidden="true">
+      {desktopPaths.map((path, index) => <g key={path} className={active === index ? styles.connectionActive : undefined}>
+        <path d={path} pathLength="1" data-engine-path />
+        <path d={path} pathLength="1" className={styles.signalPath} />
+        <circle cx={index % 2 === 0 ? 557 : 643} cy={index < 2 ? 352 : 428} r="3" />
+      </g>)}
+    </svg>
+    <svg className={`${styles.connections} ${styles.mobileConnections}`} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      {mobilePaths.map((path, index) => <g key={path} className={active === index ? styles.connectionActive : undefined}><path d={path} pathLength="1" data-engine-path /><path d={path} pathLength="1" className={styles.signalPath} /></g>)}
+    </svg>
+  </>;
+}
+
+function BackgroundGeometry() {
+  return <div className={styles.backgroundGeometry} aria-hidden="true"><i /><i /><i /><i /><span /><span /></div>;
 }
 
 export function Services() {
-  const { language, t } = useLanguage();
-  const copy = serviceCopy[language];
+  const { language } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
-  const [active, setActive] = useState(0);
-  const reducedMotion = Boolean(useReducedMotion());
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
+  const [active, setActive] = useState<number | null>(null);
+  const content = copy[language];
 
-  useMotionValueEvent(scrollYProgress, "change", value => {
-    if (window.innerWidth <= 768 || reducedMotion) return;
-    const next = Math.min(copy.services.length - 1, Math.floor(Math.min(value, 0.9999) * copy.services.length));
-    setActive(current => current === next ? current : next);
-  });
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const section = sectionRef.current;
+    if (!section) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const context = gsap.context(() => {
+      if (reduced) return;
+      const timeline = gsap.timeline({
+        scrollTrigger: { trigger: section, start: "top 84%", once: true },
+        defaults: { ease: "power3.out", immediateRender: false },
+      });
+      timeline
+        .from("[data-engine-header] > *", { y: 24, opacity: 0, duration: .72, stagger: .08 }, 0)
+        .from("[data-engine-core]", { y: 18, scale: .82, opacity: 0, duration: .9 }, .28)
+        .from("[data-engine-path]", { strokeDashoffset: 1, duration: 1.05, stagger: .08, ease: "power2.inOut" }, .52)
+        .from("[data-engine-module]", { y: 26, scale: .965, opacity: 0, duration: .82, stagger: .12 }, .76)
+        .from("[data-engine-result]", { y: 16, opacity: 0, duration: .62 }, 1.18);
+    }, section);
+    return () => context.revert();
+  }, []);
 
-  const selectService = (index: number) => {
-    setActive(index);
-    if (window.innerWidth <= 768 || reducedMotion || !sectionRef.current) return;
-    const rect = sectionRef.current.getBoundingClientRect();
-    const sectionTop = rect.top + window.scrollY;
-    const travel = Math.max(0, sectionRef.current.offsetHeight - window.innerHeight);
-    window.scrollTo({ top: sectionTop + travel * ((index + 0.18) / copy.services.length), behavior: "smooth" });
-  };
+  const renderModule = (index: number, positionClass: string) => <ServiceModule
+    key={content.services[index].key}
+    service={content.services[index]}
+    language={language}
+    className={positionClass}
+    active={active === index}
+    dimmed={active !== null && active !== index}
+    onEnter={() => setActive(index)}
+    onLeave={() => setActive(null)}
+  />;
 
   return <section ref={sectionRef} className={`services ${styles.root}`} id="expertise" aria-labelledby="services-title">
-    <div className={styles.desktopStage}><div className={styles.stickyStage}><div className={styles.layout}>
-      <div className={styles.content}>
-        <p className={styles.eyebrow}>{t("Services")}</p><h2 id="services-title">{copy.headline}</h2><p className={styles.intro}>{copy.intro}</p>
-        <nav className={styles.selector} aria-label={t("Services")}>{copy.services.map((service, index) => <button key={service.name} type="button" className={index === active ? styles.selectorActive : undefined} aria-pressed={index === active} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => selectService(index)}><span>{service.name}</span><i aria-hidden="true" /></button>)}</nav>
-        <div className={styles.detailsSlot} aria-live="polite"><AnimatePresence initial={false}><ServiceDetails key={`${language}-${active}`} service={copy.services[active]} reducedMotion={reducedMotion} /></AnimatePresence></div>
-        <BookingLink className={styles.cta}><span>{t("Book a discovery call")}</span><ArrowIcon /></BookingLink>
-      </div>
-      <div className={styles.visualColumn} aria-hidden="true"><div className={styles.visualAmbient}><i /><i /><i /></div><AnimatePresence initial={false}><ServiceVisual key={`${language}-${active}`} index={active} language={language} reducedMotion={reducedMotion} /></AnimatePresence><div className={styles.visualIndex}><span>{copy.services[active].name}</span><span>KREU WEB</span></div></div>
-    </div></div></div>
+    <BackgroundGeometry />
+    <div className={styles.inner}>
+      <header className={styles.sectionHeader} data-engine-header>
+        <div className={styles.headerMeta}><span>{content.eyebrow}</span><span>{content.aside}</span></div>
+        <h2 id="services-title">{content.headline}</h2>
+        <p>{content.subline}</p>
+      </header>
 
-    <div className={styles.mobileStage}>
-      <header className={styles.mobileHeader}><p className={styles.eyebrow}>{t("Services")}</p><h2>{copy.headline}</h2><p>{copy.intro}</p></header>
-      <div className={styles.mobileList}>{copy.services.map((service, index) => { const Visual = visuals[index]; return <motion.article key={service.name} className={styles.mobileService} initial={reducedMotion ? false : { opacity: 0.65, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: reducedMotion ? 0 : 0.55, ease: [0.22, 1, 0.36, 1] }}><div className={styles.mobileVisual} aria-hidden="true"><Visual language={language} /></div><p className={styles.activeName}>{service.name}</p><h3>{service.headline}</h3><p className={styles.serviceSubline}>{service.subline}</p><ul>{service.benefits.map(benefit => <li key={benefit}>{benefit}</li>)}</ul></motion.article>; })}</div>
-      <BookingLink className={`${styles.cta} ${styles.mobileCta}`}><span>{t("Book a discovery call")}</span><ArrowIcon /></BookingLink>
+      <div className={styles.engine} data-hovering={active !== null}>
+        <Connections active={active} />
+        <Core />
+        {renderModule(0, styles.designModule)}
+        {renderModule(1, styles.webModule)}
+        {renderModule(2, styles.marketingModule)}
+        {renderModule(3, styles.softwareModule)}
+      </div>
+
+      <div className={styles.result} data-engine-result>
+        <div><i /><span>{content.resultLabel}</span><i /></div>
+        <p>{content.result}</p>
+      </div>
     </div>
   </section>;
 }
