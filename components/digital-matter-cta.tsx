@@ -365,7 +365,9 @@ export function FinalCTA() {
               const depth = (spec.depth * local - (1 - local) * 90) * config.depth;
               element.style.opacity = String(.035 + local * spec.opacity * (mode === "mobile" ? .62 : 1));
               element.style.filter = config.blur ? `blur(${(1 - local) * config.blur}px)` : "none";
-              element.style.transform = `translate3d(${x}vw, ${y * sceneHeight / 100}px, ${depth}px) rotateX(${(spec.rotation[0] + (1 - local) * 38) * config.rotation}deg) rotateY(${spec.rotation[1] * config.rotation + bend * 5}deg) rotateZ(${spec.rotation[2] * config.rotation + bend}deg) scale(${.62 + local * .38})`;
+              element.style.transform = mode === "mobile"
+                ? `translate3d(${x}vw, ${y * sceneHeight / 100}px, 0) scale(${.82 + local * .18})`
+                : `translate3d(${x}vw, ${y * sceneHeight / 100}px, ${depth}px) rotateX(${(spec.rotation[0] + (1 - local) * 38) * config.rotation}deg) rotateY(${spec.rotation[1] * config.rotation + bend * 5}deg) rotateZ(${spec.rotation[2] * config.rotation + bend}deg) scale(${.62 + local * .38})`;
             });
 
             arcs.forEach((path, index) => {
@@ -380,32 +382,32 @@ export function FinalCTA() {
             const rearProgress = ease(clamp((progress - .16) / .62));
             const buttonProgress = ease(clamp((progress - .48) / .25));
             gsap.set(content, {
-              opacity: .82 + copyProgress * .18,
+              opacity: (mode === "mobile" ? .92 : .82) + copyProgress * (mode === "mobile" ? .08 : .18),
               x: (mode === "desktop" ? -10 : 0) * (1 - copyProgress),
-              y: (mode === "desktop" ? 4 : 6) * (1 - copyProgress),
+              y: (mode === "mobile" ? 5 : 4) * (1 - copyProgress),
             });
             gsap.set(visual, {
               opacity: 1,
             });
             if (rearPhone) gsap.set(rearPhone, {
-              opacity: .08 + rearProgress * .92,
-              x: (mode === "desktop" ? 54 : 12) * (1 - rearProgress),
-              y: (mode === "desktop" ? 20 : 9) * (1 - rearProgress),
-              z: mode === "desktop" ? -42 + rearProgress * 18 : -2,
-              rotateX: (mode === "desktop" ? -4 : -1) * (1 - rearProgress),
-              rotateY: mode === "desktop" ? -9 + rearProgress * 3 : -2 + rearProgress,
-              rotateZ: mode === "desktop" ? 4 : 2,
-              scale: .94 + rearProgress * .06,
+              opacity: (mode === "mobile" ? .18 : .08) + rearProgress * (mode === "mobile" ? .72 : .92),
+              x: (mode === "desktop" ? 54 : mode === "tablet" ? 12 : 0) * (1 - rearProgress),
+              y: (mode === "desktop" ? 20 : mode === "tablet" ? 9 : 7) * (1 - rearProgress),
+              z: mode === "desktop" ? -42 + rearProgress * 18 : mode === "tablet" ? -2 : 0,
+              rotateX: mode === "desktop" ? -4 * (1 - rearProgress) : mode === "tablet" ? -(1 - rearProgress) : 0,
+              rotateY: mode === "desktop" ? -9 + rearProgress * 3 : mode === "tablet" ? -2 + rearProgress : 0,
+              rotateZ: mode === "desktop" ? 4 : mode === "tablet" ? 2 : 0,
+              scale: (mode === "mobile" ? .97 : .94) + rearProgress * (mode === "mobile" ? .03 : .06),
             });
             if (frontPhone) gsap.set(frontPhone, {
-              opacity: .74 + frontProgress * .26,
-              x: (mode === "desktop" ? 24 : 6) * (1 - frontProgress),
+              opacity: (mode === "mobile" ? .88 : .74) + frontProgress * (mode === "mobile" ? .12 : .26),
+              x: (mode === "desktop" ? 24 : mode === "tablet" ? 6 : 0) * (1 - frontProgress),
               y: (mode === "desktop" ? 12 : 5) * (1 - frontProgress),
-              z: mode === "desktop" ? 48 + frontProgress * 18 : 5,
-              rotateX: mode === "desktop" ? -3 + frontProgress : -.75 + frontProgress * .35,
-              rotateY: mode === "desktop" ? 7 - frontProgress * 2 : 2 - frontProgress,
-              rotateZ: mode === "desktop" ? -3 : -1.5,
-              scale: .96 + frontProgress * .04,
+              z: mode === "desktop" ? 48 + frontProgress * 18 : mode === "tablet" ? 5 : 0,
+              rotateX: mode === "desktop" ? -3 + frontProgress : mode === "tablet" ? -.75 + frontProgress * .35 : 0,
+              rotateY: mode === "desktop" ? 7 - frontProgress * 2 : mode === "tablet" ? 2 - frontProgress : 0,
+              rotateZ: mode === "desktop" ? -3 : mode === "tablet" ? -1.5 : 0,
+              scale: (mode === "mobile" ? .985 : .96) + frontProgress * (mode === "mobile" ? .015 : .04),
             });
             gsap.set(button, { opacity: .84 + buttonProgress * .16, y: 4 * (1 - buttonProgress) });
           };
