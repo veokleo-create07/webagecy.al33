@@ -49,11 +49,13 @@ const copy: Record<Language, {
 function ServiceRoom({ room, index }: { room: Room; index: number }) {
   return <article className={styles.room} data-room data-room-index={index} tabIndex={0}>
     <div className={styles.roomDepth} aria-hidden="true" />
+    <div className={styles.roomHaze} aria-hidden="true" />
     <div className={styles.roomCeiling} aria-hidden="true" />
     <div className={styles.roomWallLeft} aria-hidden="true" />
     <div className={styles.roomWallRight} aria-hidden="true" />
     <div className={styles.roomFloor} aria-hidden="true" />
-    <div className={styles.roomLight} aria-hidden="true" />
+    <div className={styles.roomLight} data-room-light aria-hidden="true" />
+    <RoomArtifact index={index} />
     <div className={styles.roomContent}>
       <span className={styles.roomNumber}>{room.number}</span>
       <h3>{room.title}</h3>
@@ -62,6 +64,34 @@ function ServiceRoom({ room, index }: { room: Room; index: number }) {
     <span className={styles.edgeLeft} aria-hidden="true" />
     <span className={styles.edgeRight} aria-hidden="true" />
   </article>;
+}
+
+function RoomArtifact({ index }: { index: number }) {
+  if (index === 0) {
+    return <div className={`${styles.artifact} ${styles.designArtifact}`} data-room-artifact aria-hidden="true">
+      <span>Aa</span><i /><i /><b>Kg</b>
+    </div>;
+  }
+
+  if (index === 1) {
+    return <div className={`${styles.artifact} ${styles.webArtifact}`} data-room-artifact aria-hidden="true">
+      <header><span>kreu.web</span><i /><i /></header>
+      <div><b /><b /><b /><em /></div>
+    </div>;
+  }
+
+  if (index === 2) {
+    return <div className={`${styles.artifact} ${styles.marketingArtifact}`} data-room-artifact aria-hidden="true">
+      <span>68.4%</span>
+      <svg viewBox="0 0 180 82"><path d="M3 72 C30 70 39 57 63 60 C91 63 98 41 124 45 C149 49 155 23 177 11" /></svg>
+      <i /><i /><i />
+    </div>;
+  }
+
+  return <div className={`${styles.artifact} ${styles.softwareArtifact}`} data-room-artifact aria-hidden="true">
+    <i /><i />
+    <div><span>OS</span><b>24</b><em /><em /><em /></div>
+  </div>;
 }
 
 function HumanSilhouette() {
@@ -98,7 +128,9 @@ export function Services() {
         timeline
           .from("[data-services-header] > *", { y: 24, opacity: 0, duration: .75, stagger: .09 }, 0)
           .from("[data-room]", { y: 48, opacity: 0, rotateX: -7, scale: .965, duration: 1, stagger: .1 }, .35)
-          .from("[data-room] > *", { opacity: 0, y: 12, duration: .56, stagger: .02 }, .72)
+          .from("[data-room-light]", { opacity: 0, scaleY: .45, transformOrigin: "50% 100%", duration: .82, stagger: .08 }, .6)
+          .from("[data-room-artifact]", { opacity: 0, z: -35, y: 12, duration: .7, stagger: .08 }, .76)
+          .from("[data-room] > *:not([data-room-light]):not([data-room-artifact])", { opacity: 0, y: 10, duration: .5, stagger: .015 }, .72)
           .from("[data-figure]", { opacity: 0, y: 12, scale: .92, duration: .72 }, .92)
           .from("[data-services-closing]", { opacity: 0, y: 16, duration: .68 }, 1.08);
       });
