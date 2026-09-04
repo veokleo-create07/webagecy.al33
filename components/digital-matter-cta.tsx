@@ -79,6 +79,10 @@ const appInterface = {
     sevenDays: "This week",
     recent: "Recent shipments",
     viewAll: "View all",
+    upcoming: "Upcoming arrivals",
+    nextWindow: "Next 90 minutes",
+    arrivalRoutes: ["Prishtina · Dock 04", "Tirana · Hub 02"],
+    arrivalStatus: ["On time", "12 min early"],
     routes: ["Tirana · Prishtina", "Durrës · Skopje", "Milan · Tirana"],
     etas: ["14:30", "17:45", "Tomorrow"],
     drivers: ["AK", "EL", "NM"],
@@ -128,6 +132,10 @@ const appInterface = {
     sevenDays: "Këtë javë",
     recent: "Dërgesat e fundit",
     viewAll: "Shiko të gjitha",
+    upcoming: "Mbërritjet e radhës",
+    nextWindow: "90 minutat e ardhshme",
+    arrivalRoutes: ["Prishtinë · Porta 04", "Tiranë · Qendra 02"],
+    arrivalStatus: ["Në orar", "12 min më herët"],
     routes: ["Tiranë · Prishtinë", "Durrës · Shkup", "Milano · Tiranë"],
     etas: ["14:30", "17:45", "Nesër"],
     drivers: ["AK", "EL", "NM"],
@@ -218,6 +226,12 @@ function DashboardScreen({ language }: { language: AppLanguage }) {
               <span className="shipment-driver">{copy.drivers[index]}</span>
               <span className={`shipment-status shipment-status--${index === 1 ? "scheduled" : "transit"}`}><i />{index === 1 ? copy.scheduled : copy.transit}</span>
             </div>
+          ))}
+        </div>
+        <div className="logistics-list-heading logistics-list-heading--arrivals"><span>{copy.upcoming}</span><small>{copy.nextWindow}</small></div>
+        <div className="logistics-arrivals">
+          {["14:30", "15:10"].map((time, index) => (
+            <div key={time}><strong>{time}</strong><span><b>{copy.arrivalRoutes[index]}</b><small>NXA-{index === 0 ? "2841" : "2816"}</small></span><i>{copy.arrivalStatus[index]}</i></div>
           ))}
         </div>
       </div>
@@ -327,13 +341,13 @@ export function FinalCTA() {
           const arcs = gsap.utils.toArray<SVGPathElement>(".magnetic-field__arcs path");
           const arcLengths = arcs.map(path => path.getTotalLength());
           const reduced = match.conditions?.reduced;
-          const shouldPin = mode === "desktop" || !match.conditions?.short;
+          const shouldPin = mode === "desktop" || (mode === "tablet" && !match.conditions?.short);
           let sceneHeight = section.clientHeight;
           const state = { progress: reduced ? 1 : 0 };
 
           const render = (progress: number) => {
             section.style.setProperty("--magnetic-progress", String(progress));
-            section.style.setProperty("--magnetic-glow", String(.025 + progress * .045));
+            section.style.setProperty("--magnetic-glow", String(.04 + progress * .03));
             elements.forEach((element, index) => {
               const spec = fragments[index];
               const visible = mode === "desktop" ? desktopFragments.has(index) : mode === "tablet" ? tabletFragments.has(index) : mobileFragments.has(index);
@@ -349,7 +363,7 @@ export function FinalCTA() {
               const y = gsap.utils.interpolate(spec.from[1] * config.from, finalY, local) + Math.sin(local * Math.PI) * spec.arc * config.arc;
               const bend = Math.sin(local * Math.PI * 1.15 + index * .73) * (1 - local) * 2.2 * config.rotation;
               const depth = (spec.depth * local - (1 - local) * 90) * config.depth;
-              element.style.opacity = String(.01 + local * spec.opacity * (mode === "mobile" ? .72 : 1));
+              element.style.opacity = String(.035 + local * spec.opacity * (mode === "mobile" ? .62 : 1));
               element.style.filter = config.blur ? `blur(${(1 - local) * config.blur}px)` : "none";
               element.style.transform = `translate3d(${x}vw, ${y * sceneHeight / 100}px, ${depth}px) rotateX(${(spec.rotation[0] + (1 - local) * 38) * config.rotation}deg) rotateY(${spec.rotation[1] * config.rotation + bend * 5}deg) rotateZ(${spec.rotation[2] * config.rotation + bend}deg) scale(${.62 + local * .38})`;
             });
@@ -358,43 +372,42 @@ export function FinalCTA() {
               const local = ease(clamp((progress - .08 - index * .025) / .74));
               path.style.strokeDasharray = String(arcLengths[index]);
               path.style.strokeDashoffset = String(arcLengths[index] * (1 - local));
-              path.style.opacity = String(local * (mode === "desktop" ? .28 : mode === "tablet" ? .2 : .12));
+              path.style.opacity = String(.035 + local * (mode === "desktop" ? .245 : mode === "tablet" ? .165 : .075));
             });
 
             const copyProgress = ease(clamp((progress - .14) / .44));
-            const rearProgress = ease(clamp((progress - .18) / .5));
-            const frontProgress = ease(clamp((progress - .27) / .48));
-            const deviceProgress = Math.max(rearProgress, frontProgress);
+            const frontProgress = ease(clamp((progress - .02) / .68));
+            const rearProgress = ease(clamp((progress - .16) / .62));
             const buttonProgress = ease(clamp((progress - .48) / .25));
             gsap.set(content, {
-              opacity: copyProgress,
-              x: (mode === "desktop" ? -34 : 0) * (1 - copyProgress),
-              y: (mode === "desktop" ? 8 : 18) * (1 - copyProgress),
+              opacity: .82 + copyProgress * .18,
+              x: (mode === "desktop" ? -10 : 0) * (1 - copyProgress),
+              y: (mode === "desktop" ? 4 : 6) * (1 - copyProgress),
             });
             gsap.set(visual, {
-              opacity: deviceProgress,
+              opacity: 1,
             });
             if (rearPhone) gsap.set(rearPhone, {
-              opacity: rearProgress,
-              x: (mode === "desktop" ? 92 : 24) * (1 - rearProgress),
-              y: (mode === "desktop" ? 34 : 22) * (1 - rearProgress),
-              z: mode === "desktop" ? -34 + rearProgress * 10 : 0,
-              rotateX: (mode === "desktop" ? -8 : -2) * (1 - rearProgress),
-              rotateY: (mode === "desktop" ? -15 + rearProgress * 7 : -3 + rearProgress * 2),
+              opacity: .08 + rearProgress * .92,
+              x: (mode === "desktop" ? 54 : 12) * (1 - rearProgress),
+              y: (mode === "desktop" ? 20 : 9) * (1 - rearProgress),
+              z: mode === "desktop" ? -42 + rearProgress * 18 : -2,
+              rotateX: (mode === "desktop" ? -4 : -1) * (1 - rearProgress),
+              rotateY: mode === "desktop" ? -9 + rearProgress * 3 : -2 + rearProgress,
               rotateZ: mode === "desktop" ? 4 : 2,
-              scale: .9 + rearProgress * .1,
+              scale: .94 + rearProgress * .06,
             });
             if (frontPhone) gsap.set(frontPhone, {
-              opacity: frontProgress,
-              x: (mode === "desktop" ? 112 : 28) * (1 - frontProgress),
-              y: (mode === "desktop" ? 46 : 28) * (1 - frontProgress),
-              z: mode === "desktop" ? 42 + frontProgress * 28 : 6,
-              rotateX: (mode === "desktop" ? -10 + frontProgress * 8 : -2 + frontProgress),
-              rotateY: (mode === "desktop" ? 17 - frontProgress * 12 : 4 - frontProgress * 2),
+              opacity: .74 + frontProgress * .26,
+              x: (mode === "desktop" ? 24 : 6) * (1 - frontProgress),
+              y: (mode === "desktop" ? 12 : 5) * (1 - frontProgress),
+              z: mode === "desktop" ? 48 + frontProgress * 18 : 5,
+              rotateX: mode === "desktop" ? -3 + frontProgress : -.75 + frontProgress * .35,
+              rotateY: mode === "desktop" ? 7 - frontProgress * 2 : 2 - frontProgress,
               rotateZ: mode === "desktop" ? -3 : -1.5,
-              scale: .88 + frontProgress * .12,
+              scale: .96 + frontProgress * .04,
             });
-            gsap.set(button, { opacity: buttonProgress, y: 12 * (1 - buttonProgress) });
+            gsap.set(button, { opacity: .84 + buttonProgress * .16, y: 4 * (1 - buttonProgress) });
           };
 
           render(state.progress);
@@ -405,8 +418,8 @@ export function FinalCTA() {
             onUpdate: () => render(state.progress),
             scrollTrigger: {
               trigger: section,
-              start: shouldPin ? "top top" : "top 70%",
-              end: shouldPin ? () => `+=${section.clientHeight * config.distance}` : "bottom bottom",
+              start: shouldPin ? "top top" : "top 72%",
+              end: shouldPin ? () => `+=${section.clientHeight * config.distance}` : "bottom 35%",
               scrub: mode === "mobile" ? .45 : .65,
               pin: shouldPin,
               anticipatePin: 1,

@@ -2315,7 +2315,7 @@ a:focus-visible {
 
 .magnetic-cta {
   --magnetic-progress: 0;
-  --magnetic-glow: 0.025;
+  --magnetic-glow: 0.04;
   overflow: hidden;
   isolation: isolate;
   background: #080908;
@@ -2465,7 +2465,7 @@ a:focus-visible {
   z-index: 8;
   display: grid;
   width: min(92vw, 96rem);
-  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
   align-items: center;
   gap: clamp(2rem, 4.5vw, 6rem);
 }
@@ -2478,7 +2478,7 @@ a:focus-visible {
 }
 
 .magnetic-cta__content h2 {
-  max-width: 9.5ch;
+  max-width: 11ch;
   font-size: clamp(3.4rem, 5vw, 6.5rem);
   font-weight: 400;
   letter-spacing: -0.068em;
@@ -2508,7 +2508,7 @@ a:focus-visible {
   --device-x: 0px;
   --device-y: 0px;
   position: relative;
-  width: min(52vw, 48rem);
+  width: min(49vw, 45rem);
   aspect-ratio: 1.28;
   margin-inline: auto;
   transform: translate3d(var(--device-x), var(--device-y), 0) rotateX(var(--device-rx)) rotateY(var(--device-ry));
@@ -2668,7 +2668,7 @@ a:focus-visible {
 .nexa-wordmark { font-size: 2.75cqw; font-weight: 720; letter-spacing: 0.18em; line-height: 1; }
 .logistics-app__profile { display: grid; width: 6cqw; height: 6cqw; place-items: center; justify-self: end; border: 1px solid rgba(23,23,22,0.13); border-radius: 50%; background: #ecece8; font-size: 1.8cqw; font-weight: 650; }
 
-.logistics-app__body { flex: 1; min-height: 0; padding: 2.5% 7% 0; }
+.logistics-app__body { flex: 1; min-height: 0; overflow: hidden; padding: 2.5% 7% 0; }
 .logistics-title-row { display: flex; margin-bottom: 3.4%; align-items: flex-end; justify-content: space-between; }
 .logistics-title-row > span { display: flex; min-width: 0; flex-direction: column; gap: 0.8cqw; }
 .logistics-title-row small { color: rgba(23, 23, 22, 0.48); font-size: 2.15cqw; }
@@ -2713,6 +2713,16 @@ a:focus-visible {
 .shipment-status { display: flex; padding: 1.1cqw 1.35cqw; align-items: center; gap: 0.75cqw; border: 1px solid rgba(23,23,22,0.07); border-radius: 999px; color: rgba(23,23,22,0.66); font-size: 1.35cqw; white-space: nowrap; }
 .shipment-status i { display: block; width: 1.1cqw; height: 1.1cqw; border-radius: 50%; background: #43564c; }
 .shipment-status--scheduled i { background: rgba(23,23,22,0.32); }
+
+.logistics-list-heading--arrivals { margin-top: 3%; }
+.logistics-arrivals { overflow: hidden; border: 1px solid rgba(23,23,22,0.065); border-radius: 2.7cqw; background: rgba(255,255,255,0.58); }
+.logistics-arrivals > div { display: grid; padding: 2.4% 3.5%; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: 2.2cqw; border-bottom: 1px solid rgba(23,23,22,0.06); }
+.logistics-arrivals > div:last-child { border-bottom: 0; }
+.logistics-arrivals > div > strong { font-size: 2cqw; font-weight: 650; font-variant-numeric: tabular-nums; }
+.logistics-arrivals > div > span { display: flex; min-width: 0; flex-direction: column; gap: 0.45cqw; }
+.logistics-arrivals b { overflow: hidden; font-size: 1.8cqw; font-weight: 600; white-space: nowrap; text-overflow: ellipsis; }
+.logistics-arrivals small { color: rgba(23,23,22,0.44); font-size: 1.45cqw; }
+.logistics-arrivals > div > i { color: #43564c; font-size: 1.45cqw; font-style: normal; font-weight: 620; white-space: nowrap; }
 
 .logistics-tabbar { display: grid; height: 9%; padding: 1.2% 4.5% 2.5%; grid-template-columns: repeat(5, 1fr); align-items: end; border-top: 1px solid rgba(23, 23, 22, 0.07); background: rgba(249,249,246,0.96); }
 .logistics-tabbar > span { display: flex; align-items: center; flex-direction: column; gap: 0.9cqw; color: rgba(23,23,22,0.43); font-size: 1.25cqw; font-weight: 540; white-space: nowrap; }
@@ -4120,7 +4130,7 @@ a:focus-visible {
   }
 
   .magnetic-device {
-    width: min(58vw, 42rem);
+    width: min(54vw, 39rem);
   }
 }
 
@@ -4165,7 +4175,7 @@ a:focus-visible {
   }
 
   .magnetic-device {
-    width: min(100%, 55svh);
+    width: min(94%, 52svh);
   }
 
   .magnetic-cta__button {
