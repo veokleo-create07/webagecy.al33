@@ -4243,6 +4243,7 @@ a:focus-visible {
   }
 
   .magnetic-device {
+    --device-x: -8%;
     width: 100%;
     transition: none;
   }

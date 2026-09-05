@@ -1,11 +1,13 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import type { CSSProperties, ReactNode } from "react";
+import { useEffect, useRef } from "react";
+import type { ReactNode, RefObject } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BookingLink } from "@/components/booking/booking-provider";
 import { useLanguage } from "@/components/language-provider";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
-import { cn } from "@/lib/utils";
 import type { Language } from "@/lib/localization";
 import styles from "./cta-with-text-marquee.module.css";
 
@@ -42,9 +44,9 @@ function MarqueeGroup({ children, hidden = false }: { children: ReactNode; hidde
   return <div className={styles.group} aria-hidden={hidden || undefined}>{children}</div>;
 }
 
-function VerticalMarquee({ services, paused = true, speed = 22 }: { services: Service[]; paused?: boolean; speed?: number }) {
-  return <div className={cn(styles.marquee, paused && styles.pauseOnHover)} style={{ "--duration": `${speed}s` } as CSSProperties}>
-    <div className={styles.track}>
+function VerticalMarquee({ services, trackRef }: { services: Service[]; trackRef: RefObject<HTMLDivElement | null> }) {
+  return <div className={styles.marquee}>
+    <div ref={trackRef} className={styles.track}>
       {[false, true].map(hidden => <MarqueeGroup key={String(hidden)} hidden={hidden}>
         {services.map(service => <div className={styles.item} key={`${hidden}-${service.title}`}>
           <strong>{service.title}</strong>
@@ -58,8 +60,47 @@ export default function CTAWithTextMarquee() {
   const { language } = useLanguage();
   const reducedMotion = useReducedMotion();
   const content = copy[language];
+  const sectionRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
-  return <section className={`services ${styles.root}`} id="expertise" aria-labelledby="services-title">
+  useEffect(() => {
+    const section = sectionRef.current;
+    const track = trackRef.current;
+    if (!section || !track || reducedMotion) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+    const context = gsap.context(() => {
+      const loop = gsap.fromTo(track, { yPercent: 0 }, {
+        yPercent: -50,
+        duration: 22,
+        repeat: -1,
+        force3D: true,
+        ease: "none",
+      });
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top bottom",
+        end: "bottom top",
+        onUpdate: self => {
+          const velocity = Math.min(3.4, 1 + Math.abs(self.getVelocity()) / 650);
+          gsap.killTweensOf(loop);
+          loop.timeScale(self.direction * velocity);
+          gsap.to(loop, {
+            timeScale: 1,
+            duration: .8,
+            delay: .08,
+            ease: "power2.out",
+            overwrite: true,
+          });
+        },
+      });
+    }, section);
+
+    return () => context.revert();
+  }, [reducedMotion]);
+
+  return <section ref={sectionRef} className={`services ${styles.root}`} id="expertise" aria-labelledby="services-title">
     <motion.div className={styles.inner} initial={reducedMotion ? false : { opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "0px 0px -12%" }} transition={{ duration: reducedMotion ? 0 : .85, ease: [.22, 1, .36, 1] }}>
       <div className={styles.content}>
         <span className={styles.label}>{content.label}</span>
@@ -71,7 +112,7 @@ export default function CTAWithTextMarquee() {
       </div>
 
       <div className={styles.marqueeStage}>
-        <VerticalMarquee services={content.services} paused={!reducedMotion} />
+        <VerticalMarquee services={content.services} trackRef={trackRef} />
       </div>
     </motion.div>
   </section>;

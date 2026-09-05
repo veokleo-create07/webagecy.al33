@@ -469,11 +469,12 @@ export function FinalCTA() {
       aria-labelledby="contact-title"
       onPointerMove={handleFieldParallax}
       onPointerLeave={() => {
+        const desktopPointer = window.matchMedia("(min-width: 1025px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches;
         fieldRef.current?.style.setProperty("--field-x", "0px");
         fieldRef.current?.style.setProperty("--field-y", "0px");
         deviceStageRef.current?.style.setProperty("--device-rx", "0deg");
         deviceStageRef.current?.style.setProperty("--device-ry", "0deg");
-        deviceStageRef.current?.style.setProperty("--device-x", "0px");
+        deviceStageRef.current?.style.setProperty("--device-x", desktopPointer ? "0px" : "-8%");
         deviceStageRef.current?.style.setProperty("--device-y", "0px");
       }}
     >
