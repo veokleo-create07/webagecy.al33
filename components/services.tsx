@@ -39,9 +39,11 @@ const copy: Record<Language, { context: string; headline: string; paragraph: str
 function DesignWorld() {
   return <div className={`${styles.world} ${styles.designWorld}`} data-world aria-hidden="true">
     <div className={styles.designGrid}><i /><i /><i /><i /></div>
-    <div className={styles.typeSheetBack}><span>Form</span><b>Identity</b></div>
-    <div className={styles.typeSheetMid}><span>Kg</span><i /></div>
-    <div className={styles.typeSheetMain}><small>TYPE STUDY</small><strong>Aa</strong><span>Aspekta</span><i /></div>
+    <div className={styles.typeSheetBack}><span>Form</span><b>Identity 06.26</b></div>
+    <div className={styles.typeSheetMid}><span>Kg</span><i /><b>K</b></div>
+    <div className={styles.typeSheetMain}><small>TYPOGRAPHY / SYSTEM</small><strong>Aa</strong><span>Aspekta Regular</span><i /></div>
+    <div className={styles.identityCard}><b>K</b><span>KREU<br />VISUAL SYSTEM</span></div>
+    <div className={styles.materialSwatches}><i /><i /><i /></div>
     <div className={styles.alignMarks}><i /><i /><i /></div>
   </div>;
 }
@@ -50,9 +52,12 @@ function WebWorld() {
   return <div className={`${styles.world} ${styles.webWorld}`} data-world aria-hidden="true">
     <div className={styles.codePanel}><span>01</span><i /><i /><i /><i /></div>
     <div className={styles.browser}>
-      <header><span /><span /><span /><b>kreu.studio / work</b></header>
-      <div className={styles.browserHero}><small>DIGITAL EXPERIENCE</small><strong>Built with<br />purpose.</strong><i /></div>
-      <div className={styles.browserRail}><span /><span /><span /></div>
+      <header><span /><span /><span /><b>atelier.one / residences</b></header>
+      <div className={styles.browserHero}>
+        <small>PRIVATE RESIDENCES / 2026</small><strong>Space,<br />considered.</strong>
+        <div className={styles.editorialImage}><i /><i /><span>VIEW 04</span></div>
+      </div>
+      <div className={styles.browserRail}><span>Architecture</span><span>Residences</span><span>Explore</span></div>
     </div>
     <div className={styles.webCursor} />
   </div>;
@@ -71,6 +76,7 @@ function MarketingWorld() {
       <div className={styles.chartLabels}><span>JAN</span><span>JUN</span><span>DEC</span></div>
     </div>
     <div className={styles.rankPanel}><span>Search position</span><b>03</b><i /><i /><i /></div>
+    <div className={styles.campaignPanel}><small>CAMPAIGN 04</small><span>Qualified demand</span><b>8.7×</b></div>
   </div>;
 }
 
@@ -79,7 +85,8 @@ function SoftwareWorld() {
     <div className={styles.systemPanel}><span>LIVE SYSTEM</span><i /><i /><i /></div>
     <div className={styles.phone}><div className={styles.phoneScreen}>
       <header><span>NEXA</span><i /></header><small>OPERATIONS</small><strong>24</strong><em>active routes</em>
-      <div className={styles.phoneChart}><i /><i /><i /><i /><i /></div><div className={styles.phoneRows}><span /><span /><span /></div>
+      <div className={styles.phoneChart}><i /><i /><i /><i /><i /></div>
+      <div className={styles.phoneRows}><span><i />Tirana → Prishtina</span><span><i />Durrës → Milan</span><span><i />Skopje → Tirana</span></div>
     </div></div>
     <div className={styles.statusPanel}><i /><span>Systems connected</span><b>98.6%</b></div>
   </div>;
