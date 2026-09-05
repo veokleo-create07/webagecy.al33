@@ -19,7 +19,7 @@ function load(file, dependencies = {}, globals = {}) {
   return exports;
 }
 const booking = load("lib/booking.ts");
-const details = { ...booking.emptyDetails, fullName: "Test Visitor", email: " Visitor+call@EXAMPLE.com ", businessName: "Test Studio", hasWebsite: "yes", website: "example.com", revenue: "€10k–€50k", notes: "" };
+const details = { ...booking.emptyDetails, fullName: "Test Visitor", email: " Visitor+call@EXAMPLE.com ", businessName: "Test Studio", hasWebsite: "yes", website: "example.com", investment: "€3,000–€5,000", notes: "", referralSource: "Instagram" };
 const payload = { ...details, start: new Date(Date.now() + 86400000).toISOString(), timezone: "Europe/Tirane" };
 const key = "12345678-1234-4123-8123-123456789012";
 const future = payload.start;
@@ -28,21 +28,23 @@ function request(data = payload, headers = {}) {
   return new Request("https://kreu.example/api/booking", { method: "POST", headers: { Origin: "https://kreu.example", "Content-Type": "application/json", "Idempotency-Key": key, ...headers }, body: JSON.stringify(data) });
 }
 
-test("all six qualification steps accept valid data; notes are optional", () => {
-  for (let step = 0; step < 6; step++) assert.equal(booking.validateStep(step, details), null);
+test("all seven qualification steps accept valid data; project details are optional", () => {
+  for (let step = 0; step < 7; step++) assert.equal(booking.validateStep(step, details), null);
   assert.equal(booking.normalizedEmail(details.email), "Visitor+call@example.com");
 });
-test("required fields, email addresses and revenue choices are validated", () => {
-  for (const [step, patch] of [[0, { fullName: "" }], [1, { email: "" }], [2, { businessName: "" }], [3, { hasWebsite: "" }], [4, { revenue: "project budget" }], [5, { notes: "a".repeat(2001) }]]) assert.equal(typeof booking.validateStep(step, { ...details, ...patch }), "string");
+test("required fields, email addresses, investment and referral choices are validated", () => {
+  for (const [step, patch] of [[0, { fullName: "" }], [1, { email: "" }], [2, { businessName: "" }], [3, { hasWebsite: "" }], [4, { investment: "project budget" }], [5, { notes: "a".repeat(2001) }], [6, { referralSource: "" }]]) assert.equal(typeof booking.validateStep(step, { ...details, ...patch }), "string");
 });
 test("email accepts aliases and subdomains but rejects malformed mailboxes", () => {
   for (const email of ["hello@example.com", "first.last+call@studio.example.co.uk", "o'neil@example.com"]) assert.equal(booking.validateStep(1, { ...details, email }), null);
   for (const email of ["", "   ", "name", "name@", "@example.com", "name@example", "name@@example.com", "first last@example.com", ".name@example.com", "name..last@example.com", "name.@example.com", "name@-example.com", "name@example-.com", "name@example..com", "name@example.com\r\nBcc:other@example.com", `${"a".repeat(65)}@example.com`, `name@${"a".repeat(64)}.com`]) assert.ok(booking.validateStep(1, { ...details, email }), email);
 });
-test("revenue offers exactly four ranges and rejects the removed option", () => {
-  assert.deepEqual(booking.revenueOptions, ["Under €10k", "€10k–€50k", "€50k–€100k", "€100k+"]);
-  for (const revenue of booking.revenueOptions) assert.equal(booking.validateStep(4, { ...details, revenue }), null);
-  assert.equal(booking.validateStep(4, { ...details, revenue: "Prefer not to say" }), "Choose a revenue range.");
+test("investment offers exactly four ranges and referral offers five sources", () => {
+  assert.deepEqual(booking.investmentOptions, ["€1,500–€3,000", "€3,000–€5,000", "€5,000–€10,000", "€10,000+"]);
+  for (const investment of booking.investmentOptions) assert.equal(booking.validateStep(4, { ...details, investment }), null);
+  assert.equal(booking.validateStep(4, { ...details, investment: "Prefer not to say" }), "Choose an investment range.");
+  assert.deepEqual(booking.referralOptions, ["Instagram", "TikTok", "LinkedIn", "Google referral", "Other"]);
+  for (const referralSource of booking.referralOptions) assert.equal(booking.validateStep(6, { ...details, referralSource }), null);
 });
 test("website is required only for Yes; unsafe schemes and credentials fail", () => {
   assert.equal(booking.validateStep(3, { ...details, hasWebsite: "no", website: "" }), null);
@@ -102,7 +104,7 @@ test("missing configuration and provider errors never leak secrets", async () =>
 test("invalid email, website, timezone, start, origin and oversized payload are rejected before Cal", async () => {
   let calls = 0;
   const { post } = setup(async () => { calls++; throw new Error("Unexpected fetch"); });
-  for (const patch of [{ email: "bad" }, { email: undefined }, { website: "" }, { revenue: "Prefer not to say" }, { start: "2000-01-01T09:00:00Z" }, { start: "2030-01-01T09:00:00" }, { timezone: "invalid" }, { notes: 123 }]) assert.equal((await post(request({ ...payload, ...patch }))).status, 400);
+  for (const patch of [{ email: "bad" }, { email: undefined }, { website: "" }, { investment: "Prefer not to say" }, { referralSource: "Unknown" }, { start: "2000-01-01T09:00:00Z" }, { start: "2030-01-01T09:00:00" }, { timezone: "invalid" }, { notes: 123 }]) assert.equal((await post(request({ ...payload, ...patch }))).status, 400);
   assert.equal((await post(request(payload, { Origin: "https://other.example" }))).status, 403);
   assert.equal((await post(request(payload, { "Idempotency-Key": "bad" }))).status, 400);
   assert.equal((await post(request({ ...payload, notes: "x".repeat(20000) }))).status, 413);
@@ -121,6 +123,8 @@ test("server owns event ID and duration; full answers fit Cal metadata limits", 
   assert.equal(body.allowConflicts, false);
   assert.equal(body.allowBookingOutOfBounds, false);
   assert.equal(body.metadata.website, "");
+  assert.equal(body.metadata.investment, details.investment);
+  assert.equal(body.metadata.referralSource, details.referralSource);
   assert.equal([body.metadata.notes, body.metadata.notes_2, body.metadata.notes_3, body.metadata.notes_4].join(""), "a".repeat(1900));
   assert.ok(Object.values(body.metadata).every(value => value.length <= 500));
   assert.equal(JSON.stringify(result).includes(env.CAL_API_KEY), false);

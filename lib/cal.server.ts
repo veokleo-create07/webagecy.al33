@@ -97,7 +97,7 @@ export function normalizeConfirmation(raw: unknown, input: BookingInput): Confir
 }
 
 function metadataFor(input: BookingInput, requestToken: string, payloadToken: string) {
-  const metadata: Record<string, string> = { source: "kreu-web", kreuRequest: requestToken, kreuPayload: payloadToken, businessName: input.businessName.trim(), hasWebsite: input.hasWebsite, revenue: input.revenue };
+  const metadata: Record<string, string> = { source: "kreu-web", kreuRequest: requestToken, kreuPayload: payloadToken, businessName: input.businessName.trim(), hasWebsite: input.hasWebsite, investment: input.investment, referralSource: input.referralSource };
   // Cal metadata values have a 500-character limit. Keep long answers intact
   // across bounded continuation keys rather than silently truncating them.
   for (const [key, value] of Object.entries({ website: input.hasWebsite === "yes" ? normalizedWebsite(input.website) || "" : "", notes: input.notes.trim() })) {

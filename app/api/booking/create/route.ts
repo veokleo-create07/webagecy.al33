@@ -30,11 +30,11 @@ export async function POST(request: Request) {
     data = JSON.parse(Buffer.concat(chunks).toString("utf8"));
     if (!data || typeof data !== "object" || Array.isArray(data)) return invalid("INVALID_DETAILS");
   } catch { return invalid("INVALID_DETAILS"); }
-  if (["fullName", "email", "businessName", "hasWebsite", "revenue"].some(field => typeof data[field] !== "string")) return invalid("INVALID_DETAILS");
+  if (["fullName", "email", "businessName", "hasWebsite", "investment", "referralSource"].some(field => typeof data[field] !== "string")) return invalid("INVALID_DETAILS");
   if (data.notes !== undefined && typeof data.notes !== "string") return invalid("INVALID_DETAILS");
   if (data.hasWebsite === "yes" && typeof data.website !== "string") return invalid("INVALID_DETAILS");
-  const details: BookingDetails = { fullName: data.fullName as string, email: data.email as string, businessName: data.businessName as string, hasWebsite: data.hasWebsite as BookingDetails["hasWebsite"], website: data.hasWebsite === "yes" ? data.website as string : "", revenue: data.revenue as string, notes: data.notes as string || "" };
-  for (let step = 0; step < 6; step++) {
+  const details: BookingDetails = { fullName: data.fullName as string, email: data.email as string, businessName: data.businessName as string, hasWebsite: data.hasWebsite as BookingDetails["hasWebsite"], website: data.hasWebsite === "yes" ? data.website as string : "", investment: data.investment as string, notes: data.notes as string || "", referralSource: data.referralSource as string };
+  for (let step = 0; step < 7; step++) {
     const error = validateStep(step, details);
     if (error) return Response.json({ success: false, code: "INVALID_DETAILS", step, message: error }, { status: 400, headers: { "Cache-Control": "no-store" } });
   }

@@ -34,14 +34,14 @@ test("all explicit UI translation keys and validation messages are covered", () 
   for (const match of validation.matchAll(/return "([^"]+)"/g)) assert.ok(Object.hasOwn(albanian, match[1]), match[1]);
 });
 
-test("conversion copy is consistent without changing booking revenue values", () => {
+test("conversion copy and investment values remain consistently localized", () => {
   assert.equal(translate("sq", "Book a discovery call"), "Rezervo një konsultë");
   assert.equal(translate("sq", "Book discovery call"), "Rezervo konsultën");
   assert.equal(translate("sq", "Book a consultation"), "Rezervo një konsultë");
-  for (const range of ["Under €10k", "€10k–€50k", "€50k–€100k", "€100k+"]) assert.ok(Object.hasOwn(albanian, range));
+  for (const range of ["€1,500–€3,000", "€3,000–€5,000", "€5,000–€10,000", "€10,000+"]) assert.ok(Object.hasOwn(albanian, range));
   assert.deepEqual(
-    ["Under €10k", "€10k–€50k", "€50k–€100k", "€100k+"].map(range => translate("sq", range)),
-    ["Nën €10k", "€10.000–€50.000", "€50.000–€100.000", "€100.000+"],
+    ["€1,500–€3,000", "€3,000–€5,000", "€5,000–€10,000", "€10,000+"].map(range => translate("sq", range)),
+    ["€1.500–€3.000", "€3.000–€5.000", "€5.000–€10.000", "€10.000+"],
   );
 });
 
@@ -57,9 +57,10 @@ test("approved Albanian brand copy remains exact", () => {
     "For the next stage.": "Për etapën e radhës.",
     "Make your business harder to ignore.": "Bëje biznesin tënd të pamundur për t’u anashkaluar.",
     "Do you currently have a website?": "A keni aktualisht një website?",
-    "What’s your current monthly business revenue?": "Sa është xhiroja mujore e biznesit tuaj?",
-    "What should we know before the call?": "Çfarë duhet të dimë para se të flasim?",
-    "A little context": "Pak kontekst",
+    "What is your estimated investment?": "Sa planifikoni të investoni?",
+    "Tell us about your project. What do you want to achieve?": "Na tregoni për projektin. Çfarë dëshironi të arrini?",
+    "How did you hear about us?": "Si dëgjuat për ne?",
+    "Project details": "Rreth projektit",
     "Book discovery call": "Rezervo konsultën",
     "Back": "Kthehu",
     "You’re booked.": "Konsulta u rezervua.",

@@ -1,18 +1,20 @@
-export const revenueOptions = ["Under €10k", "€10k–€50k", "€50k–€100k", "€100k+"] as const;
+export const investmentOptions = ["€1,500–€3,000", "€3,000–€5,000", "€5,000–€10,000", "€10,000+"] as const;
+export const referralOptions = ["Instagram", "TikTok", "LinkedIn", "Google referral", "Other"] as const;
 export type BookingDetails = {
   fullName: string;
   email: string;
   businessName: string;
   hasWebsite: "yes" | "no" | "";
   website: string;
-  revenue: string;
+  investment: string;
   notes: string;
+  referralSource: string;
 };
 export type Slot = { id: string; startsAt: string; endsAt: string };
 export type Confirmation = { id: string; startsAt: string; endsAt: string; timezone: string; joinUrl?: string };
 
 export const emptyDetails: BookingDetails = {
-  fullName: "", email: "", businessName: "", hasWebsite: "", website: "", revenue: "", notes: "",
+  fullName: "", email: "", businessName: "", hasWebsite: "", website: "", investment: "", notes: "", referralSource: "",
 };
 
 /** Validate an ordinary mailbox address; preserve local-part case and aliases. */
@@ -44,8 +46,9 @@ export function validateStep(step: number, details: BookingDetails): string | nu
     if (!["yes", "no"].includes(details.hasWebsite)) return "Choose Yes or No to continue.";
     if (details.hasWebsite === "yes" && (!normalizedWebsite(details.website) || details.website.length > 2048)) return "Enter your website address, for example yourbusiness.com.";
   }
-  if (step === 4 && !(revenueOptions as readonly string[]).includes(details.revenue)) return "Choose a revenue range.";
+  if (step === 4 && !(investmentOptions as readonly string[]).includes(details.investment)) return "Choose an investment range.";
   if (step === 5 && details.notes.length > 2000) return "Please keep your notes under 2,000 characters.";
+  if (step === 6 && !(referralOptions as readonly string[]).includes(details.referralSource)) return "Choose how you heard about us.";
   return null;
 }
 

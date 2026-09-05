@@ -6,15 +6,15 @@ import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { BrandLogo } from "@/components/ui/brand-logo";
 import { LanguageSwitcher, useLanguage } from "@/components/language-provider";
 import { localizedDate } from "@/lib/localization";
-import { emptyDetails, validateStep, type BookingDetails, type Confirmation, type Slot } from "@/lib/booking";
-import { revenueOptions } from "@/lib/booking";
+import { emptyDetails, investmentOptions, referralOptions, validateStep, type BookingDetails, type Confirmation, type Slot } from "@/lib/booking";
 import { BookingCalendar } from "./booking-calendar";
 import styles from "./booking.module.css";
 
 const questions = [
   "What’s your full name?", "What’s your email address?", "What’s your business called?",
-  "Do you currently have a website?", "What’s your current monthly business revenue?",
-  "What should we know before the call?", "Choose a time that works.",
+  "Do you currently have a website?", "What is your estimated investment?",
+  "Tell us about your project. What do you want to achieve?", "How did you hear about us?",
+  "Choose a time that works.",
 ];
 
 export default function BookingFlow({ open, opener, onClose }: { open: boolean; opener?: HTMLElement; onClose: () => void }) {
@@ -55,7 +55,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
   }, [open, opener]);
 
   useEffect(() => {
-    if (!open || step !== 6 || confirmation) return;
+    if (!open || step !== 7 || confirmation) return;
     let controller: AbortController | undefined;
     let loading = false;
     let lastAttempt = 0;
@@ -119,7 +119,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
     if (posting.current) return;
     const invalid = validateStep(step, details);
     if (invalid) { setError(invalid); return; }
-    if (step < 6) { setError(""); setDirection(1); setStep(step + 1); return; }
+    if (step < 7) { setError(""); setDirection(1); setStep(step + 1); return; }
     if (availability !== "ready" || !selected) { setError("Choose an available date and time to book your call."); return; }
     const payload = JSON.stringify({ ...details, website: details.hasWebsite === "yes" ? details.website : "", start: selected.startsAt, timezone });
     if (requestKey.current.payload !== payload) requestKey.current = { payload, key: crypto.randomUUID() };
@@ -171,9 +171,9 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
         <main className={styles.main}>
           <div className={styles.progressMeta}>
             <span>{t("Discovery call")}</span>
-            <span aria-live="polite">{confirmation ? t("Confirmed") : `${step + 1} / 7`}</span>
+            <span aria-live="polite">{confirmation ? t("Confirmed") : `${step + 1} / 8`}</span>
           </div>
-          <div className={styles.progress} role="progressbar" aria-label={t("Booking progress")} aria-valuemin={0} aria-valuemax={7} aria-valuenow={confirmation ? 7 : step + 1}><span style={{ transform: `scaleX(${confirmation ? 1 : (step + 1) / 7})` }} /></div>
+          <div className={styles.progress} role="progressbar" aria-label={t("Booking progress")} aria-valuemin={0} aria-valuemax={8} aria-valuenow={confirmation ? 8 : step + 1}><span style={{ transform: `scaleX(${confirmation ? 1 : (step + 1) / 8})` }} /></div>
           <AnimatePresence mode="wait" initial={false}>
             <motion.div key={confirmation ? "confirmed" : step} initial={reduced ? false : { opacity: 0, x: direction * 14 }} animate={{ opacity: 1, x: 0 }} exit={reduced ? { opacity: 1 } : { opacity: 0, x: direction * -10 }} transition={{ duration: reduced ? 0 : .22, ease: [.22, 1, .36, 1] }} onAnimationComplete={focusHeading}>
               <h1 id="booking-question" ref={headingRef} tabIndex={-1} className={styles.question}>{t(confirmation ? "You’re booked." : questions[step])}</h1>
@@ -201,11 +201,14 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
                     </fieldset>
                     {details.hasWebsite === "yes" && <label className={styles.field}><span>{t("Website URL")}</span><input {...fieldProps} name="website" type="url" autoComplete="url" inputMode="url" autoCapitalize="none" autoCorrect="off" spellCheck={false} value={details.website} onChange={e => update("website", e.target.value)} maxLength={2048} placeholder={t("yourbusiness.com")} required /></label>}
                   </>}
-                  {step === 4 && <fieldset className={styles.choices} aria-describedby={fieldProps["aria-describedby"]}><legend className={styles.srOnly}>{t("Current monthly business revenue")}</legend>
-                    {revenueOptions.map(value => <label key={value} className={styles.choice}><input type="radio" name="revenue" value={value} checked={details.revenue === value} onChange={() => update("revenue", value)} /><span>{t(value)}</span><i aria-hidden="true" /></label>)}
+                  {step === 4 && <fieldset className={styles.choices} aria-describedby={fieldProps["aria-describedby"]}><legend className={styles.srOnly}>{t("Estimated investment")}</legend>
+                    {investmentOptions.map(value => <label key={value} className={styles.choice}><input type="radio" name="investment" value={value} checked={details.investment === value} onChange={() => update("investment", value)} /><span>{t(value)}</span><i aria-hidden="true" /></label>)}
                   </fieldset>}
-                  {step === 5 && <label className={styles.field}><span>{t("A little context")} <small>{t("Optional")}</small></span><textarea {...fieldProps} name="notes" rows={4} value={details.notes} onChange={e => update("notes", e.target.value)} maxLength={2000} placeholder={t("A few lines about the business, what’s changing, and what you want Kreu to help you achieve.")} /></label>}
-                  {step === 6 && <>
+                  {step === 5 && <label className={styles.field}><span>{t("Project details")} <small>{t("Optional")}</small></span><textarea {...fieldProps} name="notes" rows={4} value={details.notes} onChange={e => update("notes", e.target.value)} maxLength={2000} placeholder={t("A few lines about the project, your goals, and what you want Kreu to help you achieve.")} /></label>}
+                  {step === 6 && <fieldset className={styles.choices} aria-describedby={fieldProps["aria-describedby"]}><legend className={styles.srOnly}>{t("How did you hear about us?")}</legend>
+                    {referralOptions.map(value => <label key={value} className={styles.choice}><input type="radio" name="referralSource" value={value} checked={details.referralSource === value} onChange={() => update("referralSource", value)} /><span>{t(value)}</span><i aria-hidden="true" /></label>)}
+                  </fieldset>}
+                  {step === 7 && <>
                     <p className={styles.hint}>{t("Times shown in")} {timezone.replaceAll("_", " ")}.</p>
                     <BookingCalendar slots={slots} timezone={timezone} selected={selected} onSelect={setSelected} disabled={pending || availability !== "ready"} status={<>
                     {availability === "loading" && <p className={styles.hint} role="status">{t("Finding available times…")}</p>}
@@ -220,11 +223,11 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
                 {error && <p id="booking-error" className={styles.error} role="alert">{t(error)}</p>}
                 <div className={styles.actions}>
                   {step > 0 && <button type="button" className={styles.back} disabled={pending} onClick={() => { setError(""); setDirection(-1); setStep(step - 1); }}>{t("Back")}</button>}
-                  <button className={styles.primary} type="submit" disabled={pending || (step === 6 && (availability !== "ready" || !selected))}>
-                    {t(pending ? "Confirming your call…" : step === 6 ? "Book discovery call" : "Continue")}<ArrowIcon direction={step === 6 ? "up-right" : "right"} />
+                  <button className={styles.primary} type="submit" disabled={pending || (step === 7 && (availability !== "ready" || !selected))}>
+                    {t(pending ? "Confirming your call…" : step === 7 ? "Book discovery call" : "Continue")}<ArrowIcon direction={step === 7 ? "up-right" : "right"} />
                   </button>
                 </div>
-                <p className={styles.privacy}>{t(step === 6 ? "Your details are sent securely when you book. No mailing lists." : "A few details. Then we talk about where your business can go next.")}</p>
+                <p className={styles.privacy}>{t(step === 7 ? "Your details are sent securely when you book. No mailing lists." : "A few details. Then we talk about where your business can go next.")}</p>
               </form>}
             </motion.div>
           </AnimatePresence>
