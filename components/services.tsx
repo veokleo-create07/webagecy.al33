@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLanguage } from "@/components/language-provider";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
 import type { Language } from "@/lib/localization";
@@ -106,33 +108,68 @@ export function Services() {
   const reducedMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(1);
-  const [paused, setPaused] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const activeRef = useRef(0);
 
   const select = useCallback((index: number) => {
-    setDirection(index >= activeIndex ? 1 : -1);
+    setDirection(index >= activeRef.current ? 1 : -1);
+    activeRef.current = index;
     setActiveIndex(index);
-  }, [activeIndex]);
+  }, []);
 
   const next = useCallback(() => {
-    setDirection(1);
-    setActiveIndex(current => (current + 1) % content.services.length);
+    select((activeRef.current + 1) % content.services.length);
   }, [content.services.length]);
 
   const previous = useCallback(() => {
-    setDirection(-1);
-    setActiveIndex(current => (current - 1 + content.services.length) % content.services.length);
+    select((activeRef.current - 1 + content.services.length) % content.services.length);
   }, [content.services.length]);
 
   useEffect(() => {
-    if (paused || reducedMotion) return;
-    const timer = window.setInterval(next, 6500);
-    return () => window.clearInterval(timer);
-  }, [next, paused, reducedMotion]);
+    if (reducedMotion) return;
+    gsap.registerPlugin(ScrollTrigger);
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const context = gsap.context(() => {
+      const media = gsap.matchMedia();
+      const updateFromProgress = (progress: number) => {
+        const index = Math.min(content.services.length - 1, Math.floor(progress * content.services.length));
+        if (index !== activeRef.current) select(index);
+      };
+
+      media.add("(min-width: 769px)", () => {
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top top",
+          end: "+=165%",
+          pin: "[data-services-stage]",
+          pinSpacing: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: self => updateFromProgress(self.progress),
+        });
+      });
+
+      media.add("(max-width: 768px)", () => {
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top 72%",
+          end: "bottom 30%",
+          invalidateOnRefresh: true,
+          onUpdate: self => updateFromProgress(self.progress),
+        });
+      });
+
+      return () => media.revert();
+    }, section);
+
+    return () => context.revert();
+  }, [content.services.length, reducedMotion, select]);
 
   return <section ref={sectionRef} className={`services ${styles.root}`} id="expertise" aria-labelledby="services-title">
     <div className={styles.atmosphere} aria-hidden="true"><i /><i /><i /></div>
-    <div className={styles.inner}>
+    <div className={styles.inner} data-services-stage>
       <div className={styles.layout}>
         <div className={styles.content}>
           <header className={styles.intro}>
@@ -144,8 +181,8 @@ export function Services() {
           <div className={styles.selector} role="tablist" aria-label={content.label}>
             {content.services.map((service, index) => {
               const active = index === activeIndex;
-              return <button key={service.id} type="button" role="tab" aria-selected={active} aria-controls="service-visual" className={styles.serviceTab} data-active={active || undefined} onClick={() => select(index)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}>
-                <span className={styles.progressTrack}>{active && !reducedMotion && <motion.i key={`${activeIndex}-${paused}`} initial={{ scaleY: 0 }} animate={{ scaleY: paused ? 0 : 1 }} transition={{ duration: 6.5, ease: "linear" }} />}</span>
+              return <button key={service.id} type="button" role="tab" aria-selected={active} aria-controls="service-visual" className={styles.serviceTab} data-active={active || undefined} onClick={() => select(index)}>
+                <span className={styles.progressTrack}>{active && <i />}</span>
                 <small>/{service.id}</small>
                 <span className={styles.tabCopy}><strong>{service.title}</strong>
                   <AnimatePresence initial={false}>{active && <motion.span initial={reducedMotion ? false : { opacity: 0, height: 0, y: 5 }} animate={{ opacity: 1, height: "auto", y: 0 }} exit={{ opacity: 0, height: 0, y: -3 }} transition={{ duration: .34, ease: [.22, 1, .36, 1] }}>{service.description}</motion.span>}</AnimatePresence>
@@ -155,7 +192,7 @@ export function Services() {
           </div>
         </div>
 
-        <div className={styles.gallery} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+        <div className={styles.gallery}>
           <div className={styles.galleryFrame} id="service-visual" role="tabpanel" aria-label={content.services[activeIndex].title}>
             <div className={styles.galleryGlow} aria-hidden="true" />
             <AnimatePresence initial={false} custom={direction} mode="popLayout">
