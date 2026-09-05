@@ -7,19 +7,9 @@ import { useLanguage } from "@/components/language-provider";
 import type { Language } from "@/lib/localization";
 import styles from "./services.module.css";
 
-type Room = {
-  number: string;
-  title: string;
-  items: string[];
-};
+type Room = { number: string; title: string; items: string[] };
 
-const copy: Record<Language, {
-  context: string;
-  headline: string;
-  paragraph: string;
-  closing: string;
-  rooms: Room[];
-}> = {
+const copy: Record<Language, { context: string; headline: string; paragraph: string; closing: string; rooms: Room[] }> = {
   sq: {
     context: "Different disciplines. One bigger picture.",
     headline: "Çdo vendim duhet t’i shërbejë biznesit.",
@@ -46,63 +36,82 @@ const copy: Record<Language, {
   },
 };
 
-function ServiceRoom({ room, index }: { room: Room; index: number }) {
-  return <article className={styles.room} data-room data-room-index={index} tabIndex={0}>
-    <div className={styles.roomDepth} aria-hidden="true" />
-    <div className={styles.roomHaze} aria-hidden="true" />
-    <div className={styles.roomCeiling} aria-hidden="true" />
-    <div className={styles.roomWallLeft} aria-hidden="true" />
-    <div className={styles.roomWallRight} aria-hidden="true" />
-    <div className={styles.roomFloor} aria-hidden="true" />
-    <div className={styles.roomLight} data-room-light aria-hidden="true" />
-    <RoomArtifact index={index} />
-    <div className={styles.roomContent}>
-      <span className={styles.roomNumber}>{room.number}</span>
-      <h3>{room.title}</h3>
-      <ul>{room.items.map((item) => <li key={item}>{item}</li>)}</ul>
-    </div>
-    <span className={styles.edgeLeft} aria-hidden="true" />
-    <span className={styles.edgeRight} aria-hidden="true" />
-  </article>;
+function DesignWorld() {
+  return <div className={`${styles.world} ${styles.designWorld}`} data-world aria-hidden="true">
+    <div className={styles.designGrid}><i /><i /><i /><i /></div>
+    <div className={styles.typeSheetBack}><span>Form</span><b>Identity</b></div>
+    <div className={styles.typeSheetMid}><span>Kg</span><i /></div>
+    <div className={styles.typeSheetMain}><small>TYPE STUDY</small><strong>Aa</strong><span>Aspekta</span><i /></div>
+    <div className={styles.alignMarks}><i /><i /><i /></div>
+  </div>;
 }
 
-function RoomArtifact({ index }: { index: number }) {
-  if (index === 0) {
-    return <div className={`${styles.artifact} ${styles.designArtifact}`} data-room-artifact aria-hidden="true">
-      <span>Aa</span><i /><i /><b>Kg</b>
-    </div>;
-  }
-
-  if (index === 1) {
-    return <div className={`${styles.artifact} ${styles.webArtifact}`} data-room-artifact aria-hidden="true">
-      <header><span>kreu.web</span><i /><i /></header>
-      <div><b /><b /><b /><em /></div>
-    </div>;
-  }
-
-  if (index === 2) {
-    return <div className={`${styles.artifact} ${styles.marketingArtifact}`} data-room-artifact aria-hidden="true">
-      <span>68.4%</span>
-      <svg viewBox="0 0 180 82"><path d="M3 72 C30 70 39 57 63 60 C91 63 98 41 124 45 C149 49 155 23 177 11" /></svg>
-      <i /><i /><i />
-    </div>;
-  }
-
-  return <div className={`${styles.artifact} ${styles.softwareArtifact}`} data-room-artifact aria-hidden="true">
-    <i /><i />
-    <div><span>OS</span><b>24</b><em /><em /><em /></div>
+function WebWorld() {
+  return <div className={`${styles.world} ${styles.webWorld}`} data-world aria-hidden="true">
+    <div className={styles.codePanel}><span>01</span><i /><i /><i /><i /></div>
+    <div className={styles.browser}>
+      <header><span /><span /><span /><b>kreu.studio / work</b></header>
+      <div className={styles.browserHero}><small>DIGITAL EXPERIENCE</small><strong>Built with<br />purpose.</strong><i /></div>
+      <div className={styles.browserRail}><span /><span /><span /></div>
+    </div>
+    <div className={styles.webCursor} />
   </div>;
+}
+
+function MarketingWorld() {
+  return <div className={`${styles.world} ${styles.marketingWorld}`} data-world aria-hidden="true">
+    <div className={styles.metricCard}><small>ORGANIC VISIBILITY</small><strong>+320%</strong><span>12 month change</span></div>
+    <div className={styles.chartPanel}>
+      <div className={styles.chartMeta}><span>Market relevance</span><b>68.4</b></div>
+      <svg viewBox="0 0 240 120" preserveAspectRatio="none">
+        <g><path d="M0 24H240M0 60H240M0 96H240" /></g>
+        <path className={styles.chartArea} d="M2 108 C30 103 46 94 68 96 C96 99 111 68 137 75 C165 83 177 43 199 50 C218 56 224 22 238 12 L238 120 L2 120 Z" />
+        <path className={styles.chartLine} d="M2 108 C30 103 46 94 68 96 C96 99 111 68 137 75 C165 83 177 43 199 50 C218 56 224 22 238 12" />
+      </svg>
+      <div className={styles.chartLabels}><span>JAN</span><span>JUN</span><span>DEC</span></div>
+    </div>
+    <div className={styles.rankPanel}><span>Search position</span><b>03</b><i /><i /><i /></div>
+  </div>;
+}
+
+function SoftwareWorld() {
+  return <div className={`${styles.world} ${styles.softwareWorld}`} data-world aria-hidden="true">
+    <div className={styles.systemPanel}><span>LIVE SYSTEM</span><i /><i /><i /></div>
+    <div className={styles.phone}><div className={styles.phoneScreen}>
+      <header><span>NEXA</span><i /></header><small>OPERATIONS</small><strong>24</strong><em>active routes</em>
+      <div className={styles.phoneChart}><i /><i /><i /><i /><i /></div><div className={styles.phoneRows}><span /><span /><span /></div>
+    </div></div>
+    <div className={styles.statusPanel}><i /><span>Systems connected</span><b>98.6%</b></div>
+  </div>;
+}
+
+function RoomWorld({ index }: { index: number }) {
+  if (index === 0) return <DesignWorld />;
+  if (index === 1) return <WebWorld />;
+  if (index === 2) return <MarketingWorld />;
+  return <SoftwareWorld />;
+}
+
+function ServiceRoom({ room, index }: { room: Room; index: number }) {
+  return <article className={styles.room} data-room data-room-index={index} tabIndex={0}>
+    <div className={styles.outerGlow} aria-hidden="true" />
+    <div className={styles.chamber}>
+      <div className={styles.backWall} aria-hidden="true" /><div className={styles.ceiling} aria-hidden="true" />
+      <div className={styles.leftWall} aria-hidden="true" /><div className={styles.rightWall} aria-hidden="true" />
+      <div className={styles.innerFloor} aria-hidden="true" /><div className={styles.lightCone} data-room-light aria-hidden="true" />
+      <div className={styles.roomHeading}><span>{room.number}</span><h3>{room.title}</h3></div>
+      <RoomWorld index={index} />
+      <ul>{room.items.map((item) => <li key={item}>{item}</li>)}</ul>
+      <span className={styles.edgeLeft} aria-hidden="true" /><span className={styles.edgeRight} aria-hidden="true" /><span className={styles.edgeTop} aria-hidden="true" />
+    </div>
+  </article>;
 }
 
 function HumanSilhouette() {
   return <div className={styles.figure} data-figure aria-hidden="true">
-    <span className={styles.figureHead} />
-    <span className={styles.figureBody} />
-    <span className={styles.figureArmLeft} />
-    <span className={styles.figureArmRight} />
-    <span className={styles.figureLegLeft} />
-    <span className={styles.figureLegRight} />
-    <span className={styles.figureShadow} />
+    <span className={styles.figureHead} /><span className={styles.figureTorso} />
+    <span className={styles.figureArmLeft} /><span className={styles.figureArmRight} />
+    <span className={styles.figureLegLeft} /><span className={styles.figureLegRight} /><span className={styles.figureShadow} />
   </div>;
 }
 
@@ -120,68 +129,43 @@ export function Services() {
       const media = gsap.matchMedia();
 
       media.add("(prefers-reduced-motion: no-preference)", () => {
-        const timeline = gsap.timeline({
-          defaults: { ease: "power3.out", immediateRender: false },
-          scrollTrigger: { trigger: section, start: "top 78%", once: true },
-        });
-
-        timeline
-          .from("[data-services-header] > *", { y: 24, opacity: 0, duration: .75, stagger: .09 }, 0)
-          .from("[data-room]", { y: 48, opacity: 0, rotateX: -7, scale: .965, duration: 1, stagger: .1 }, .35)
-          .from("[data-room-light]", { opacity: 0, scaleY: .45, transformOrigin: "50% 100%", duration: .82, stagger: .08 }, .6)
-          .from("[data-room-artifact]", { opacity: 0, z: -35, y: 12, duration: .7, stagger: .08 }, .76)
-          .from("[data-room] > *:not([data-room-light]):not([data-room-artifact])", { opacity: 0, y: 10, duration: .5, stagger: .015 }, .72)
-          .from("[data-figure]", { opacity: 0, y: 12, scale: .92, duration: .72 }, .92)
-          .from("[data-services-closing]", { opacity: 0, y: 16, duration: .68 }, 1.08);
+        gsap.timeline({ defaults: { ease: "power3.out", immediateRender: false }, scrollTrigger: { trigger: section, start: "top 76%", once: true } })
+          .from("[data-services-header] > *", { y: 20, opacity: 0, duration: .72, stagger: .08 }, 0)
+          .from("[data-room]", { y: 58, opacity: 0, rotateX: -5, scale: .975, duration: 1.08, stagger: .11 }, .28)
+          .from("[data-room-light]", { opacity: 0, scaleY: .25, transformOrigin: "50% 0%", duration: 1.05, stagger: .09 }, .52)
+          .from("[data-world]", { opacity: 0, y: 20, scale: .94, duration: .86, stagger: .1 }, .68)
+          .from("[data-figure]", { opacity: 0, y: 14, scale: .92, duration: .7 }, 1.03)
+          .from("[data-services-closing]", { opacity: 0, y: 14, duration: .66 }, 1.12);
       });
 
       media.add("(min-width: 769px) and (prefers-reduced-motion: no-preference)", () => {
-        const rooms = gsap.utils.toArray<HTMLElement>("[data-room]");
-        rooms.forEach((room, index) => {
-          gsap.to(room, {
-            yPercent: index % 2 ? -1.15 : -.65,
-            duration: 4.8 + index * .45,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-          });
+        gsap.utils.toArray<HTMLElement>("[data-room]").forEach((room, index) => {
+          gsap.to(room, { y: index % 2 ? -7 : -4, duration: 5.6 + index * .55, repeat: -1, yoyo: true, ease: "sine.inOut" });
         });
+        gsap.to("[data-room-index='0'] [data-world], [data-room-index='2'] [data-world]", { y: -5, scrollTrigger: { trigger: section, start: "top bottom", end: "bottom top", scrub: 1.4 } });
+        gsap.to("[data-room-index='1'] [data-world], [data-room-index='3'] [data-world]", { y: 5, scrollTrigger: { trigger: section, start: "top bottom", end: "bottom top", scrub: 1.4 } });
       });
 
       return () => media.revert();
     }, section);
-
     return () => context.revert();
   }, []);
 
   return <section ref={sectionRef} className={`services ${styles.root}`} id="expertise" aria-labelledby="services-title">
-    <div className={styles.ambient} aria-hidden="true"><i /><i /><span /></div>
+    <div className={styles.atmosphere} aria-hidden="true"><i /><i /><span /></div>
     <div className={styles.inner}>
       <header className={styles.header} data-services-header>
-        <div className={styles.metaRow}>
-          <span>03</span>
-          <span>THE FOUR ROOMS</span>
-          <span>{content.context}</span>
-        </div>
-        <h2 id="services-title">{content.headline}</h2>
-        <p>{content.paragraph}</p>
+        <div className={styles.metaRow}><span>03</span><span>THE FOUR ROOMS</span><span>{content.context}</span></div>
+        <h2 id="services-title">{content.headline}</h2><p>{content.paragraph}</p>
       </header>
-
       <div className={styles.installation}>
-        <div className={styles.rooms}>
-          {content.rooms.map((room, index) => <ServiceRoom key={room.number} room={room} index={index} />)}
-        </div>
-        <div className={styles.horizon} aria-hidden="true" />
-        <div className={styles.reflection} aria-hidden="true">
-          {content.rooms.map((room) => <i key={room.number} />)}
-        </div>
+        <div className={styles.stageLight} aria-hidden="true" />
+        <div className={styles.rooms}>{content.rooms.map((room, index) => <ServiceRoom key={room.number} room={room} index={index} />)}</div>
+        <div className={styles.horizon} aria-hidden="true" /><div className={styles.stageFloor} aria-hidden="true" />
+        <div className={styles.reflections} aria-hidden="true">{content.rooms.map(room => <i key={room.number} />)}</div>
         <HumanSilhouette />
       </div>
-
-      <div className={styles.closing} data-services-closing>
-        <span>KREU</span>
-        <p>{content.closing}</p>
-      </div>
+      <div className={styles.closing} data-services-closing><span>KREU</span><p>{content.closing}</p></div>
     </div>
   </section>;
 }
