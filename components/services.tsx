@@ -1,178 +1,176 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useLanguage } from "@/components/language-provider";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
 import type { Language } from "@/lib/localization";
 import styles from "./services.module.css";
 
-type Room = { number: string; title: string; items: string[] };
+type Service = {
+  id: string;
+  title: string;
+  description: string;
+  eyebrow: string;
+};
 
-const copy: Record<Language, { context: string; headline: string; paragraph: string; closing: string; rooms: Room[] }> = {
+const copy: Record<Language, { label: string; headline: string; paragraph: string; services: Service[]; previous: string; next: string }> = {
   sq: {
-    context: "Different disciplines. One bigger picture.",
+    label: "SHËRBIMET",
     headline: "Çdo vendim duhet t’i shërbejë biznesit.",
     paragraph: "Strategji, dizajn dhe teknologji të integruara për një pozicionim më të qartë, diferencim më të dallueshëm dhe relevancë më të lartë në treg.",
-    closing: "Më shumë se shërbime. Një partner për rritje.",
-    rooms: [
-      { number: "01", title: "Dizajn & Strategji", items: ["Branding", "Identitet", "UX/UI", "Strategji"] },
-      { number: "02", title: "Web Development", items: ["Web faqe", "Platforma", "E-commerce", "Performancë"] },
-      { number: "03", title: "Marketing & SEO", items: ["SEO", "Content", "Advertising", "Rritje"] },
-      { number: "04", title: "Software & Apps", items: ["Sisteme", "Aplikacione", "Integrime", "Shkallëzim"] },
+    previous: "Shërbimi i mëparshëm",
+    next: "Shërbimi tjetër",
+    services: [
+      { id: "01", eyebrow: "IDENTITET & POZICIONIM", title: "Dizajn & Strategji", description: "Pozicionim, identitet dhe përvoja që e bëjnë biznesin të qartë, të dallueshëm dhe të besueshëm." },
+      { id: "02", eyebrow: "WEBSITE & PLATFORMA", title: "Web Development", description: "Website dhe platforma me prezencë të fortë, performancë të lartë dhe një rrugë më të qartë drejt konvertimit." },
+      { id: "03", eyebrow: "VIZIBILITET & KËRKESË", title: "Marketing & SEO", description: "Strategji kërkimi dhe komunikimi që rrisin relevancën, tërheqin vëmendjen e duhur dhe krijojnë kërkesë." },
+      { id: "04", eyebrow: "PRODUKTE & SISTEME", title: "Software & Apps", description: "Produkte digjitale dhe sisteme të ndërtuara për të thjeshtuar operacionet dhe për t’u zgjeruar me biznesin." },
     ],
   },
   en: {
-    context: "Different disciplines. One bigger picture.",
+    label: "SERVICES",
     headline: "Every decision should serve the business.",
     paragraph: "Integrated strategy, design and technology for clearer positioning, sharper differentiation and greater competitive relevance.",
-    closing: "More than services. A partner for growth.",
-    rooms: [
-      { number: "01", title: "Design & Strategy", items: ["Branding", "Identity", "UX/UI", "Strategy"] },
-      { number: "02", title: "Web Development", items: ["Websites", "Platforms", "E-commerce", "Performance"] },
-      { number: "03", title: "Marketing & SEO", items: ["SEO", "Content", "Advertising", "Growth"] },
-      { number: "04", title: "Software & Apps", items: ["Systems", "Applications", "Integrations", "Scale"] },
+    previous: "Previous service",
+    next: "Next service",
+    services: [
+      { id: "01", eyebrow: "IDENTITY & POSITIONING", title: "Design & Strategy", description: "Positioning, identity and experiences that make the business clearer, more distinctive and more credible." },
+      { id: "02", eyebrow: "WEBSITES & PLATFORMS", title: "Web Development", description: "Websites and platforms with a commanding presence, high performance and a clearer path to conversion." },
+      { id: "03", eyebrow: "VISIBILITY & DEMAND", title: "Marketing & SEO", description: "Search and communication strategies that build relevance, attract the right attention and create demand." },
+      { id: "04", eyebrow: "PRODUCTS & SYSTEMS", title: "Software & Apps", description: "Digital products and systems designed to simplify operations and scale with the business." },
     ],
   },
 };
 
-function DesignWorld() {
-  return <div className={`${styles.world} ${styles.designWorld}`} data-world aria-hidden="true">
+function DesignScene() {
+  return <div className={`${styles.scene} ${styles.designScene}`} aria-hidden="true">
+    <div className={styles.sceneLabel}>IDENTITY SYSTEM / 2026</div>
     <div className={styles.designGrid}><i /><i /><i /><i /></div>
-    <div className={styles.typeSheetBack}><span>Form</span><b>Identity 06.26</b></div>
-    <div className={styles.typeSheetMid}><span>Kg</span><i /><b>K</b></div>
-    <div className={styles.typeSheetMain}><small>TYPOGRAPHY / SYSTEM</small><strong>Aa</strong><span>Aspekta Regular</span><i /></div>
-    <div className={styles.identityCard}><b>K</b><span>KREU<br />VISUAL SYSTEM</span></div>
-    <div className={styles.materialSwatches}><i /><i /><i /></div>
-    <div className={styles.alignMarks}><i /><i /><i /></div>
+    <div className={styles.logoStudy}><small>MARK / 04</small><strong>K</strong><span>Form follows meaning.</span></div>
+    <div className={styles.typeStudy}><small>TYPE SYSTEM</small><strong>Aa</strong><span>Aspekta Regular</span></div>
+    <div className={styles.identityStrip}><b>01</b><span>KREU<br />IDENTITY</span><i /><i /><i /></div>
   </div>;
 }
 
-function WebWorld() {
-  return <div className={`${styles.world} ${styles.webWorld}`} data-world aria-hidden="true">
-    <div className={styles.codePanel}><span>01</span><i /><i /><i /><i /></div>
-    <div className={styles.browser}>
-      <header><span /><span /><span /><b>atelier.one / residences</b></header>
-      <div className={styles.browserHero}>
-        <small>PRIVATE RESIDENCES / 2026</small><strong>Space,<br />considered.</strong>
-        <div className={styles.editorialImage}><i /><i /><span>VIEW 04</span></div>
-      </div>
-      <div className={styles.browserRail}><span>Architecture</span><span>Residences</span><span>Explore</span></div>
+function WebScene() {
+  return <div className={`${styles.scene} ${styles.webScene}`} aria-hidden="true">
+    <div className={styles.sceneLabel}>DIGITAL EXPERIENCE / LIVE</div>
+    <div className={styles.codePane}><span>01</span><i /><i /><i /><i /><i /></div>
+    <div className={styles.browserFrame}>
+      <header><i /><i /><i /><span>atelier.one / residences</span></header>
+      <nav><b>ATELIER ONE</b><span>Residences&nbsp;&nbsp; Journal&nbsp;&nbsp; Contact</span></nav>
+      <main><small>PRIVATE RESIDENCES</small><strong>Space,<br />considered.</strong><div className={styles.architecture}><i /><i /><i /></div></main>
+      <footer><span>Prishtina / 42.66° N</span><span>Explore project</span></footer>
     </div>
-    <div className={styles.webCursor} />
+    <div className={styles.viewportBadge}><span>PERFORMANCE</span><b>98</b></div>
   </div>;
 }
 
-function MarketingWorld() {
-  return <div className={`${styles.world} ${styles.marketingWorld}`} data-world aria-hidden="true">
-    <div className={styles.metricCard}><small>ORGANIC VISIBILITY</small><strong>+320%</strong><span>12 month change</span></div>
-    <div className={styles.chartPanel}>
-      <div className={styles.chartMeta}><span>Market relevance</span><b>68.4</b></div>
-      <svg viewBox="0 0 240 120" preserveAspectRatio="none">
-        <g><path d="M0 24H240M0 60H240M0 96H240" /></g>
-        <path className={styles.chartArea} d="M2 108 C30 103 46 94 68 96 C96 99 111 68 137 75 C165 83 177 43 199 50 C218 56 224 22 238 12 L238 120 L2 120 Z" />
-        <path className={styles.chartLine} d="M2 108 C30 103 46 94 68 96 C96 99 111 68 137 75 C165 83 177 43 199 50 C218 56 224 22 238 12" />
+function MarketingScene() {
+  return <div className={`${styles.scene} ${styles.marketingScene}`} aria-hidden="true">
+    <div className={styles.sceneLabel}>MARKET INTELLIGENCE / Q3</div>
+    <div className={styles.metricHero}><small>Qualified demand</small><strong>8.7×</strong><span>rolling 12 months</span></div>
+    <div className={styles.analytics}>
+      <header><span>Organic visibility</span><b>+64.8%</b></header>
+      <svg viewBox="0 0 640 240" preserveAspectRatio="none">
+        <g><path d="M0 48H640M0 120H640M0 192H640" /></g>
+        <path className={styles.area} d="M0 216 C72 208 98 176 154 184 C218 194 252 126 318 144 C388 163 415 87 478 105 C548 124 578 53 640 28 L640 240 L0 240 Z" />
+        <path className={styles.line} d="M0 216 C72 208 98 176 154 184 C218 194 252 126 318 144 C388 163 415 87 478 105 C548 124 578 53 640 28" />
       </svg>
-      <div className={styles.chartLabels}><span>JAN</span><span>JUN</span><span>DEC</span></div>
+      <footer><span>JAN</span><span>JUN</span><span>DEC</span></footer>
     </div>
-    <div className={styles.rankPanel}><span>Search position</span><b>03</b><i /><i /><i /></div>
-    <div className={styles.campaignPanel}><small>CAMPAIGN 04</small><span>Qualified demand</span><b>8.7×</b></div>
+    <div className={styles.ranking}><span>Search position</span><strong>03</strong><i /><i /><i /></div>
   </div>;
 }
 
-function SoftwareWorld() {
-  return <div className={`${styles.world} ${styles.softwareWorld}`} data-world aria-hidden="true">
-    <div className={styles.systemPanel}><span>LIVE SYSTEM</span><i /><i /><i /></div>
-    <div className={styles.phone}><div className={styles.phoneScreen}>
-      <header><span>NEXA</span><i /></header><small>OPERATIONS</small><strong>24</strong><em>active routes</em>
-      <div className={styles.phoneChart}><i /><i /><i /><i /><i /></div>
-      <div className={styles.phoneRows}><span><i />Tirana → Prishtina</span><span><i />Durrës → Milan</span><span><i />Skopje → Tirana</span></div>
-    </div></div>
-    <div className={styles.statusPanel}><i /><span>Systems connected</span><b>98.6%</b></div>
+function SoftwareScene() {
+  return <div className={`${styles.scene} ${styles.softwareScene}`} aria-hidden="true">
+    <div className={styles.sceneLabel}>PRODUCT SYSTEM / NEXA</div>
+    <div className={styles.systemCard}><span>CONNECTED SYSTEMS</span><b>98.6%</b><i /><i /><i /></div>
+    <div className={styles.deviceBack}><header>NEXA <i /></header><small>SHIPMENT DETAIL</small><strong>NX 4827</strong><div className={styles.route}><i /><i /><i /></div><span>Tirana&nbsp;&nbsp; → &nbsp;&nbsp;Milan</span></div>
+    <div className={styles.deviceFront}><header>NEXA <i /></header><small>OPERATIONS</small><strong>24</strong><em>active routes</em><div className={styles.appStats}><span>48<small>today</small></span><span>03<small>delayed</small></span><span>18<small>fleet</small></span></div><div className={styles.appRows}><i /><i /><i /></div></div>
   </div>;
 }
 
-function RoomWorld({ index }: { index: number }) {
-  if (index === 0) return <DesignWorld />;
-  if (index === 1) return <WebWorld />;
-  if (index === 2) return <MarketingWorld />;
-  return <SoftwareWorld />;
-}
-
-function ServiceRoom({ room, index }: { room: Room; index: number }) {
-  return <article className={styles.room} data-room data-room-index={index} tabIndex={0}>
-    <div className={styles.outerGlow} aria-hidden="true" />
-    <div className={styles.chamber}>
-      <div className={styles.backWall} aria-hidden="true" /><div className={styles.ceiling} aria-hidden="true" />
-      <div className={styles.leftWall} aria-hidden="true" /><div className={styles.rightWall} aria-hidden="true" />
-      <div className={styles.innerFloor} aria-hidden="true" /><div className={styles.lightCone} data-room-light aria-hidden="true" />
-      <div className={styles.roomHeading}><span>{room.number}</span><h3>{room.title}</h3></div>
-      <RoomWorld index={index} />
-      <ul>{room.items.map((item) => <li key={item}>{item}</li>)}</ul>
-      <span className={styles.edgeLeft} aria-hidden="true" /><span className={styles.edgeRight} aria-hidden="true" /><span className={styles.edgeTop} aria-hidden="true" />
-    </div>
-  </article>;
-}
-
-function HumanSilhouette() {
-  return <div className={styles.figure} data-figure aria-hidden="true">
-    <span className={styles.figureHead} /><span className={styles.figureTorso} />
-    <span className={styles.figureArmLeft} /><span className={styles.figureArmRight} />
-    <span className={styles.figureLegLeft} /><span className={styles.figureLegRight} /><span className={styles.figureShadow} />
-  </div>;
+function ServiceScene({ index }: { index: number }) {
+  if (index === 0) return <DesignScene />;
+  if (index === 1) return <WebScene />;
+  if (index === 2) return <MarketingScene />;
+  return <SoftwareScene />;
 }
 
 export function Services() {
   const { language } = useLanguage();
-  const sectionRef = useRef<HTMLElement>(null);
   const content = copy[language];
+  const reducedMotion = useReducedMotion();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [paused, setPaused] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const select = useCallback((index: number) => {
+    setDirection(index >= activeIndex ? 1 : -1);
+    setActiveIndex(index);
+  }, [activeIndex]);
+
+  const next = useCallback(() => {
+    setDirection(1);
+    setActiveIndex(current => (current + 1) % content.services.length);
+  }, [content.services.length]);
+
+  const previous = useCallback(() => {
+    setDirection(-1);
+    setActiveIndex(current => (current - 1 + content.services.length) % content.services.length);
+  }, [content.services.length]);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const context = gsap.context(() => {
-      const media = gsap.matchMedia();
-
-      media.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.timeline({ defaults: { ease: "power3.out", immediateRender: false }, scrollTrigger: { trigger: section, start: "top 76%", once: true } })
-          .from("[data-services-header] > *", { y: 20, opacity: 0, duration: .72, stagger: .08 }, 0)
-          .from("[data-room]", { y: 58, opacity: 0, rotateX: -5, scale: .975, duration: 1.08, stagger: .11 }, .28)
-          .from("[data-room-light]", { opacity: 0, scaleY: .25, transformOrigin: "50% 0%", duration: 1.05, stagger: .09 }, .52)
-          .from("[data-world]", { opacity: 0, y: 20, scale: .94, duration: .86, stagger: .1 }, .68)
-          .from("[data-figure]", { opacity: 0, y: 14, scale: .92, duration: .7 }, 1.03)
-          .from("[data-services-closing]", { opacity: 0, y: 14, duration: .66 }, 1.12);
-      });
-
-      media.add("(min-width: 769px) and (prefers-reduced-motion: no-preference)", () => {
-        gsap.utils.toArray<HTMLElement>("[data-room]").forEach((room, index) => {
-          gsap.to(room, { y: index % 2 ? -7 : -4, duration: 5.6 + index * .55, repeat: -1, yoyo: true, ease: "sine.inOut" });
-        });
-        gsap.to("[data-room-index='0'] [data-world], [data-room-index='2'] [data-world]", { y: -5, scrollTrigger: { trigger: section, start: "top bottom", end: "bottom top", scrub: 1.4 } });
-        gsap.to("[data-room-index='1'] [data-world], [data-room-index='3'] [data-world]", { y: 5, scrollTrigger: { trigger: section, start: "top bottom", end: "bottom top", scrub: 1.4 } });
-      });
-
-      return () => media.revert();
-    }, section);
-    return () => context.revert();
-  }, []);
+    if (paused || reducedMotion) return;
+    const timer = window.setInterval(next, 6500);
+    return () => window.clearInterval(timer);
+  }, [next, paused, reducedMotion]);
 
   return <section ref={sectionRef} className={`services ${styles.root}`} id="expertise" aria-labelledby="services-title">
-    <div className={styles.atmosphere} aria-hidden="true"><i /><i /><span /></div>
+    <div className={styles.atmosphere} aria-hidden="true"><i /><i /><i /></div>
     <div className={styles.inner}>
-      <header className={styles.header} data-services-header>
-        <div className={styles.metaRow}><span>03</span><span>THE FOUR ROOMS</span><span>{content.context}</span></div>
-        <h2 id="services-title">{content.headline}</h2><p>{content.paragraph}</p>
-      </header>
-      <div className={styles.installation}>
-        <div className={styles.stageLight} aria-hidden="true" />
-        <div className={styles.rooms}>{content.rooms.map((room, index) => <ServiceRoom key={room.number} room={room} index={index} />)}</div>
-        <div className={styles.horizon} aria-hidden="true" /><div className={styles.stageFloor} aria-hidden="true" />
-        <div className={styles.reflections} aria-hidden="true">{content.rooms.map(room => <i key={room.number} />)}</div>
-        <HumanSilhouette />
+      <div className={styles.layout}>
+        <div className={styles.content}>
+          <header className={styles.intro}>
+            <span>{content.label}</span>
+            <h2 id="services-title">{content.headline}</h2>
+            <p>{content.paragraph}</p>
+          </header>
+
+          <div className={styles.selector} role="tablist" aria-label={content.label}>
+            {content.services.map((service, index) => {
+              const active = index === activeIndex;
+              return <button key={service.id} type="button" role="tab" aria-selected={active} aria-controls="service-visual" className={styles.serviceTab} data-active={active || undefined} onClick={() => select(index)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}>
+                <span className={styles.progressTrack}>{active && !reducedMotion && <motion.i key={`${activeIndex}-${paused}`} initial={{ scaleY: 0 }} animate={{ scaleY: paused ? 0 : 1 }} transition={{ duration: 6.5, ease: "linear" }} />}</span>
+                <small>/{service.id}</small>
+                <span className={styles.tabCopy}><strong>{service.title}</strong>
+                  <AnimatePresence initial={false}>{active && <motion.span initial={reducedMotion ? false : { opacity: 0, height: 0, y: 5 }} animate={{ opacity: 1, height: "auto", y: 0 }} exit={{ opacity: 0, height: 0, y: -3 }} transition={{ duration: .34, ease: [.22, 1, .36, 1] }}>{service.description}</motion.span>}</AnimatePresence>
+                </span>
+              </button>;
+            })}
+          </div>
+        </div>
+
+        <div className={styles.gallery} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+          <div className={styles.galleryFrame} id="service-visual" role="tabpanel" aria-label={content.services[activeIndex].title}>
+            <div className={styles.galleryGlow} aria-hidden="true" />
+            <AnimatePresence initial={false} custom={direction} mode="popLayout">
+              <motion.div key={activeIndex} custom={direction} className={styles.visual} initial={reducedMotion ? false : { y: direction > 0 ? -28 : 28, opacity: 0, scale: .985 }} animate={{ y: 0, opacity: 1, scale: 1 }} exit={reducedMotion ? { opacity: 0 } : { y: direction > 0 ? 24 : -24, opacity: 0, scale: .99 }} transition={{ duration: reducedMotion ? 0 : .72, ease: [.22, 1, .36, 1] }}>
+                <ServiceScene index={activeIndex} />
+              </motion.div>
+            </AnimatePresence>
+            <div className={styles.visualMeta}><span>{content.services[activeIndex].eyebrow}</span><strong>{content.services[activeIndex].title}</strong></div>
+            <div className={styles.controls}>
+              <button type="button" onClick={previous} aria-label={content.previous}><ArrowIcon direction="right" /></button>
+              <button type="button" onClick={next} aria-label={content.next}><ArrowIcon direction="right" /></button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className={styles.closing} data-services-closing><span>KREU</span><p>{content.closing}</p></div>
     </div>
   </section>;
 }
