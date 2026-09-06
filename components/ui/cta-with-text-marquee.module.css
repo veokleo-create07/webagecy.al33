@@ -130,9 +130,9 @@
 @media (max-width: 768px) {
   .inner {
     display: grid;
-    grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr);
+    grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
     min-height: min(48rem, 88svh);
-    gap: clamp(.65rem, 2.8vw, 1rem);
+    gap: clamp(.95rem, 4vw, 1.25rem);
     padding: clamp(4.5rem, 18vw, 5.5rem) .75rem clamp(3.5rem, 14vw, 4.5rem);
   }
   .content { width: 100%; max-width: none; text-align: left; }
@@ -140,8 +140,8 @@
   .content h2 {
     max-width: 8.5ch;
     margin: .9rem 0 0;
-    font-size: clamp(2rem, 8.5vw, 2.55rem);
-    line-height: .91;
+    font-size: clamp(1.78rem, 7.55vw, 2.25rem);
+    line-height: .97;
   }
   .content p {
     max-width: 18rem;
@@ -166,7 +166,8 @@
     text-align: left;
   }
   .item strong {
-    font-size: clamp(1.55rem, 6.35vw, 2.1rem);
+    font-size: clamp(1.38rem, 5.55vw, 1.85rem);
+    line-height: .98;
     white-space: nowrap;
   }
 }
