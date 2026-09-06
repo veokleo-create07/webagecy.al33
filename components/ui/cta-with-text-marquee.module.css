@@ -129,26 +129,51 @@
 
 @media (max-width: 768px) {
   .inner {
-    display: flex;
-    min-height: 0;
-    flex-direction: column;
-    gap: 3.5rem;
-    padding: clamp(5.5rem, 15vw, 7rem) 1rem clamp(5rem, 14vw, 6.5rem);
+    display: grid;
+    grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr);
+    min-height: min(48rem, 88svh);
+    gap: clamp(.65rem, 2.8vw, 1rem);
+    padding: clamp(4.5rem, 18vw, 5.5rem) .75rem clamp(3.5rem, 14vw, 4.5rem);
   }
-  .content { width: 100%; text-align: center; }
-  .content h2 { max-width: 8.5ch; margin-inline: auto; font-size: clamp(3rem, 13vw, 4.5rem); }
-  .content p { max-width: 34rem; margin-inline: auto; font-size: .92rem; }
-  .cta { margin-top: 1.9rem; }
-  .marqueeStage { width: 100%; height: clamp(27rem, 115vw, 34rem); }
-  .item { min-height: clamp(7.25rem, 29vw, 9rem); padding-inline: .75rem; text-align: center; }
-  .item strong { font-size: clamp(2.5rem, 10.8vw, 4.25rem); white-space: normal; text-wrap: balance; }
+  .content { width: 100%; max-width: none; text-align: left; }
+  .label { font-size: .5rem; letter-spacing: .18em; }
+  .content h2 {
+    max-width: 8.5ch;
+    margin: .9rem 0 0;
+    font-size: clamp(2rem, 8.5vw, 2.55rem);
+    line-height: .91;
+  }
+  .content p {
+    max-width: 18rem;
+    margin: 1.1rem 0 0;
+    font-size: clamp(.62rem, 2.55vw, .72rem);
+    line-height: 1.48;
+  }
+  .cta {
+    width: 100%;
+    min-height: 2.75rem;
+    justify-content: space-between;
+    gap: .5rem;
+    margin-top: 1.3rem;
+    padding: .65rem .7rem .65rem .8rem;
+    font-size: clamp(.56rem, 2.25vw, .64rem);
+  }
+  .cta svg { width: .85rem; height: .85rem; }
+  .marqueeStage { width: 100%; height: min(38rem, 72svh); }
+  .item {
+    min-height: min(9.5rem, 18svh);
+    padding: .75rem .15rem;
+    text-align: left;
+  }
+  .item strong {
+    font-size: clamp(1.55rem, 6.35vw, 2.1rem);
+    white-space: nowrap;
+  }
 }
 
 @media (max-width: 430px) {
-  .content h2 { font-size: clamp(2.85rem, 13.1vw, 3.55rem); }
-  .marqueeStage { height: 28rem; }
-  .item { min-height: 7.5rem; }
-  .item strong { font-size: clamp(2.35rem, 10.5vw, 3rem); }
+  .inner { min-height: min(46rem, 88svh); }
+  .marqueeStage { height: min(36rem, 70svh); }
 }
 
 @media (prefers-reduced-motion: reduce) {
