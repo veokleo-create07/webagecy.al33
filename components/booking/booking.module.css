@@ -1,4 +1,4 @@
-.loading { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; background: #111210; color: #b5b8ad; font-size: .95rem; }
+.loading { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; background: var(--color-ink); color: #b5b8ad; font-size: .95rem; }
 .dialog {
   position: fixed;
   inset: 0;
@@ -10,14 +10,14 @@
   padding: 0;
   border: 0;
   color: #f1efe8;
-  background: #111210;
+  background: var(--color-ink);
   font-family: "Aspekta", var(--font-inter-tight), "Arial Narrow", Arial, sans-serif;
   font-weight: 400;
   overflow: auto;
   overscroll-behavior: contain;
   color-scheme: dark;
 }
-.dialog::backdrop { background: #111210; }
+.dialog::backdrop { background: var(--color-ink); }
 .shell { min-height: 100%; display: flex; flex-direction: column; padding: clamp(1.25rem, 3vw, 3rem) clamp(1.25rem, 4vw, 4.5rem); }
 .header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .brandGroup { display: flex; align-items: center; gap: .75rem; }

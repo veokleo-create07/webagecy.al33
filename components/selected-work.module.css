@@ -2,6 +2,7 @@
   position: relative;
   padding-block: .75rem 2rem;
   scroll-margin-top: 7rem;
+  background: var(--color-ink);
 }
 
 @media (max-width: 767px) {
@@ -222,12 +223,12 @@
   padding: clamp(1.25rem, 3vw, 3rem);
   border: 0;
   color: var(--color-text);
-  background: #111210;
+  background: var(--color-ink);
   overscroll-behavior: contain;
   overflow-y: auto;
 }
 .modal[open] { display: flex; flex-direction: column; align-items: center; gap: clamp(1.25rem, 3vh, 2rem); animation: preview-enter 300ms ease both; }
-.modal::backdrop { background: #080908; }
+.modal::backdrop { background: var(--color-ink); }
 .modalHeader {
   width: 100%;
   display: flex;

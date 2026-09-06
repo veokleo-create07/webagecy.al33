@@ -66,6 +66,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+main {
+  background: var(--color-ink);
+}
+
 ::selection {
   background: var(--color-text);
   color: var(--color-ink);
@@ -390,7 +394,7 @@ a:focus-visible {
   place-items: center;
   overflow: clip;
   padding: clamp(10rem, 18svh, 13rem) var(--space-page) clamp(3rem, 6vh, 5rem);
-  background: #0d0d0c;
+  background: var(--color-ink);
 }
 
 .hero__atmosphere,
@@ -405,9 +409,7 @@ a:focus-visible {
 
 .hero__atmosphere {
   overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 40%, rgba(115, 112, 102, 0.065), transparent 34%),
-    linear-gradient(180deg, #111110 0%, #0d0d0c 62%, #111110 100%);
+  background: radial-gradient(circle at 50% 40%, rgba(115, 112, 102, 0.065), transparent 34%);
 }
 
 .hero__light {
@@ -1859,7 +1861,7 @@ a:focus-visible {
   display: grid;
   place-items: center;
   overflow: hidden;
-  background: #0d0d0c;
+  background: var(--color-ink);
 }
 
 .final-cta__atmosphere,
@@ -1874,9 +1876,7 @@ a:focus-visible {
 
 .final-cta__atmosphere {
   overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 44%, rgba(115, 112, 102, 0.065), transparent 34%),
-    linear-gradient(180deg, #111110 0%, #0d0d0c 55%, #111110 100%);
+  background: radial-gradient(circle at 50% 44%, rgba(115, 112, 102, 0.065), transparent 34%);
 }
 
 .final-cta__light {
@@ -2025,14 +2025,13 @@ a:focus-visible {
   padding: clamp(4rem, 7vh, 6rem) var(--space-page);
   align-items: center;
   isolation: isolate;
-  background: #0b0b0a;
+  background: var(--color-ink);
 }
 
 .final-cta__atmosphere {
   background:
     radial-gradient(ellipse 44% 37% at 50% 54%, rgba(225, 218, 200, 0.075), transparent 70%),
-    radial-gradient(ellipse 70% 48% at 50% 100%, rgba(92, 89, 82, 0.09), transparent 74%),
-    linear-gradient(180deg, #10100f 0%, #0b0b0a 68%, #11110f 100%);
+    radial-gradient(ellipse 70% 48% at 50% 100%, rgba(92, 89, 82, 0.09), transparent 74%);
 }
 
 .final-cta__content {
@@ -2206,7 +2205,7 @@ a:focus-visible {
 
 .city-cta {
   isolation: isolate;
-  background: #070807;
+  background: var(--color-ink);
 }
 
 .city-cta__atmosphere,
@@ -2220,8 +2219,7 @@ a:focus-visible {
   z-index: 0;
   background:
     radial-gradient(ellipse 30% 17% at 50% 58%, rgba(231, 227, 213, 0.075), transparent 72%),
-    radial-gradient(ellipse 80% 56% at 50% 100%, rgba(96, 101, 98, 0.055), transparent 73%),
-    linear-gradient(180deg, #090a09, #070807 68%, #0b0c0b);
+    radial-gradient(ellipse 80% 56% at 50% 100%, rgba(96, 101, 98, 0.055), transparent 73%);
 }
 
 .city-cta__scene {
@@ -2318,7 +2316,7 @@ a:focus-visible {
   --magnetic-glow: 0.04;
   overflow: hidden;
   isolation: isolate;
-  background: #080908;
+  background: var(--color-ink);
 }
 
 .magnetic-cta__atmosphere,
@@ -2332,8 +2330,7 @@ a:focus-visible {
   z-index: 0;
   background:
     radial-gradient(ellipse 34% 30% at 50% 48%, rgba(232, 228, 216, var(--magnetic-glow)), transparent 72%),
-    radial-gradient(ellipse 82% 55% at 50% 112%, rgba(106, 109, 105, 0.055), transparent 72%),
-    linear-gradient(180deg, #090a09 0%, #070807 67%, #0b0c0b 100%);
+    radial-gradient(ellipse 82% 55% at 50% 112%, rgba(106, 109, 105, 0.055), transparent 72%);
 }
 
 .magnetic-field {
@@ -3029,7 +3026,7 @@ a:focus-visible {
 .site-footer {
   padding: clamp(2.5rem, 5vw, 5rem) 0;
   border-top: 0;
-  background: #080908;
+  background: var(--color-ink);
   perspective: 1100px;
 }
 

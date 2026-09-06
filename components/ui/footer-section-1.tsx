@@ -33,7 +33,7 @@ export default function Footer1() {
   const linkClass = "group relative w-fit py-1 text-[clamp(1.05rem,1.45vw,1.4rem)] leading-tight tracking-[-0.025em] text-white/72 transition-colors duration-300 hover:text-[#f2f0e9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/45 after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-right after:scale-x-0 after:bg-white/45 after:transition-transform after:duration-300 hover:after:origin-left hover:after:scale-x-100";
 
   return (
-    <footer className="w-full overflow-hidden bg-[#070807] text-[#f2f0e9]">
+    <footer className="w-full overflow-hidden bg-[var(--color-ink)] text-[#f2f0e9]">
       <motion.div
         initial="hidden"
         whileInView="visible"
