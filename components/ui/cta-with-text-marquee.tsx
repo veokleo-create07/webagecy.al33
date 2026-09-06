@@ -107,7 +107,8 @@ export default function CTAWithTextMarquee() {
         <h2 id="services-title">{content.headline}</h2>
         <p>{content.paragraph}</p>
         <BookingLink className={styles.cta}>
-          <span>{content.cta}</span><ArrowIcon />
+          <span>{content.cta}</span>
+          <span className={styles.ctaArrow} aria-hidden="true"><ArrowIcon /></span>
         </BookingLink>
       </div>
 
