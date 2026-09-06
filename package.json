@@ -8,12 +8,14 @@
     "start": "next start"
   },
   "dependencies": {
+    "@remotion/player": "^4.0.521",
     "gsap": "latest",
     "libphonenumber-js": "^1.13.12",
     "motion": "^13.1.1",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "remotion": "^4.0.521"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "latest",

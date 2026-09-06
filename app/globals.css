@@ -2590,6 +2590,18 @@ a:focus-visible {
   transform: translateZ(2px);
 }
 
+.nexa-remotion-player,
+.nexa-remotion-stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.nexa-remotion-player { background: #f4f4f1; }
+.nexa-remotion-stage { container-type: inline-size; }
+
 .coded-phone__button {
   position: absolute;
   left: -1.5%;
