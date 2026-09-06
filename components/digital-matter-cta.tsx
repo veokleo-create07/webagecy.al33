@@ -363,8 +363,7 @@ export function FinalCTA() {
               const y = gsap.utils.interpolate(spec.from[1] * config.from, finalY, local) + Math.sin(local * Math.PI) * spec.arc * config.arc;
               const bend = Math.sin(local * Math.PI * 1.15 + index * .73) * (1 - local) * 2.2 * config.rotation;
               const depth = (spec.depth * local - (1 - local) * 90) * config.depth;
-              const fragmentWeight = mode === "desktop" ? .7 : mode === "tablet" ? .6 : .5;
-              element.style.opacity = String(.02 + local * spec.opacity * fragmentWeight);
+              element.style.opacity = String(.035 + local * spec.opacity * (mode === "mobile" ? .62 : 1));
               element.style.filter = config.blur ? `blur(${(1 - local) * config.blur}px)` : "none";
               element.style.transform = mode === "mobile"
                 ? `translate3d(${x}vw, ${y * sceneHeight / 100}px, 0) scale(${.82 + local * .18})`
@@ -375,7 +374,7 @@ export function FinalCTA() {
               const local = ease(clamp((progress - .08 - index * .025) / .74));
               path.style.strokeDasharray = String(arcLengths[index]);
               path.style.strokeDashoffset = String(arcLengths[index] * (1 - local));
-              path.style.opacity = String(.02 + local * (mode === "desktop" ? .17 : mode === "tablet" ? .115 : .05));
+              path.style.opacity = String(.035 + local * (mode === "desktop" ? .245 : mode === "tablet" ? .165 : .075));
             });
 
             const copyProgress = ease(clamp((progress - .14) / .44));

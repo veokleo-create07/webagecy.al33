@@ -2483,7 +2483,7 @@ a:focus-visible {
 }
 
 .magnetic-cta__content .final-cta__subline {
-  max-width: 28.5rem;
+  max-width: 31rem;
   margin-right: 0;
   margin-left: 0;
   text-wrap: pretty;
@@ -2505,7 +2505,7 @@ a:focus-visible {
   --device-x: 0px;
   --device-y: 0px;
   position: relative;
-  width: min(51.5vw, 47.25rem);
+  width: min(49vw, 45rem);
   aspect-ratio: 1.28;
   margin-inline: auto;
   transform: translate3d(var(--device-x), var(--device-y), 0) rotateX(var(--device-rx)) rotateY(var(--device-ry));
@@ -4127,7 +4127,7 @@ a:focus-visible {
   }
 
   .magnetic-device {
-    width: min(56.7vw, 40.95rem);
+    width: min(54vw, 39rem);
   }
 }
 
@@ -4201,7 +4201,7 @@ a:focus-visible {
     display: flex;
     width: 100%;
     flex-direction: column;
-    gap: 0.65rem;
+    gap: 1.25rem;
   }
 
   .magnetic-cta__content {
@@ -4221,7 +4221,7 @@ a:focus-visible {
   }
 
   .magnetic-cta__content .final-cta__subline {
-    max-width: 20.5rem;
+    max-width: 22rem;
     margin-top: 0.9rem;
     font-size: 0.86rem;
     line-height: 1.42;
@@ -4235,14 +4235,13 @@ a:focus-visible {
   .magnetic-cta__visual {
     width: min(90vw, 22.5rem);
     max-width: none;
-    margin: -2.25rem auto -2.25rem;
+    margin-inline: auto;
     perspective: none;
   }
 
   .magnetic-device {
     --device-x: -8%;
-    left: -2.5%;
-    width: 105%;
+    width: 100%;
     transition: none;
   }
 
