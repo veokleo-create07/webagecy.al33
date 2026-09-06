@@ -49,13 +49,13 @@ test("approved Albanian brand copy remains exact", () => {
   const approved = {
     "Build a business": "Ndërto një biznes",
     "people take seriously.": "që merret seriozisht.",
-    "We articulate your business with greater clarity, authority and credibility. It is perceived at the level it deserves.": "E artikulojmë biznesin tuaj me më shumë qartësi, autoritet dhe besueshmëri. Kështu perceptohet në nivelin që meriton.",
+    "We position your business with clarity, credibility and authority so it is perceived at the level it aspires to.": "E pozicionojmë biznesin tuaj me qartësi, besueshmëri dhe autoritet që të perceptohet në nivelin që synon.",
     "View our work": "Shiko projektet",
     "Web Development": "Web Development",
     "Every decision should serve the business.": "Çdo vendim duhet t’i shërbejë biznesit.",
     "Authority. Differentiation. Growth.": "Autoritet. Diferencim. Rritje.",
     "For the next stage.": "Për etapën e radhës.",
-    "Make your business harder to ignore.": "Bëje biznesin tënd të pamundur për t’u anashkaluar.",
+    "Make your business stand out where it matters.": "Bëje biznesin tënd të dallohet aty ku ka rëndësi.",
     "Do you currently have a website?": "A keni aktualisht një website?",
     "What is your estimated investment?": "Sa planifikoni të investoni?",
     "Tell us about your project. What do you want to achieve?": "Na tregoni për projektin. Çfarë dëshironi të arrini?",
@@ -72,7 +72,7 @@ test("approved Albanian brand copy remains exact", () => {
 test("outcome-focused English and Albanian copy remains paired", () => {
   const approved = {
     "Integrated strategy, design and technology for clearer positioning, sharper differentiation and greater competitive relevance.": "Strategji, dizajn dhe teknologji të integruara për një pozicionim më të qartë, diferencim më të dallueshëm dhe relevancë më të lartë në treg.",
-    "A considered digital presence designed to consolidate trust, increase relevance and open new opportunities for the business.": "Një prezencë digjitale e menduar për të konsoliduar besimin, për të rritur relevancën dhe për të hapur mundësi të reja për biznesin.",
+    "A considered digital presence designed to strengthen trust, increase relevance and create new opportunities for the business.": "Një prezencë digjitale e menduar për të forcuar besimin, për të rritur relevancën dhe për të krijuar mundësi të reja për biznesin.",
     "Design · Development · Growth · Software": "Dizajn · Zhvillim · Rritje · Software",
     "For businesses defined by ambition.": "Për biznese me ambicie.",
     "A few details. Then we talk about where your business can go next.": "Disa detaje. Pastaj flasim për hapin e radhës të biznesit tuaj.",

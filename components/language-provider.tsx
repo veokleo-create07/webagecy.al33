@@ -12,7 +12,7 @@ export function LanguageProvider({ children, initialLanguage }: { children: Reac
   useEffect(() => {
     document.documentElement.lang = language;
     document.title = translate(language, "KREU WEB. Built for progress.");
-    document.querySelector('meta[name="description"]')?.setAttribute("content", translate(language, "We articulate your business with greater clarity, authority and credibility. It is perceived at the level it deserves."));
+    document.querySelector('meta[name="description"]')?.setAttribute("content", translate(language, "We position your business with clarity, credibility and authority so it is perceived at the level it aspires to."));
     // Text reflow changes section bounds; retain the existing scroll animations.
     const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
     return () => cancelAnimationFrame(frame);
