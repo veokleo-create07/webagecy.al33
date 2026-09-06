@@ -16,7 +16,7 @@ type Service = { title: string };
 const copy: Record<Language, { label: string; headline: string; paragraph: string; cta: string; services: Service[] }> = {
   sq: {
     label: "SHËRBIMET",
-    headline: "Çdo disiplinë. Një drejtim.",
+    headline: "Çdo vendim duhet t'i shërbej biznesit.",
     paragraph: "Dizajni, teknologjia dhe rritja punojnë si një sistem i vetëm për ta pozicionuar biznesin me më shumë qartësi, autoritet dhe relevancë.",
     cta: "Rezervo një konsultë",
     services: [
