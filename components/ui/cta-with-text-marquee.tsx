@@ -28,7 +28,7 @@ const copy: Record<Language, { label: string; headline: string; paragraph: strin
   },
   en: {
     label: "SERVICES",
-    headline: "Every discipline. One direction.",
+    headline: "Every decision should serve the business.",
     paragraph: "Design, technology and growth operate as one system to position the business with greater clarity, authority and relevance.",
     cta: "Book a discovery call",
     services: [
