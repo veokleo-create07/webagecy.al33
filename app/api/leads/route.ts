@@ -1,6 +1,6 @@
 import { normalizedWebsite, validateStep, type BookingDetails } from "@/lib/booking";
 
-const LEADS_WEBHOOK_URL = "https://n8n.rizlyy.app/webhook/kreu.web.leads";
+const LEADS_WEBHOOK_URL = "https://n8n.rizlyy.app/webhook-test/kreu.web.leads";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
