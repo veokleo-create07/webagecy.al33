@@ -17,11 +17,13 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
   const { t } = useLanguage();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const submitting = useRef(false);
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
   const [details, setDetails] = useState<BookingDetails>({ ...emptyDetails });
   const [error, setError] = useState("");
   const [confirmation, setConfirmation] = useState(false);
+  const [pending, setPending] = useState(false);
   const reduced = useReducedMotion();
 
   useEffect(() => {
@@ -48,6 +50,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
   }
 
   function close() {
+    if (pending) return;
     onClose();
     if (confirmation) {
       setConfirmation(false); setDetails({ ...emptyDetails }); setStep(0);
@@ -56,11 +59,29 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (submitting.current) return;
     const invalid = validateStep(step, details);
     if (invalid) { setError(invalid); return; }
     if (step < 5) { setError(""); setDirection(1); setStep(step + 1); return; }
+    submitting.current = true;
+    setPending(true);
     setError("");
-    setConfirmation(true);
+    try {
+      const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(details),
+        signal: AbortSignal.timeout(20_000),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) throw new Error("Lead delivery failed");
+      setConfirmation(true);
+    } catch {
+      setError("We couldn’t send your project request. Please try again.");
+    } finally {
+      submitting.current = false;
+      setPending(false);
+    }
   }
 
   const fieldProps = { "aria-invalid": Boolean(error), "aria-describedby": error ? "booking-error" : undefined };
@@ -74,7 +95,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
       <div className={styles.shell}>
         <header className={styles.header}>
           <div className={styles.brandGroup}><BrandLogo /><LanguageSwitcher /></div>
-          <button className={styles.close} type="button" onClick={close} aria-label={t("Close booking")}>
+          <button className={styles.close} type="button" onClick={close} disabled={pending} aria-label={t("Close booking")}>
             <span>{t("Close")}</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
           </button>
         </header>
@@ -96,7 +117,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
                   <span>{details.countryCode} {details.whatsapp.trim()}</span>
                 </div>
                 <button type="button" className={styles.primary} onClick={close}>{t("Back to Kreu")} <ArrowIcon /></button>
-              </div> : <form onSubmit={submit} noValidate>
+              </div> : <form onSubmit={submit} noValidate aria-busy={pending}>
                 <div className={styles.fields}>
                   {step === 0 && <label className={styles.field}><span>{t("Name")}</span><input {...fieldProps} name="fullName" autoComplete="name" value={details.fullName} onChange={e => update("fullName", e.target.value)} maxLength={120} placeholder={t("Your name")} required /></label>}
                   {step === 1 && <label className={styles.field}><span>{t("Business name")}</span><input {...fieldProps} name="businessName" autoComplete="organization" value={details.businessName} onChange={e => update("businessName", e.target.value)} maxLength={160} placeholder={t("Your business name")} required /></label>}
@@ -117,9 +138,9 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
                 </div>
                 {error && <p id="booking-error" className={styles.error} role="alert">{t(error)}</p>}
                 <div className={styles.actions}>
-                  {step > 0 && <button type="button" className={styles.back} onClick={() => { setError(""); setDirection(-1); setStep(step - 1); }}>{t("Back")}</button>}
-                  <button className={styles.primary} type="submit">
-                    {t(step === 5 ? "Apply to Work With Us" : "Continue")}<ArrowIcon direction={step === 5 ? "up-right" : "right"} />
+                  {step > 0 && <button type="button" className={styles.back} disabled={pending} onClick={() => { setError(""); setDirection(-1); setStep(step - 1); }}>{t("Back")}</button>}
+                  <button className={styles.primary} type="submit" disabled={pending}>
+                    {t(pending ? "Sending your request…" : step === 5 ? "Apply to Work With Us" : "Continue")}<ArrowIcon direction={step === 5 ? "up-right" : "right"} />
                   </button>
                 </div>
                 <p className={styles.privacy}>{t(step === 5 ? "A focused first step for your next project." : "A few details. Then we talk about where your business can go next.")}</p>
