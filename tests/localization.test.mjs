@@ -38,10 +38,10 @@ test("conversion copy and investment values remain consistently localized", () =
   assert.equal(translate("sq", "Book a discovery call"), "Rezervo një konsultë");
   assert.equal(translate("sq", "Book discovery call"), "Rezervo konsultën");
   assert.equal(translate("sq", "Book a consultation"), "Rezervo një konsultë");
-  for (const range of ["€1,500–€3,000", "€3,000–€5,000", "€5,000–€10,000", "€10,000+"]) assert.ok(Object.hasOwn(albanian, range));
+  for (const range of ["€2,000–€5,000", "€5,000–€10,000", "€10,000–€25,000", "€25,000+"]) assert.ok(Object.hasOwn(albanian, range));
   assert.deepEqual(
-    ["€1,500–€3,000", "€3,000–€5,000", "€5,000–€10,000", "€10,000+"].map(range => translate("sq", range)),
-    ["€1.500–€3.000", "€3.000–€5.000", "€5.000–€10.000", "€10.000+"],
+    ["€2,000–€5,000", "€5,000–€10,000", "€10,000–€25,000", "€25,000+"].map(range => translate("sq", range)),
+    ["€2.000–€5.000", "€5.000–€10.000", "€10.000–€25.000", "€25.000+"],
   );
 });
 
@@ -57,9 +57,9 @@ test("approved Albanian brand copy remains exact", () => {
     "For the next stage.": "Për etapën e radhës.",
     "Make your business stand out where it matters.": "Bëje biznesin tënd të dallohet aty ku ka rëndësi.",
     "Do you currently have a website?": "A keni aktualisht një website?",
-    "What is your estimated investment?": "Sa planifikoni të investoni?",
-    "Tell us about your project. What do you want to achieve?": "Na tregoni për projektin. Çfarë dëshironi të arrini?",
-    "How did you hear about us?": "Si dëgjuat për ne?",
+    "What’s your WhatsApp number?": "Cili është numri juaj në WhatsApp?",
+    "What investment range are you considering?": "Çfarë niveli investimi po konsideroni?",
+    "Tell us briefly about your project.": "Na tregoni shkurt për projektin.",
     "Project details": "Rreth projektit",
     "Back": "Kthehu",
   };
