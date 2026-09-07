@@ -156,33 +156,16 @@ export const albanian: Record<string, string> = {
   "LinkedIn": "LinkedIn",
   "Google referral": "Google / Rekomandim",
   "Other": "Tjetër",
-  "Times shown in": "Oraret sipas zonës",
-  "Finding available times…": "Po kërkojmë oraret e lira…",
-  "Scheduling is temporarily unavailable.": "Rezervimi online është përkohësisht i padisponueshëm.",
-  "We couldn’t load available times.": "Nuk arritëm t’i shfaqim oraret e lira.",
-  "There are no open times in the next 60 days.": "Nuk ka orare të lira gjatë 60 ditëve të ardhshme.",
-  "Email": "Na shkruani në",
-  "to arrange a call.": "për të lënë një takim.",
-  "Your details haven’t been sent.": "Të dhënat tuaja nuk janë dërguar.",
-  "Check again": "Provo sërish",
   "Back": "Kthehu",
-  "Confirming your call…": "Po konfirmojmë konsultën…",
   "Book discovery call": "Rezervo konsultën",
+  "Send enquiry": "Dërgo kërkesën",
   "Continue": "Vazhdo",
-  "Your details are sent securely when you book. No mailing lists.": "Të dhënat dërgohen në mënyrë të sigurt vetëm kur rezervoni. Pa emaile promocionale.",
+  "Thank you.": "Faleminderit.",
+  "We’ll review your details and be in touch by email.": "Do t’i shqyrtojmë të dhënat tuaja dhe do t’ju kontaktojmë me email.",
+  "We’ll review your details and reply by email.": "Do t’i shqyrtojmë të dhënat tuaja dhe do t’ju përgjigjemi me email.",
   "A few details. Then we talk about where your business can go next.": "Disa detaje. Pastaj flasim për hapin e radhës të biznesit tuaj.",
   "A considered start to something better.": "Një hap i menduar mirë.",
-  "You’re booked.": "Konsulta u rezervua.",
-  "Your discovery call is confirmed. Check your email for the invitation.": "Konfirmimin dhe ftesën i gjeni në email.",
-  "The call link isn’t available yet. Check your invitation email or contact hello@kreuweb.com before the call.": "Linku i takimit nuk është ende gati. Kontrolloni ftesën në email ose na shkruani në hello@kreuweb.com para takimit.",
-  "Join call": "Bashkohu në takim",
   "Back to Kreu": "Kthehu te Kreu",
-  "Previous month": "Muaji i kaluar",
-  "Next month": "Muaji i ardhshëm",
-  "Choose a date": "Zgjidhni datën",
-  "Choose a time": "Zgjidhni orarin",
-  "Available times": "Oraret e lira",
-  "There are no available times to select.": "Për momentin nuk ka orare të lira.",
   "Please enter your full name.": "Shkruani emrin dhe mbiemrin.",
   "Please enter a valid email address.": "Shkruani një adresë emaili të vlefshme.",
   "Please enter your business name.": "Shkruani emrin e biznesit.",
@@ -192,34 +175,8 @@ export const albanian: Record<string, string> = {
   "Choose an investment range.": "Zgjidhni nivelin e investimit.",
   "Choose how you heard about us.": "Zgjidhni si dëgjuat për ne.",
   "Please keep your notes under 2,000 characters.": "Ju lutemi, shkruani jo më shumë se 2 000 karaktere.",
-  "Choose an available date and time to book your call.": "Zgjidhni një datë dhe orar të lirë për konsultën.",
-  "That time was just booked. Please choose another available time.": "Ky orar sapo u rezervua. Ju lutemi, zgjidhni një orar tjetër.",
-  "Your request is awaiting confirmation. Please check your email before trying again.": "Kërkesa juaj është në pritje të konfirmimit. Kontrolloni emailin para se të provoni sërish.",
-  "We couldn’t confirm your booking. Please retry to check this request. If this continues, email hello@kreuweb.com.": "Nuk arritëm ta konfirmojmë rezervimin. Provoni sërish. Nëse problemi vazhdon, na shkruani në hello@kreuweb.com.",
 };
 
 export function translate(language: Language, message: string): string {
   return language === "sq" ? albanian[message] ?? message : message;
-}
-
-const monthsSq = ["janar", "shkurt", "mars", "prill", "maj", "qershor", "korrik", "gusht", "shtator", "tetor", "nëntor", "dhjetor"];
-const weekdaysSq = ["E diel", "E hënë", "E martë", "E mërkurë", "E enjte", "E premte", "E shtunë"];
-export function calendarWeekdays(language: Language) {
-  return language === "sq" ? ["H", "M", "M", "E", "P", "S", "D"] : ["M", "T", "W", "T", "F", "S", "S"];
-}
-
-/** Explicit Albanian labels also work in browsers shipped without Albanian ICU data. */
-export function localizedDate(language: Language, value: Date | string, timeZone: string, style: "month" | "day" | "full") {
-  const date = new Date(value);
-  if (language === "en") return new Intl.DateTimeFormat("en-GB", {
-    timeZone, month: "long", ...(style !== "month" ? { weekday: "long" as const, day: "numeric" as const } : {}),
-    ...(style !== "day" ? { year: "numeric" as const } : {}),
-  }).format(date);
-  const parts = new Intl.DateTimeFormat("en-GB", { timeZone, year: "numeric", month: "numeric", day: "numeric" }).formatToParts(date);
-  const part = (name: string) => Number(parts.find(item => item.type === name)?.value);
-  const year = part("year"), month = part("month"), day = part("day");
-  const monthName = monthsSq[month - 1];
-  if (style === "month") return `${monthName[0].toUpperCase()}${monthName.slice(1)} ${year}`;
-  const weekday = weekdaysSq[new Date(Date.UTC(year, month - 1, day)).getUTCDay()];
-  return `${weekday}, ${day} ${monthName}${style === "full" ? ` ${year}` : ""}`;
 }

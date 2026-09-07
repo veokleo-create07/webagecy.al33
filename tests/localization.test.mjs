@@ -4,7 +4,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { stripTypeScriptTypes } from "node:module";
 
 const source = readFileSync("lib/localization.ts", "utf8");
-const { translate, albanian, localizedDate, calendarWeekdays } = new Function(`${stripTypeScriptTypes(source).replace(/^export /gm, "")}\nreturn {translate, albanian, localizedDate, calendarWeekdays};`)();
+const { translate, albanian } = new Function(`${stripTypeScriptTypes(source).replace(/^export /gm, "")}\nreturn {translate, albanian};`)();
 
 test("every translation has an English fallback and nonempty Albanian copy", () => {
   for (const [english, shqip] of Object.entries(albanian)) {
@@ -61,10 +61,7 @@ test("approved Albanian brand copy remains exact", () => {
     "Tell us about your project. What do you want to achieve?": "Na tregoni për projektin. Çfarë dëshironi të arrini?",
     "How did you hear about us?": "Si dëgjuat për ne?",
     "Project details": "Rreth projektit",
-    "Book discovery call": "Rezervo konsultën",
     "Back": "Kthehu",
-    "You’re booked.": "Konsulta u rezervua.",
-    "Join call": "Bashkohu në takim",
   };
   for (const [english, shqip] of Object.entries(approved)) assert.equal(translate("sq", english), shqip);
 });
@@ -81,13 +78,4 @@ test("outcome-focused English and Albanian copy remains paired", () => {
     assert.equal(translate("en", english), english);
     assert.equal(translate("sq", english), shqip);
   }
-});
-
-test("Albanian calendar formatting localizes dates without changing timezone", () => {
-  const date = new Date("2026-09-01T07:00:00Z");
-  assert.equal(localizedDate("sq", date, "Europe/Tirane", "month"), "Shtator 2026");
-  assert.equal(localizedDate("sq", date, "Europe/Tirane", "full"), "E martë, 1 shtator 2026");
-  assert.equal(localizedDate("sq", "2026-08-31T22:30:00Z", "Europe/Tirane", "day"), "E martë, 1 shtator");
-  assert.deepEqual(calendarWeekdays("sq"), ["H", "M", "M", "E", "P", "S", "D"]);
-  assert.equal(new Intl.DateTimeFormat("sq-AL", { hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZone: "Europe/Tirane" }).format(date), "09:00");
 });

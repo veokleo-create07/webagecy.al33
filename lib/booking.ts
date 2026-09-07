@@ -10,9 +10,6 @@ export type BookingDetails = {
   notes: string;
   referralSource: string;
 };
-export type Slot = { id: string; startsAt: string; endsAt: string };
-export type Confirmation = { id: string; startsAt: string; endsAt: string; timezone: string; joinUrl?: string };
-
 export const emptyDetails: BookingDetails = {
   fullName: "", email: "", businessName: "", hasWebsite: "", website: "", investment: "", notes: "", referralSource: "",
 };
@@ -50,15 +47,4 @@ export function validateStep(step: number, details: BookingDetails): string | nu
   if (step === 5 && details.notes.length > 2000) return "Please keep your notes under 2,000 characters.";
   if (step === 6 && !(referralOptions as readonly string[]).includes(details.referralSource)) return "Choose how you heard about us.";
   return null;
-}
-
-export function validTimezone(value: string) {
-  try { new Intl.DateTimeFormat("en", { timeZone: value }).format(); return true; } catch { return false; }
-}
-
-/** Calendar keys must follow the visitor's timezone, not the server's day. */
-export function dayKey(date: Date | string, timezone: string) {
-  const parts = new Intl.DateTimeFormat("en-GB", { timeZone: timezone, year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date(date));
-  const part = (name: string) => parts.find(item => item.type === name)?.value;
-  return `${part("year")}-${part("month")}-${part("day")}`;
 }
