@@ -1,5 +1,6 @@
 "use client";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
+import { LayeredText } from "@/components/ui/layered-text";
 import { BookingLink } from "@/components/booking/booking-provider";
 import { useLanguage } from "@/components/language-provider";
 
@@ -417,7 +418,7 @@ function PhoneDevice({ variant, language }: { variant: "front" | "rear"; languag
 }
 
 export function FinalCTA() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -537,6 +538,11 @@ export function FinalCTA() {
     button.style.setProperty("--lens-y", `${((event.clientY - bounds.top) / bounds.height) * 100}%`);
   };
 
+  const headline = t("Make your business stand out where it matters.");
+  const headlineLines = language === "sq"
+    ? ["Bëje", "biznesin tënd", "të dallohet", "aty ku", "ka rëndësi."]
+    : ["Make your", "business stand out", "where it", "matters."];
+
   return (
     <section
       ref={sectionRef}
@@ -565,7 +571,7 @@ export function FinalCTA() {
       <div className="magnetic-cta__layout magnetic-cta__layout--solo">
         <div ref={contentRef} className="final-cta__content magnetic-cta__content">
           <p className="final-cta__eyebrow">{t("For the next stage.")}</p>
-          <h2 id="contact-title">{t("Make your business stand out where it matters.")}</h2>
+          <LayeredText id="contact-title" text={headline} lines={headlineLines} />
           <p className="final-cta__subline">{t("A considered digital presence designed to strengthen trust, increase relevance and create new opportunities for the business.")}</p>
           <BookingLink
             ref={buttonRef}
