@@ -5,6 +5,30 @@
   background: var(--color-ink);
 }
 
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: clamp(.85rem, 1.4vw, 1.25rem);
+}
+.sectionHeader h2,
+.sectionHeader p {
+  margin: 0;
+  font-weight: 400;
+}
+.sectionHeader h2 {
+  color: var(--color-text);
+  font-size: clamp(.72rem, .85vw, .82rem);
+  line-height: 1;
+  letter-spacing: .16em;
+}
+.sectionHeader p {
+  color: var(--color-muted, #a3a29b);
+  font-size: clamp(.76rem, .9vw, .88rem);
+  line-height: 1.3;
+}
+
 @media (max-width: 767px) {
   .showcase { padding-bottom: 1.5rem; }
 }
@@ -255,6 +279,14 @@
   .modalMedia { width: 100%; max-width: 70rem; }
 }
 @media (max-width: 768px) {
+  .sectionHeader {
+    align-items: center;
+    padding-bottom: .8rem;
+  }
+  .sectionHeader p {
+    max-width: 12rem;
+    text-align: right;
+  }
   .composition {
     width: 100%;
     min-width: 0;

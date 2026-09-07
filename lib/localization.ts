@@ -43,6 +43,7 @@ export const albanian: Record<string, string> = {
   "Kreu Web on Instagram": "Kreu Web në Instagram",
   "Your next chapter": "Hapi juaj i radhës",
   "Selected website concepts": "Projekte të përzgjedhura",
+  "Selected explorations": "Eksplorime të përzgjedhura",
   "Preview": "Shiko projektin",
   "Design concept": "Koncept dizajni",
   "Residential Real Estate": "Prona rezidenciale",

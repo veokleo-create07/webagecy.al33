@@ -14,31 +14,31 @@ const projects = [
   {
     slug: "nova",
     name: "Park & Stone",
-    category: "Residential Real Estate",
+    category: "Concept · Real Estate",
     description: "A refined digital experience for modern residential developments.",
   },
   {
     slug: "maison",
     name: "Still",
-    category: "Mobile App / Software",
+    category: "Concept · Software",
     description: "A considered mobile app concept for focused work, daily planning, and a little more clarity.",
   },
   {
     slug: "lume",
     name: "Westside Aesthetics",
-    category: "Med Spa",
+    category: "Concept · Aesthetics",
     description: "A calm, clinically precise experience for modern aesthetic care.",
   },
   {
     slug: "noir",
     name: "The Oak House",
-    category: "Hospitality",
+    category: "Concept · Hospitality",
     description: "A cinematic reservation experience built around appetite and atmosphere.",
   },
   {
     slug: "velor",
     name: "First Class Rentals",
-    category: "Car Rental",
+    category: "Concept · Mobility",
     description: "A booking experience engineered around performance and exceptional cars.",
   },
 ] as const;
@@ -248,7 +248,11 @@ export function SelectedWork() {
   }, [active]);
 
   return (
-    <section ref={showcase} className={styles.showcase} id="work" aria-label={t("Selected website concepts")}>
+    <section ref={showcase} className={styles.showcase} id="work" aria-label={`KREU LAB · ${t("Selected explorations")}`}>
+      <header className={styles.sectionHeader}>
+        <h2>KREU LAB</h2>
+        <p>{t("Selected explorations")}</p>
+      </header>
       <div className={styles.composition}>
         {projects.map((project, index) => {
           const Concept = concepts[project.slug];
@@ -322,7 +326,7 @@ export function SelectedWork() {
           <>
             <div className={styles.modalHeader}>
               <div>
-                <p>{t(active.category)} · {t("Design concept")}</p>
+                <p>{t(active.category)}</p>
                 <h2 id="project-preview-title">{active.name}</h2>
               </div>
               <button ref={closeButton} className={styles.close} type="button" onClick={() => dialog.current?.close()}>
