@@ -4,7 +4,6 @@ import { FoundationReveal } from "@/components/foundation-reveal";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { BookingLink } from "@/components/booking/booking-provider";
 import { SiteHeader } from "@/components/site-header";
-import { SelectedWork } from "@/components/selected-work";
 import { Services } from "@/components/services";
 import { FinalCTA } from "@/components/digital-matter-cta";
 import Footer1 from "@/components/ui/footer-section-1";
@@ -39,14 +38,9 @@ export default function Home() {
               <BookingLink className="hero__primary">
                 {t("Book a discovery call")} <span aria-hidden="true"><ArrowIcon /></span>
               </BookingLink>
-              <a className="hero__secondary" href="#work">
-                {t("View our work")} <span aria-hidden="true"><ArrowIcon direction="down" /></span>
-              </a>
             </div>
           </div>
         </section>
-
-        <SelectedWork />
 
         <Services />
 

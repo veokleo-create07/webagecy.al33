@@ -8,7 +8,6 @@ import { useEffect, useRef, useState, type MouseEvent } from "react";
 import styles from "./site-header.module.css";
 
 const navigation = [
-  { label: "Work", href: "#work" },
   { label: "Services", href: "#expertise" },
 ];
 

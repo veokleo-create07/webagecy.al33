@@ -4,7 +4,6 @@ import { LanguageSwitcher, useLanguage } from "@/components/language-provider";
 import { motion, useReducedMotion, type Variants } from "motion/react";
 
 const navigation = [
-  { label: "Work", href: "#work" },
   { label: "Services", href: "#expertise" },
   { label: "Contact", href: "#contact" },
 ] as const;
