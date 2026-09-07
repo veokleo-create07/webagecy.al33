@@ -2467,6 +2467,20 @@ a:focus-visible {
   gap: clamp(2rem, 4.5vw, 6rem);
 }
 
+.magnetic-cta__layout.magnetic-cta__layout--solo {
+  grid-template-columns: minmax(0, 48rem);
+  justify-content: center;
+}
+
+.magnetic-cta__layout--solo .magnetic-cta__content {
+  align-items: center;
+  text-align: center;
+}
+
+.magnetic-cta__layout--solo .magnetic-cta__content .final-cta__subline {
+  margin-inline: auto;
+}
+
 .magnetic-cta__content {
   width: 100%;
   margin: 0;

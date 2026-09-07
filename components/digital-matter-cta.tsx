@@ -417,22 +417,17 @@ function PhoneDevice({ variant, language }: { variant: "front" | "rear"; languag
 }
 
 export function FinalCTA() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const visualRef = useRef<HTMLDivElement>(null);
-  const deviceStageRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
     const content = contentRef.current;
-    const visual = visualRef.current;
     const button = buttonRef.current;
-    const frontPhone = section?.querySelector<HTMLElement>('[data-phone="front"]');
-    const rearPhone = section?.querySelector<HTMLElement>('[data-phone="rear"]');
-    if (!section || !content || !visual || !button) return;
+    if (!section || !content || !button) return;
 
     gsap.registerPlugin(ScrollTrigger);
     const media = gsap.matchMedia();
@@ -489,36 +484,11 @@ export function FinalCTA() {
             });
 
             const copyProgress = ease(clamp((progress - .14) / .44));
-            const frontProgress = ease(clamp((progress - .02) / .68));
-            const rearProgress = ease(clamp((progress - .16) / .62));
             const buttonProgress = ease(clamp((progress - .48) / .25));
             gsap.set(content, {
               opacity: (mode === "mobile" ? .92 : .82) + copyProgress * (mode === "mobile" ? .08 : .18),
               x: (mode === "desktop" ? -10 : 0) * (1 - copyProgress),
               y: (mode === "mobile" ? 5 : 4) * (1 - copyProgress),
-            });
-            gsap.set(visual, {
-              opacity: 1,
-            });
-            if (rearPhone) gsap.set(rearPhone, {
-              opacity: (mode === "mobile" ? .18 : .08) + rearProgress * (mode === "mobile" ? .72 : .92),
-              x: (mode === "desktop" ? 54 : mode === "tablet" ? 12 : 0) * (1 - rearProgress),
-              y: (mode === "desktop" ? 20 : mode === "tablet" ? 9 : 7) * (1 - rearProgress),
-              z: mode === "desktop" ? -42 + rearProgress * 18 : mode === "tablet" ? -2 : 0,
-              rotateX: mode === "desktop" ? -4 * (1 - rearProgress) : mode === "tablet" ? -(1 - rearProgress) : 0,
-              rotateY: mode === "desktop" ? -9 + rearProgress * 3 : mode === "tablet" ? -2 + rearProgress : 0,
-              rotateZ: mode === "desktop" ? 4 : mode === "tablet" ? 2 : 0,
-              scale: (mode === "mobile" ? .97 : .94) + rearProgress * (mode === "mobile" ? .03 : .06),
-            });
-            if (frontPhone) gsap.set(frontPhone, {
-              opacity: (mode === "mobile" ? .88 : .74) + frontProgress * (mode === "mobile" ? .12 : .26),
-              x: (mode === "desktop" ? 24 : mode === "tablet" ? 6 : 0) * (1 - frontProgress),
-              y: (mode === "desktop" ? 12 : 5) * (1 - frontProgress),
-              z: mode === "desktop" ? 48 + frontProgress * 18 : mode === "tablet" ? 5 : 0,
-              rotateX: mode === "desktop" ? -3 + frontProgress : mode === "tablet" ? -.75 + frontProgress * .35 : 0,
-              rotateY: mode === "desktop" ? 7 - frontProgress * 2 : mode === "tablet" ? 2 - frontProgress : 0,
-              rotateZ: mode === "desktop" ? -3 : mode === "tablet" ? -1.5 : 0,
-              scale: (mode === "mobile" ? .985 : .96) + frontProgress * (mode === "mobile" ? .015 : .04),
             });
             gsap.set(button, { opacity: .84 + buttonProgress * .16, y: 4 * (1 - buttonProgress) });
           };
@@ -552,16 +522,11 @@ export function FinalCTA() {
 
   const handleFieldParallax = (event: PointerEvent<HTMLElement>) => {
     const field = fieldRef.current;
-    const deviceStage = deviceStageRef.current;
-    if (!field || !deviceStage || !window.matchMedia("(min-width: 1025px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return;
+    if (!field || !window.matchMedia("(min-width: 1025px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return;
     const x = (event.clientX / window.innerWidth - .5) * 7;
     const y = (event.clientY / window.innerHeight - .5) * 5;
     field.style.setProperty("--field-x", `${x}px`);
     field.style.setProperty("--field-y", `${y}px`);
-    deviceStage.style.setProperty("--device-rx", `${-y * .16}deg`);
-    deviceStage.style.setProperty("--device-ry", `${x * .18}deg`);
-    deviceStage.style.setProperty("--device-x", `${x * .38}px`);
-    deviceStage.style.setProperty("--device-y", `${y * .32}px`);
   };
 
   const handleLens = (event: PointerEvent<HTMLAnchorElement>) => {
@@ -580,13 +545,8 @@ export function FinalCTA() {
       aria-labelledby="contact-title"
       onPointerMove={handleFieldParallax}
       onPointerLeave={() => {
-        const desktopPointer = window.matchMedia("(min-width: 1025px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches;
         fieldRef.current?.style.setProperty("--field-x", "0px");
         fieldRef.current?.style.setProperty("--field-y", "0px");
-        deviceStageRef.current?.style.setProperty("--device-rx", "0deg");
-        deviceStageRef.current?.style.setProperty("--device-ry", "0deg");
-        deviceStageRef.current?.style.setProperty("--device-x", desktopPointer ? "0px" : "-8%");
-        deviceStageRef.current?.style.setProperty("--device-y", "0px");
       }}
     >
       <div className="magnetic-cta__atmosphere" aria-hidden="true" />
@@ -602,7 +562,7 @@ export function FinalCTA() {
         </div>
       </div>
 
-      <div className="magnetic-cta__layout">
+      <div className="magnetic-cta__layout magnetic-cta__layout--solo">
         <div ref={contentRef} className="final-cta__content magnetic-cta__content">
           <p className="final-cta__eyebrow">{t("For the next stage.")}</p>
           <h2 id="contact-title">{t("Make your business stand out where it matters.")}</h2>
@@ -621,14 +581,6 @@ export function FinalCTA() {
           </BookingLink>
         </div>
 
-        <div ref={visualRef} className="magnetic-cta__visual" aria-hidden="true">
-          <div ref={deviceStageRef} className="magnetic-device">
-            <PhoneDevice variant="rear" language={language} />
-            <PhoneDevice variant="front" language={language} />
-            <span className="magnetic-device__contact-shadow" />
-            <span className="magnetic-device__reflection" />
-          </div>
-        </div>
       </div>
     </section>
   );
