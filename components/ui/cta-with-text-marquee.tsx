@@ -5,9 +5,8 @@ import { useEffect, useRef } from "react";
 import type { ReactNode, RefObject } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { BookingLink } from "@/components/booking/booking-provider";
 import { useLanguage } from "@/components/language-provider";
-import { ArrowIcon } from "@/components/ui/arrow-icon";
+import { ThreeDButton } from "@/components/ui/3d-button";
 import type { Language } from "@/lib/localization";
 import styles from "./cta-with-text-marquee.module.css";
 
@@ -106,10 +105,7 @@ export default function CTAWithTextMarquee() {
         <span className={styles.label}>{content.label}</span>
         <h2 id="services-title">{content.headline}</h2>
         <p>{content.paragraph}</p>
-        <BookingLink className={styles.cta}>
-          <span>{content.cta}</span>
-          <span className={styles.ctaArrow} aria-hidden="true"><ArrowIcon /></span>
-        </BookingLink>
+        <ThreeDButton label={content.cta} />
       </div>
 
       <div className={styles.marqueeStage}>
