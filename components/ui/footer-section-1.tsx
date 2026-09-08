@@ -55,7 +55,7 @@ export default function Footer1() {
         <nav aria-label={t("Socials")}>{socials.map((item, index) => <a key={item.label} href={item.href} target="_blank" rel="noreferrer" style={{ "--item-index": index } as CSSProperties}><span>{item.label}</span><ArrowIcon /></a>)}</nav>
       </motion.div>
       <motion.div variants={reveal} className={styles.bottom}>
-        <p>{t("Kreu Web © 2026. Designed with intent.")}</p>
+        <p>© 2026 Kreu Web. All rights reserved.</p>
       </motion.div>
     </motion.div>
   </footer>;
