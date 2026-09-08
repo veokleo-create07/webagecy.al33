@@ -12,6 +12,7 @@ const questions = [
   "What’s your name?", "What’s your business called?", "Do you currently have a website?",
   "What’s your WhatsApp number?", "What investment range are you considering?", "Tell us briefly about your project.",
 ];
+const stepLabels = ["Contact", "Business", "Website", "WhatsApp", "Investment", "Project"];
 
 export default function BookingFlow({ open, opener, onClose }: { open: boolean; opener?: HTMLElement; onClose: () => void }) {
   const { t } = useLanguage();
@@ -100,21 +101,46 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
           </button>
         </header>
 
-        <main className={styles.main}>
-          <div className={styles.progressMeta}>
-            <span>{t("Project request")}</span>
-            <span aria-live="polite">{confirmation ? t("Confirmed") : `${step + 1} / 6`}</span>
-          </div>
-          <div className={styles.progress} role="progressbar" aria-label={t("Project request progress")} aria-valuemin={0} aria-valuemax={6} aria-valuenow={confirmation ? 6 : step + 1}><span style={{ transform: `scaleX(${confirmation ? 1 : (step + 1) / 6})` }} /></div>
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div key={confirmation ? "confirmed" : step} initial={reduced ? false : { opacity: 0, x: direction * 14 }} animate={{ opacity: 1, x: 0 }} exit={reduced ? { opacity: 1 } : { opacity: 0, x: direction * -10 }} transition={{ duration: reduced ? 0 : .22, ease: [.22, 1, .36, 1] }} onAnimationComplete={focusHeading}>
+        <div className={styles.workspace}>
+          <aside className={styles.advisory} aria-label={t("Consultation overview")}>
+            <div className={styles.advisoryIntro}>
+              <span className={styles.eyebrow}>{t("Private consultation")}</span>
+              <h2>{t("A focused beginning for serious work.")}</h2>
+              <p>{t("Six considered questions help us understand the business, the ambition and whether we are the right fit.")}</p>
+            </div>
+            <ol className={styles.steps} aria-label={t("Project request progress")}>
+              {stepLabels.map((label, index) => {
+                const isComplete = confirmation || index < step;
+                const isCurrent = !confirmation && index === step;
+                return <li key={label} className={`${isComplete ? styles.stepComplete : ""} ${isCurrent ? styles.stepCurrent : ""}`} aria-current={isCurrent ? "step" : undefined}>
+                  <span className={styles.stepNumber}>{String(index + 1).padStart(2, "0")}</span>
+                  <span className={styles.stepLabel}>{t(label)}</span>
+                  <i aria-hidden="true" />
+                </li>;
+              })}
+            </ol>
+            <div className={styles.assurance}>
+              <span aria-hidden="true" />
+              <p>{t("Reviewed privately by Kreu.")}</p>
+            </div>
+          </aside>
+
+          <main className={styles.main}>
+            <div className={styles.panelMeta}>
+              <span>{t(confirmation ? "Consultation received" : "Consultation brief")}</span>
+              <span aria-live="polite">{confirmation ? t("Confirmed") : `${String(step + 1).padStart(2, "0")} / 06`}</span>
+            </div>
+            <div className={styles.mobileProgress} role="progressbar" aria-label={t("Project request progress")} aria-valuemin={0} aria-valuemax={6} aria-valuenow={confirmation ? 6 : step + 1}><span style={{ transform: `scaleX(${confirmation ? 1 : (step + 1) / 6})` }} /></div>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div className={styles.stepContent} key={confirmation ? "confirmed" : step} initial={reduced ? false : { opacity: 0, x: direction * 16 }} animate={{ opacity: 1, x: 0 }} exit={reduced ? { opacity: 1 } : { opacity: 0, x: direction * -12 }} transition={{ duration: reduced ? 0 : .28, ease: [.22, 1, .36, 1] }} onAnimationComplete={focusHeading}>
               <h1 id="booking-question" ref={headingRef} tabIndex={-1} className={styles.question}>{t(confirmation ? "Thank you." : questions[step])}</h1>
               {confirmation ? <div className={styles.confirmation}>
                 <p>{t("Thank you. We’ve received your project request.")}</p>
                 <p>{t("Our team will review the information you submitted and we’ll contact you directly on WhatsApp to discuss the next steps.")}</p>
-                <div className={styles.appointment}>
-                  <span>{details.fullName.trim()} · {details.businessName.trim()}</span>
-                  <span>{details.countryCode} {details.whatsapp.trim()}</span>
+                <div className={styles.summary}>
+                  <div><span>{t("Name")}</span><strong>{details.fullName.trim()}</strong></div>
+                  <div><span>{t("Business name")}</span><strong>{details.businessName.trim()}</strong></div>
+                  <div><span>{t("WhatsApp number")}</span><strong>{details.countryCode} {details.whatsapp.trim()}</strong></div>
                 </div>
                 <button type="button" className={styles.primary} onClick={close}>{t("Back to Kreu")} <ArrowIcon /></button>
               </div> : <form onSubmit={submit} noValidate aria-busy={pending}>
@@ -147,7 +173,8 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
               </form>}
             </motion.div>
           </AnimatePresence>
-        </main>
+          </main>
+        </div>
         <footer className={styles.footer}>{t("A considered start to something better.")}</footer>
       </div>
     </dialog>
