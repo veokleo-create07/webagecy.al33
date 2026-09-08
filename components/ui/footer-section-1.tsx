@@ -1,114 +1,60 @@
 "use client";
 
+import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { LanguageSwitcher, useLanguage } from "@/components/language-provider";
 import { motion, useReducedMotion, type Variants } from "motion/react";
+import { type CSSProperties, type PointerEvent, useRef } from "react";
+import styles from "./footer-section-1.module.css";
 
 const navigation = [
+  { label: "Projects", href: "#top" },
   { label: "Services", href: "#expertise" },
+  { label: "About", href: "#top" },
   { label: "Contact", href: "#contact" },
+] as const;
+const socials = [
+  { label: "Instagram", href: "https://www.instagram.com/" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/" },
+  { label: "Behance", href: "https://www.behance.net/" },
 ] as const;
 
 export default function Footer1() {
   const { t } = useLanguage();
   const reduceMotion = useReducedMotion();
-
-  const containerVariants: Variants = {
-    hidden: { opacity: reduceMotion ? 1 : 0 },
-    visible: {
-      opacity: 1,
-      transition: reduceMotion ? { duration: 0 } : { staggerChildren: 0.08, delayChildren: 0.08 },
-    },
+  const footerRef = useRef<HTMLElement>(null);
+  const ctaRef = useRef<HTMLAnchorElement>(null);
+  const items: Variants = {
+    hidden: { opacity: reduceMotion ? 1 : 0, y: reduceMotion ? 0 : 24 },
+    visible: { opacity: 1, y: 0, transition: { duration: reduceMotion ? 0 : .8, ease: [.22, 1, .36, 1] } },
+  };
+  const onPointerMove = (event: PointerEvent<HTMLElement>) => {
+    if (reduceMotion || !footerRef.current || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    const bounds = footerRef.current.getBoundingClientRect();
+    footerRef.current.style.setProperty("--footer-x", `${((event.clientX - bounds.left) / bounds.width - .5) * 14}px`);
+    footerRef.current.style.setProperty("--footer-y", `${((event.clientY - bounds.top) / bounds.height - .5) * 10}px`);
+  };
+  const moveCreateCta = (event: PointerEvent<HTMLAnchorElement>) => {
+    if (reduceMotion || !ctaRef.current || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    const bounds = ctaRef.current.getBoundingClientRect();
+    ctaRef.current.style.setProperty("--cta-x", `${(event.clientX - bounds.left - bounds.width / 2) * .12}px`);
+    ctaRef.current.style.setProperty("--cta-y", `${(event.clientY - bounds.top - bounds.height / 2) * .12}px`);
   };
 
-  const itemVariants: Variants = {
-    hidden: { opacity: reduceMotion ? 1 : 0, y: reduceMotion ? 0 : 16 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: reduceMotion ? { duration: 0 } : { duration: 0.75, ease: [0.22, 1, 0.36, 1] },
-    },
-  };
-
-  const linkClass = "group relative w-fit py-1 text-[clamp(1.05rem,1.45vw,1.4rem)] leading-tight tracking-[-0.025em] text-white/72 transition-colors duration-300 hover:text-[#f2f0e9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/45 after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-right after:scale-x-0 after:bg-white/45 after:transition-transform after:duration-300 hover:after:origin-left hover:after:scale-x-100";
-
-  return (
-    <footer className="w-full overflow-hidden bg-[var(--color-ink)] text-[#f2f0e9]">
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "0px 0px -80px 0px" }}
-        variants={containerVariants}
-        className="mx-auto w-full max-w-[1600px] px-5 pb-7 pt-16 sm:px-8 sm:pb-8 sm:pt-20 lg:px-12 lg:pb-10 lg:pt-24"
-      >
-        <div className="h-px w-full bg-white/12" aria-hidden="true" />
-
-        <div className="grid gap-12 py-14 sm:grid-cols-2 sm:gap-x-10 sm:gap-y-14 sm:py-16 lg:grid-cols-3 lg:gap-16 lg:py-20">
-          <motion.section variants={itemVariants} aria-labelledby="footer-contact" className="flex flex-col items-start">
-            <p id="footer-contact" className="mb-6 text-[0.68rem] uppercase tracking-[0.15em] text-white/34">
-              {t("Contact")}
-            </p>
-            <a href="mailto:hello@kreuweb.com" className={linkClass}>
-              hello@kreuweb.com
-            </a>
-            <p className="mt-7 max-w-[22rem] text-sm leading-relaxed text-white/38">
-              {t("For businesses defined by ambition.")}
-            </p>
-          </motion.section>
-
-          <motion.nav variants={itemVariants} aria-labelledby="footer-navigation" className="flex flex-col items-start">
-            <p id="footer-navigation" className="mb-5 text-[0.68rem] uppercase tracking-[0.15em] text-white/34">
-              {t("Navigation")}
-            </p>
-            <div className="flex flex-col items-start gap-2">
-              {navigation.map(item => (
-                <a key={item.label} href={item.href} className={linkClass}>
-                  {t(item.label)}
-                </a>
-              ))}
-            </div>
-          </motion.nav>
-
-          <motion.section variants={itemVariants} aria-labelledby="footer-socials" className="flex flex-col items-start sm:col-span-2 lg:col-span-1">
-            <p id="footer-socials" className="mb-5 text-[0.68rem] uppercase tracking-[0.15em] text-white/34">
-              {t("Socials")}
-            </p>
-            <a
-              href="https://www.instagram.com/"
-              target="_blank"
-              rel="noreferrer"
-              aria-label={t("Kreu Web on Instagram")}
-              className={linkClass}
-            >
-              Instagram
-            </a>
-            <div className="mt-8">
-              <LanguageSwitcher />
-            </div>
-          </motion.section>
-        </div>
-
-        <motion.div variants={itemVariants} className="border-t border-white/10 pt-8 sm:pt-10">
-          <p className="text-[0.66rem] uppercase tracking-[0.15em] text-white/30">
-            {t("Design · Development · Growth · Software")}
-          </p>
-          <p
-            aria-label="Kreu Web"
-            className="mt-8 whitespace-nowrap text-[clamp(5.15rem,18.2vw,18rem)] font-normal leading-[0.72] tracking-[-0.085em] text-white/48 sm:mt-10"
-          >
-            Kreu Web
-          </p>
-        </motion.div>
-
-        <motion.div
-          variants={itemVariants}
-          className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 text-[0.72rem] tracking-[0.02em] text-white/32 sm:mt-16 sm:flex-row sm:items-center sm:justify-between"
-        >
-          <p>© {new Date().getFullYear()} Kreu Web. {t("All rights reserved.")}</p>
-          <a href="#top" className="w-fit self-end transition-colors duration-300 hover:text-white/65 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/45 sm:self-auto">
-            {t("Back to top")}
-          </a>
-        </motion.div>
+  return <footer ref={footerRef} className={styles.footer} onPointerMove={onPointerMove} onPointerLeave={() => { footerRef.current?.style.setProperty("--footer-x", "0px"); footerRef.current?.style.setProperty("--footer-y", "0px"); }}>
+    <div className={styles.atmosphere} aria-hidden="true"><i className={styles.signal} /><i className={`${styles.signal} ${styles.signalTwo}`} /><i className={`${styles.signal} ${styles.signalThree}`} /><i className={`${styles.particle} ${styles.particleOne}`} /><i className={`${styles.particle} ${styles.particleTwo}`} /><i className={`${styles.particle} ${styles.particleThree}`} /></div>
+    <motion.div className={styles.inner} initial="hidden" whileInView="visible" viewport={{ once: true, amount: .16 }}>
+      <motion.div variants={items} className={styles.topline}><p>{t("Kreu Web")}</p><p>{t("A creative digital practice.")}</p><LanguageSwitcher /></motion.div>
+      <motion.div variants={items} className={styles.intro}>
+        <p>{t("We create digital experiences people remember.")}</p>
+        <a ref={ctaRef} href="#contact" className={styles.create} onPointerMove={moveCreateCta} onPointerLeave={() => { ctaRef.current?.style.setProperty("--cta-x", "0px"); ctaRef.current?.style.setProperty("--cta-y", "0px"); }}><span>{t("Let’s create")}</span><ArrowIcon /></a>
       </motion.div>
-    </footer>
-  );
+      <motion.div variants={items} className={styles.wordmark} aria-label="Kreu Web">{"KREU WEB".split("").map((letter, index) => <span key={`${letter}-${index}`} style={{ "--letter-index": index } as CSSProperties}>{letter === " " ? "\u00a0" : letter}</span>)}</motion.div>
+      <motion.div variants={items} className={styles.details}>
+        <section aria-labelledby="footer-navigation"><p id="footer-navigation">{t("Navigation")}</p><nav>{navigation.map((item, index) => <a key={item.label} href={item.href} style={{ "--link-index": index } as CSSProperties}>{t(item.label)}</a>)}</nav></section>
+        <section aria-labelledby="footer-socials"><p id="footer-socials">{t("Socials")}</p><nav>{socials.map((item, index) => <a key={item.label} href={item.href} target="_blank" rel="noreferrer" style={{ "--link-index": index } as CSSProperties}>{item.label}</a>)}</nav></section>
+        <section className={styles.contact} aria-labelledby="footer-contact"><p id="footer-contact">{t("Contact")}</p><a href="mailto:hello@kreuweb.com">hello@kreuweb.com</a></section>
+      </motion.div>
+      <motion.div variants={items} className={styles.bottom}><p>© KREU WEB 2026 {t("All rights reserved.")}</p><a href="#top">{t("Back to top")}</a></motion.div>
+    </motion.div>
+  </footer>;
 }
