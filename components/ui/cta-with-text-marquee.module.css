@@ -13,7 +13,7 @@
   grid-template-columns: minmax(20rem, 5fr) minmax(0, 7fr);
   gap: clamp(4rem, 8vw, 10rem);
   align-items: center;
-  width: min(100%, 116rem);
+  width: 100%;
   min-height: min(58rem, 92svh);
   margin-inline: auto;
   padding: clamp(6rem, 8vw, 8.5rem) var(--space-page);

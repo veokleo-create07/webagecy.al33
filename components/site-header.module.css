@@ -4,10 +4,10 @@
     inset 0 2px 2px #edf3ff2b, inset 3px 0 5px #e1e9f019,
     inset -3px 0 6px #cad6df21, inset 0 -4px 5px #0205078c,
     inset 0 -7px 8px #d4e1ed0d;
-  width: min(calc(100% - var(--space-page) * 2), 68rem);
+  width: calc(100% - var(--space-page) * 2);
   font-size: .78rem;
 }
-.header:global(.site-header.is-compact) { width: min(calc(100% - var(--space-page) * 2.5), 64rem); }
+.header:global(.site-header.is-compact) { width: calc(100% - var(--space-page) * 2.5); }
 .header:global(.site-header:not(.is-ready)) { width: 13rem; }
 
 .header :global(.glass-nav) {
