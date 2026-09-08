@@ -45,6 +45,7 @@ export const albanian: Record<string, string> = {
   "A creative digital practice.": "Një praktikë digjitale krijuese.",
   "We create digital experiences people remember.": "Krijojmë përvoja digjitale që mbeten në mendje.",
   "Let’s create": "Le të krijojmë",
+  "Kreu Web © 2026. Designed with intent.": "Kreu Web © 2026. Dizajnuar me qëllim.",
   "Projects": "Projektet",
   "About": "Rreth nesh",
   "Your next chapter": "Hapi juaj i radhës",
