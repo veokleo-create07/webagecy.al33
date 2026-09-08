@@ -386,6 +386,7 @@ a:focus-visible {
 
 .hero {
   position: relative;
+  isolation: isolate;
   left: 50%;
   display: grid;
   width: 100vw;
@@ -395,6 +396,18 @@ a:focus-visible {
   overflow: clip;
   padding: clamp(10rem, 18svh, 13rem) var(--space-page) clamp(3rem, 6vh, 5rem);
   background: var(--color-ink);
+}
+
+.hero::after {
+  position: absolute;
+  z-index: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: clamp(5rem, 12vh, 9rem);
+  background: linear-gradient(to bottom, transparent, var(--color-ink));
+  content: "";
+  pointer-events: none;
 }
 
 .hero__atmosphere,
@@ -410,6 +423,8 @@ a:focus-visible {
 .hero__atmosphere {
   overflow: hidden;
   background: radial-gradient(circle at 50% 40%, rgba(115, 112, 102, 0.065), transparent 34%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 68%, rgba(0, 0, 0, 0.72) 82%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 68%, rgba(0, 0, 0, 0.72) 82%, transparent 100%);
 }
 
 .hero__light {
