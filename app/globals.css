@@ -1964,6 +1964,8 @@ a:focus-visible {
   transition: transform 500ms var(--ease-out), background 450ms ease, box-shadow 450ms ease;
 }
 
+.final-cta__anti-metal-button { margin-top: clamp(1.5rem, 3vh, 2.25rem); }
+
 .final-cta__button::before,
 .final-cta__button::after {
   position: absolute;

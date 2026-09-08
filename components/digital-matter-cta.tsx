@@ -1,7 +1,6 @@
 "use client";
-import { ArrowIcon } from "@/components/ui/arrow-icon";
+import { AntiMetalButton } from "@/components/ui/anti-metal-button";
 import { LayeredText } from "@/components/ui/layered-text";
-import { BookingLink } from "@/components/booking/booking-provider";
 import { useLanguage } from "@/components/language-provider";
 
 import { type CSSProperties, type PointerEvent, useEffect, useRef } from "react";
@@ -530,14 +529,6 @@ export function FinalCTA() {
     field.style.setProperty("--field-y", `${y}px`);
   };
 
-  const handleLens = (event: PointerEvent<HTMLAnchorElement>) => {
-    const button = buttonRef.current;
-    if (!button || event.pointerType !== "mouse" || !window.matchMedia("(min-width: 1025px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return;
-    const bounds = button.getBoundingClientRect();
-    button.style.setProperty("--lens-x", `${((event.clientX - bounds.left) / bounds.width) * 100}%`);
-    button.style.setProperty("--lens-y", `${((event.clientY - bounds.top) / bounds.height) * 100}%`);
-  };
-
   const headline = t("Make your business stand out where it matters.");
   const headlineLines = language === "sq"
     ? ["Bëje", "biznesin tënd", "të dallohet", "aty ku", "ka rëndësi."]
@@ -573,18 +564,11 @@ export function FinalCTA() {
           <p className="final-cta__eyebrow">{t("For the next stage.")}</p>
           <LayeredText id="contact-title" text={headline} lines={headlineLines} />
           <p className="final-cta__subline">{t("A considered digital presence designed to strengthen trust, increase relevance and create new opportunities for the business.")}</p>
-          <BookingLink
+          <AntiMetalButton
             ref={buttonRef}
-            className="final-cta__button magnetic-cta__button"
-            onPointerMove={handleLens}
-            onPointerLeave={() => {
-              buttonRef.current?.style.setProperty("--lens-x", "50%");
-              buttonRef.current?.style.setProperty("--lens-y", "20%");
-            }}
-            style={{ "--lens-x": "50%", "--lens-y": "20%" } as CSSProperties}
-          >
-            <span>{t("Book a discovery call")}</span><span aria-hidden="true"><ArrowIcon /></span>
-          </BookingLink>
+            className="final-cta__anti-metal-button"
+            label={t("Book a discovery call")}
+          />
         </div>
 
       </div>
