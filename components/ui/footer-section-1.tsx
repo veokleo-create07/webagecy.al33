@@ -15,7 +15,7 @@ const navigation = [
 const socials = [
   { label: "Instagram", href: "https://www.instagram.com/" },
 ] as const;
-const marquee = ["KREU WEB", "DESIGN", "WEB DEVELOPMENT", "MARKETING & SEO", "SOFTWARE & APPS"];
+const marquee = ["DESIGN", "WEB DEVELOPMENT", "MARKETING & SEO", "SOFTWARE & APPS"];
 
 export default function Footer1() {
   const { language, t } = useLanguage();
@@ -45,8 +45,8 @@ export default function Footer1() {
           text={t("Make your business stand out where it matters.")}
           className={styles.layeredHeadline}
           lines={language === "sq"
-            ? ["Bëje", "biznesin tënd", "të dallohet", "aty ku", "ka rëndësi."]
-            : ["Make your", "business", "stand out", "where it", "matters."]}
+            ? ["Bëje biznesin tënd", "të dallohet", "aty ku", "ka rëndësi."]
+            : ["Make your", "business stand out", "where it", "matters."]}
         />
         <AntiMetalButton className={styles.bookingButton} label={t("Book a discovery call")} />
       </motion.div>
