@@ -3,68 +3,10 @@ import { AntiMetalButton } from "@/components/ui/anti-metal-button";
 import { LayeredText } from "@/components/ui/layered-text";
 import { useLanguage } from "@/components/language-provider";
 
-import { type CSSProperties, type PointerEvent, useEffect, useRef } from "react";
+import { type CSSProperties, useEffect, useRef } from "react";
 import { Player, type PlayerRef } from "@remotion/player";
 import { Easing, interpolate, useCurrentFrame } from "remotion";
 import { useReducedMotion } from "motion/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-type FragmentKind = "plane" | "strip" | "shard" | "frame";
-type Fragment = {
-  kind: FragmentKind;
-  final: [number, number];
-  from: [number, number];
-  rotation: [number, number, number];
-  depth: number;
-  arc: number;
-  opacity: number;
-  start: number;
-  quiet?: boolean;
-};
-
-const fragments: Fragment[] = [
-  { kind: "plane", final: [-37, -23], from: [-78, -55], rotation: [10, 19, -8], depth: 48, arc: -7, opacity: .58, start: .02 },
-  { kind: "strip", final: [-32, -7], from: [-82, -9], rotation: [-7, 27, -13], depth: 82, arc: 9, opacity: .48, start: .06 },
-  { kind: "frame", final: [-39, 15], from: [-84, 46], rotation: [12, 22, 7], depth: 34, arc: -8, opacity: .46, start: .1 },
-  { kind: "shard", final: [-24, -32], from: [-37, -79], rotation: [24, -17, 26], depth: 110, arc: 7, opacity: .38, start: .13 },
-  { kind: "plane", final: [-27, 29], from: [-58, 76], rotation: [-13, 28, -5], depth: 66, arc: -10, opacity: .42, start: .17 },
-  { kind: "shard", final: [-45, 2], from: [-91, 11], rotation: [18, 35, 17], depth: -10, arc: 6, opacity: .3, start: .2, quiet: true },
-  { kind: "strip", final: [-14, -39], from: [-8, -84], rotation: [-18, 12, -7], depth: 72, arc: 6, opacity: .34, start: .21, quiet: true },
-  { kind: "plane", final: [36, -25], from: [81, -58], rotation: [-11, -21, 9], depth: 58, arc: 8, opacity: .55, start: .04 },
-  { kind: "frame", final: [39, -5], from: [87, -18], rotation: [14, -26, 12], depth: 96, arc: -9, opacity: .5, start: .08 },
-  { kind: "strip", final: [34, 18], from: [79, 51], rotation: [-8, -24, -6], depth: 42, arc: 8, opacity: .47, start: .11 },
-  { kind: "shard", final: [23, -34], from: [42, -82], rotation: [22, 16, -24], depth: 122, arc: -7, opacity: .36, start: .15 },
-  { kind: "plane", final: [27, 31], from: [55, 82], rotation: [12, -31, 5], depth: 74, arc: 10, opacity: .45, start: .18 },
-  { kind: "shard", final: [45, 8], from: [93, 20], rotation: [-17, -36, -15], depth: 4, arc: -6, opacity: .3, start: .22, quiet: true },
-  { kind: "strip", final: [13, 39], from: [4, 86], rotation: [16, -14, 8], depth: 88, arc: -8, opacity: .34, start: .23, quiet: true },
-];
-
-const clamp = gsap.utils.clamp(0, 1);
-const ease = (value: number) => value * value * (3 - 2 * value);
-const ctaConfig = {
-  desktop: { distance: .88, rotation: 1, depth: 1, blur: 2.1, from: 1, arc: 1 },
-  tablet: { distance: .7, rotation: .55, depth: .45, blur: 1, from: .82, arc: .65 },
-  mobile: { distance: .54, rotation: .22, depth: .12, blur: 0, from: .68, arc: .35 },
-} as const;
-const desktopFragments = new Set([0, 1, 2, 3, 4, 7, 8, 9, 11]);
-const tabletFragments = new Set([0, 1, 2, 4, 7, 8, 9, 11]);
-const mobileFragments = new Set([0, 1, 2, 7, 8, 9]);
-
-function GlassFragment({ fragment, index }: { fragment: Fragment; index: number }) {
-  return (
-    <i
-      className={`magnetic-fragment magnetic-fragment--${fragment.kind}${fragment.quiet ? " magnetic-fragment--quiet" : ""}`}
-      data-magnetic-fragment
-      data-index={index}
-      style={{ "--final-x": `${fragment.final[0]}vw`, "--final-y": `${fragment.final[1]}vh` } as CSSProperties}
-    >
-      <span className="magnetic-fragment__surface" />
-      {(fragment.kind === "plane" || fragment.kind === "frame") && <span className="magnetic-fragment__trace" />}
-    </i>
-  );
-}
-
 type AppLanguage = "sq" | "en";
 
 const DEMO_FPS = 30;
@@ -418,116 +360,6 @@ function PhoneDevice({ variant, language }: { variant: "front" | "rear"; languag
 
 export function FinalCTA() {
   const { t, language } = useLanguage();
-  const sectionRef = useRef<HTMLElement>(null);
-  const fieldRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLAnchorElement>(null);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    const content = contentRef.current;
-    const button = buttonRef.current;
-    if (!section || !content || !button) return;
-
-    gsap.registerPlugin(ScrollTrigger);
-    const media = gsap.matchMedia();
-    const context = gsap.context(() => {
-      media.add(
-        {
-          desktop: "(min-width: 1025px)",
-          tablet: "(min-width: 768px) and (max-width: 1024px)",
-          mobile: "(max-width: 767px)",
-          short: "(max-height: 700px)",
-          reduced: "(prefers-reduced-motion: reduce)",
-        },
-        match => {
-          const mode = match.conditions?.desktop ? "desktop" : match.conditions?.tablet ? "tablet" : "mobile";
-          const config = ctaConfig[mode];
-          const elements = gsap.utils.toArray<HTMLElement>("[data-magnetic-fragment]");
-          const arcs = gsap.utils.toArray<SVGPathElement>(".magnetic-field__arcs path");
-          const arcLengths = arcs.map(path => path.getTotalLength());
-          const reduced = match.conditions?.reduced;
-          const shouldPin = mode === "desktop" || (mode === "tablet" && !match.conditions?.short);
-          let sceneHeight = section.clientHeight;
-          const state = { progress: reduced ? 1 : 0 };
-
-          const render = (progress: number) => {
-            section.style.setProperty("--magnetic-progress", String(progress));
-            section.style.setProperty("--magnetic-glow", String(.04 + progress * .03));
-            elements.forEach((element, index) => {
-              const spec = fragments[index];
-              const visible = mode === "desktop" ? desktopFragments.has(index) : mode === "tablet" ? tabletFragments.has(index) : mobileFragments.has(index);
-              if (!visible) {
-                element.style.opacity = "0";
-                return;
-              }
-              const local = ease(clamp((progress - spec.start) / (1 - spec.start)));
-              const edge = mode === "mobile" ? 1.08 : 1;
-              const finalX = spec.final[0] * edge;
-              const finalY = spec.final[1] * (mode === "mobile" ? .92 : 1);
-              const x = gsap.utils.interpolate(spec.from[0] * config.from, finalX, local);
-              const y = gsap.utils.interpolate(spec.from[1] * config.from, finalY, local) + Math.sin(local * Math.PI) * spec.arc * config.arc;
-              const bend = Math.sin(local * Math.PI * 1.15 + index * .73) * (1 - local) * 2.2 * config.rotation;
-              const depth = (spec.depth * local - (1 - local) * 90) * config.depth;
-              element.style.opacity = String(.035 + local * spec.opacity * (mode === "mobile" ? .62 : 1));
-              element.style.filter = config.blur ? `blur(${(1 - local) * config.blur}px)` : "none";
-              element.style.transform = mode === "mobile"
-                ? `translate3d(${x}vw, ${y * sceneHeight / 100}px, 0) scale(${.82 + local * .18})`
-                : `translate3d(${x}vw, ${y * sceneHeight / 100}px, ${depth}px) rotateX(${(spec.rotation[0] + (1 - local) * 38) * config.rotation}deg) rotateY(${spec.rotation[1] * config.rotation + bend * 5}deg) rotateZ(${spec.rotation[2] * config.rotation + bend}deg) scale(${.62 + local * .38})`;
-            });
-
-            arcs.forEach((path, index) => {
-              const local = ease(clamp((progress - .08 - index * .025) / .74));
-              path.style.strokeDasharray = String(arcLengths[index]);
-              path.style.strokeDashoffset = String(arcLengths[index] * (1 - local));
-              path.style.opacity = String(.035 + local * (mode === "desktop" ? .245 : mode === "tablet" ? .165 : .075));
-            });
-
-            const copyProgress = ease(clamp((progress - .14) / .44));
-            const buttonProgress = ease(clamp((progress - .48) / .25));
-            gsap.set(content, {
-              opacity: (mode === "mobile" ? .92 : .82) + copyProgress * (mode === "mobile" ? .08 : .18),
-              x: (mode === "desktop" ? -10 : 0) * (1 - copyProgress),
-              y: (mode === "mobile" ? 5 : 4) * (1 - copyProgress),
-            });
-            gsap.set(button, { opacity: .84 + buttonProgress * .16, y: 4 * (1 - buttonProgress) });
-          };
-
-          render(state.progress);
-          if (reduced) return;
-          gsap.to(state, {
-            progress: 1,
-            ease: "none",
-            onUpdate: () => render(state.progress),
-            scrollTrigger: {
-              trigger: section,
-              start: shouldPin ? "top top" : "top 72%",
-              end: shouldPin ? () => `+=${section.clientHeight * config.distance}` : "bottom 35%",
-              scrub: mode === "mobile" ? .45 : .65,
-              pin: shouldPin,
-              anticipatePin: 1,
-              invalidateOnRefresh: true,
-              onRefresh: () => { sceneHeight = section.clientHeight; render(state.progress); },
-            },
-          });
-        },
-      );
-    }, section);
-
-    return () => {
-      media.revert();
-      context.revert();
-    };
-  }, []);
-
-  const handleFieldParallax = (event: PointerEvent<HTMLElement>) => {
-    const field = fieldRef.current;
-    if (!field || !window.matchMedia("(min-width: 1025px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return;
-    const x = (event.clientX / window.innerWidth - .5) * 7;
-    const y = (event.clientY / window.innerHeight - .5) * 5;
-    field.style.setProperty("--field-x", `${x}px`);
-    field.style.setProperty("--field-y", `${y}px`);
-  };
 
   const headline = t("Make your business stand out where it matters.");
   const headlineLines = language === "sq"
@@ -535,37 +367,15 @@ export function FinalCTA() {
     : ["Make your", "business stand out", "where it", "matters."];
 
   return (
-    <section
-      ref={sectionRef}
-      className="final-cta magnetic-cta"
-      id="contact"
-      aria-labelledby="contact-title"
-      onPointerMove={handleFieldParallax}
-      onPointerLeave={() => {
-        fieldRef.current?.style.setProperty("--field-x", "0px");
-        fieldRef.current?.style.setProperty("--field-y", "0px");
-      }}
-    >
+    <section className="final-cta magnetic-cta" id="contact" aria-labelledby="contact-title">
       <div className="magnetic-cta__atmosphere" aria-hidden="true" />
-      <div ref={fieldRef} className="magnetic-field" aria-hidden="true">
-        <svg className="magnetic-field__arcs" viewBox="0 0 1440 900" preserveAspectRatio="none">
-          <path d="M-80 690 C240 480 296 188 566 84" />
-          <path d="M1520 650 C1220 468 1168 220 884 92" />
-          <path d="M172 940 C318 748 442 715 570 692" />
-          <path d="M1268 950 C1116 760 1002 726 870 700" />
-        </svg>
-        <div className="magnetic-field__depth">
-          {fragments.map((fragment, index) => <GlassFragment key={index} fragment={fragment} index={index} />)}
-        </div>
-      </div>
 
       <div className="magnetic-cta__layout magnetic-cta__layout--solo">
-        <div ref={contentRef} className="final-cta__content magnetic-cta__content">
+        <div className="final-cta__content magnetic-cta__content">
           <p className="final-cta__eyebrow">{t("For the next stage.")}</p>
           <LayeredText id="contact-title" text={headline} lines={headlineLines} />
           <p className="final-cta__subline">{t("A considered digital presence designed to strengthen trust, increase relevance and create new opportunities for the business.")}</p>
           <AntiMetalButton
-            ref={buttonRef}
             className="final-cta__anti-metal-button"
             label={t("Book a discovery call")}
           />
