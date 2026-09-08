@@ -39,9 +39,7 @@ export default function Footer1() {
     <div className={styles.marquee} aria-hidden="true"><div>{[...marquee, ...marquee, ...marquee].map((item, index) => <span key={`${item}-${index}`}>{item}<b>✦</b></span>)}</div></div>
     <motion.div className={styles.stage} initial="hidden" whileInView="visible" viewport={{ once: true, amount: .12 }}>
       <motion.div variants={reveal} className={styles.center}>
-        <p className={styles.kicker}>{t("For the next stage.")}</p>
         <h2>{t("Make your business stand out where it matters.")}</h2>
-        <p className={styles.subline}>{t("A considered digital presence designed to strengthen trust, increase relevance and create new opportunities for the business.")}</p>
         <AntiMetalButton className={styles.bookingButton} label={t("Book a discovery call")} />
       </motion.div>
       <motion.div variants={reveal} className={styles.pills}>
