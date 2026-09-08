@@ -2321,6 +2321,14 @@ a:focus-visible {
   background: var(--color-ink);
 }
 
+/* Keep the final conversion stage close to the moving Services composition. */
+@media (min-width: 769px) {
+  .magnetic-cta {
+    min-height: min(48rem, 78svh);
+    padding-block: clamp(4rem, 6vh, 5.5rem);
+  }
+}
+
 .magnetic-cta__atmosphere,
 .magnetic-field {
   position: absolute;

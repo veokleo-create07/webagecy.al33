@@ -51,6 +51,11 @@
   .button:hover .rail, .button:focus-visible .rail { width: calc(100% - .5rem); gap: .66rem; }
 }
 
+@media (hover: none), (pointer: coarse) {
+  .button:active, .button:focus { border-color: rgba(241, 239, 232, .27); box-shadow: inset 0 1px rgba(255, 255, 255, .16), inset 0 -1px rgba(0, 0, 0, .72), 0 1rem 2rem rgba(0, 0, 0, .28); }
+  .button:active .rail, .button:focus .rail { width: calc(100% - .5rem); gap: .66rem; }
+}
+
 .button:active { transform: translateY(1px) scale(.986); }
 .button:focus-visible { outline: 2px solid rgba(241, 239, 232, .72); outline-offset: 4px; }
 
