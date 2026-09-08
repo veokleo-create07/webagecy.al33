@@ -1,6 +1,7 @@
 "use client";
 
 import { AntiMetalButton } from "@/components/ui/anti-metal-button";
+import { LayeredText } from "@/components/ui/layered-text";
 import { useLanguage } from "@/components/language-provider";
 import { motion, useReducedMotion, type Variants } from "motion/react";
 import { type CSSProperties, type PointerEvent, useRef } from "react";
@@ -16,7 +17,7 @@ const socials = [
 const marquee = ["KREU WEB", "DESIGN", "WEB DEVELOPMENT", "MARKETING & SEO", "SOFTWARE & APPS"];
 
 export default function Footer1() {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const reduceMotion = useReducedMotion();
   const footerRef = useRef<HTMLElement>(null);
   const reveal: Variants = {
@@ -39,7 +40,14 @@ export default function Footer1() {
     <div className={styles.marquee} aria-hidden="true"><div>{[...marquee, ...marquee, ...marquee].map((item, index) => <span key={`${item}-${index}`}>{item}<b>✦</b></span>)}</div></div>
     <motion.div className={styles.stage} initial="hidden" whileInView="visible" viewport={{ once: true, amount: .12 }}>
       <motion.div variants={reveal} className={styles.center}>
-        <h2>{t("Make your business stand out where it matters.")}</h2>
+        <LayeredText
+          id="footer-heading"
+          text={t("Make your business stand out where it matters.")}
+          className={styles.layeredHeadline}
+          lines={language === "sq"
+            ? ["Bëje", "biznesin tënd", "të dallohet", "aty ku", "ka rëndësi."]
+            : ["Make your", "business", "stand out", "where it", "matters."]}
+        />
         <AntiMetalButton className={styles.bookingButton} label={t("Book a discovery call")} />
       </motion.div>
       <motion.div variants={reveal} className={styles.pills}>
