@@ -5,7 +5,6 @@ import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { BookingLink } from "@/components/booking/booking-provider";
 import { SiteHeader } from "@/components/site-header";
 import { Services } from "@/components/services";
-import { FinalCTA } from "@/components/digital-matter-cta";
 import Footer1 from "@/components/ui/footer-section-1";
 
 export default function Home() {
@@ -43,8 +42,6 @@ export default function Home() {
         </section>
 
         <Services />
-
-        <FinalCTA />
 
         <Footer1 />
       </div>
