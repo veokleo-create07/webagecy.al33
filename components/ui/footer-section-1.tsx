@@ -42,6 +42,12 @@ export default function Footer1() {
 
   return <footer ref={footerRef} className={styles.footer} onPointerMove={onPointerMove} onPointerLeave={() => { footerRef.current?.style.setProperty("--footer-x", "0px"); footerRef.current?.style.setProperty("--footer-y", "0px"); }}>
     <div className={styles.atmosphere} aria-hidden="true"><i className={styles.signal} /><i className={`${styles.signal} ${styles.signalTwo}`} /><i className={`${styles.signal} ${styles.signalThree}`} /><i className={`${styles.particle} ${styles.particleOne}`} /><i className={`${styles.particle} ${styles.particleTwo}`} /><i className={`${styles.particle} ${styles.particleThree}`} /></div>
+    <div className={styles.marquee} aria-hidden="true">
+      <div>
+        <span>KREU WEB</span><b>✦</b><span>DESIGN</span><b>✦</b><span>WEB DEVELOPMENT</span><b>✦</b><span>SOFTWARE</span><b>✦</b>
+        <span>KREU WEB</span><b>✦</b><span>DESIGN</span><b>✦</b><span>WEB DEVELOPMENT</span><b>✦</b><span>SOFTWARE</span><b>✦</b>
+      </div>
+    </div>
     <motion.div className={styles.inner} initial="hidden" whileInView="visible" viewport={{ once: true, amount: .16 }}>
       <motion.div variants={items} className={styles.topline}><p>{t("Kreu Web")}</p><p>{t("A creative digital practice.")}</p><LanguageSwitcher /></motion.div>
       <motion.div variants={items} className={styles.intro}>
