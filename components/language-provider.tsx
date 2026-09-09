@@ -10,9 +10,15 @@ const LanguageContext = createContext({ language: "sq" as Language, setLanguage:
 export function LanguageProvider({ children, initialLanguage }: { children: ReactNode; initialLanguage: Language }) {
   const [language, setLanguage] = useState(initialLanguage);
   useEffect(() => {
+    const title = translate(language, "Kreu Web — Strategy, Design & Digital Development");
+    const description = translate(language, "Kreu Web helps ambitious businesses build credible brands, high-performing websites, effective marketing and scalable digital products.");
     document.documentElement.lang = language;
-    document.title = translate(language, "KREU WEB. Built for progress.");
-    document.querySelector('meta[name="description"]')?.setAttribute("content", translate(language, "We position your business with clarity, credibility and authority so it is perceived at the level it aspires to."));
+    document.title = title;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", description);
+    document.querySelector('meta[property="og:title"]')?.setAttribute("content", title);
+    document.querySelector('meta[property="og:description"]')?.setAttribute("content", description);
+    document.querySelector('meta[name="twitter:title"]')?.setAttribute("content", title);
+    document.querySelector('meta[name="twitter:description"]')?.setAttribute("content", description);
     // Text reflow changes section bounds; retain the existing scroll animations.
     const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
     return () => cancelAnimationFrame(frame);

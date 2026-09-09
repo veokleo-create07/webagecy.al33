@@ -91,7 +91,7 @@ export function SmokeyBackground({ color = "#c2b6ec" }: { color?: string }) {
     let start = performance.now();
 
     const resize = () => {
-      const scale = Math.min(window.devicePixelRatio || 1, 1.5);
+      const scale = window.innerWidth < 768 ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
       const width = Math.max(1, Math.round(canvas.clientWidth * scale));
       const height = Math.max(1, Math.round(canvas.clientHeight * scale));
       if (canvas.width !== width || canvas.height !== height) { canvas.width = width; canvas.height = height; }

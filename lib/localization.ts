@@ -5,6 +5,8 @@ export const languageCookie = "kreu-language";
 // project slugs, customer input, contact addresses or third-party brand names.
 export const albanian: Record<string, string> = {
   "KREU WEB. Built for progress.": "KREU WEB. Ndërtuar për progres.",
+  "Kreu Web — Strategy, Design & Digital Development": "Kreu Web — Strategji, Dizajn & Zhvillim Digjital",
+  "Kreu Web helps ambitious businesses build credible brands, high-performing websites, effective marketing and scalable digital products.": "Kreu Web ndihmon bizneset ambicioze të ndërtojnë marka të besueshme, website me performancë, marketing efektiv dhe produkte digjitale që shkallëzohen.",
   "Language": "Gjuha",
   "KREU WEB, home": "KREU WEB, kreu",
   "Primary navigation": "Navigimi kryesor",

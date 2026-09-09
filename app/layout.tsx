@@ -14,9 +14,28 @@ const interTight = Inter_Tight({
 
 export async function generateMetadata(): Promise<Metadata> {
   const language = (await cookies()).get(languageCookie)?.value === "en" ? "en" : "sq";
+  const title = translate(language, "Kreu Web — Strategy, Design & Digital Development");
+  const description = translate(language, "Kreu Web helps ambitious businesses build credible brands, high-performing websites, effective marketing and scalable digital products.");
   return {
-    title: translate(language, "KREU WEB. Built for progress."),
-    description: translate(language, "We position your business with clarity, credibility and authority so it is perceived at the level it aspires to."),
+    metadataBase: new URL("https://www.kreuweb.com"),
+    title,
+    description,
+    applicationName: "Kreu Web",
+    alternates: { canonical: "/" },
+    icons: {
+      icon: [{ url: "/brand/kreu-chrome-mark.png", type: "image/png", sizes: "500x500" }],
+      apple: [{ url: "/brand/kreu-chrome-mark.png", type: "image/png", sizes: "500x500" }],
+    },
+    openGraph: {
+      type: "website",
+      url: "/",
+      siteName: "Kreu Web",
+      title,
+      description,
+      locale: language === "sq" ? "sq_AL" : "en_US",
+    },
+    twitter: { card: "summary", title, description },
+    robots: { index: true, follow: true },
   };
 }
 

@@ -110,7 +110,6 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
               <motion.div className={styles.stepContent} key={confirmation ? "confirmed" : step} initial={reduced ? false : { opacity: 0, x: direction * 16 }} animate={{ opacity: 1, x: 0 }} exit={reduced ? { opacity: 1 } : { opacity: 0, x: direction * -12 }} transition={{ duration: reduced ? 0 : .28, ease: [.22, 1, .36, 1] }} onAnimationComplete={focusHeading}>
               <h1 id="booking-question" ref={headingRef} tabIndex={-1} className={`${styles.question} ${confirmation ? styles.confirmationTitle : ""}`}>{t(confirmation ? "Thank you." : questions[step])}</h1>
               {confirmation ? <div className={styles.confirmation}>
-                <div className={styles.confirmationMark} aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" /><path d="m16.5 24.5 5 5 10.5-12" /></svg></div>
                 <p>{t("Thank you. We’ve received your project request.")}</p>
                 <p>{t("Our team will review the information you submitted and we’ll contact you directly on WhatsApp to discuss the next steps.")}</p>
                 <div className={styles.summary}>
