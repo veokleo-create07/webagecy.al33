@@ -104,8 +104,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
         <div className={styles.workspace}>
           <main className={styles.main}>
             <div className={styles.invitation}>
-              <span>{t(confirmation ? "Consultation received" : "Private consultation")}</span>
-              {!confirmation && <h2>{t("Start something worth building.")}</h2>}
+              <h2>{t(confirmation ? "Consultation received" : "Start something worth building.")}</h2>
             </div>
             <AnimatePresence mode="wait" initial={false}>
               <motion.div className={styles.stepContent} key={confirmation ? "confirmed" : step} initial={reduced ? false : { opacity: 0, x: direction * 16 }} animate={{ opacity: 1, x: 0 }} exit={reduced ? { opacity: 1 } : { opacity: 0, x: direction * -12 }} transition={{ duration: reduced ? 0 : .28, ease: [.22, 1, .36, 1] }} onAnimationComplete={focusHeading}>
