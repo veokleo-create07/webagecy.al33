@@ -13,7 +13,7 @@ const navigation = [
   { label: "Contact", href: "#contact" },
 ] as const;
 const socials = [
-  { label: "Instagram", href: "https://www.instagram.com/" },
+  { label: "Instagram", href: "https://www.instagram.com/kreuweb/" },
 ] as const;
 const marquee = ["DESIGN", "WEB DEVELOPMENT", "MARKETING & SEO", "SOFTWARE & APPS"];
 
