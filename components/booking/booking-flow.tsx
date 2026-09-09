@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent, type PointerEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { BrandLogo } from "@/components/ui/brand-logo";
@@ -26,6 +26,25 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
   const [confirmation, setConfirmation] = useState(false);
   const [pending, setPending] = useState(false);
   const reduced = useReducedMotion();
+
+  function moveGlass(event: PointerEvent<HTMLElement>) {
+    if (reduced) return;
+    const panel = event.currentTarget;
+    const bounds = panel.getBoundingClientRect();
+    const x = Math.min(Math.max((event.clientX - bounds.left) / bounds.width, 0), 1);
+    const y = Math.min(Math.max((event.clientY - bounds.top) / bounds.height, 0), 1);
+    panel.style.setProperty("--glass-x", `${x * 100}%`);
+    panel.style.setProperty("--glass-y", `${y * 100}%`);
+    panel.style.setProperty("--glass-rx", `${(0.5 - y) * 1.15}deg`);
+    panel.style.setProperty("--glass-ry", `${(x - 0.5) * 1.15}deg`);
+  }
+
+  function resetGlass(event: PointerEvent<HTMLElement>) {
+    event.currentTarget.style.setProperty("--glass-x", "50%");
+    event.currentTarget.style.setProperty("--glass-y", "18%");
+    event.currentTarget.style.setProperty("--glass-rx", "0deg");
+    event.currentTarget.style.setProperty("--glass-ry", "0deg");
+  }
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -94,6 +113,15 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
   return (
     <dialog ref={dialogRef} className={styles.dialog} aria-labelledby="booking-question" onCancel={event => { event.preventDefault(); close(); }} onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); close(); } }}>
       <div className={styles.shell}>
+        <div className={styles.scene} aria-hidden="true">
+          <div className={styles.atmosphere} />
+          <svg className={styles.mountains} viewBox="0 0 920 520" preserveAspectRatio="xMinYMax meet">
+            <path className={styles.mountainBack} d="M0 344 94 258l68 46 115-145 76 94 70-54 137 128 94-101 73 71 105-135 88 98v260H0Z" />
+            <path className={styles.mountainMid} d="M0 407 106 312l78 55 117-144 83 112 60-44 99 97 82-76 73 49 93-121 129 151v129H0Z" />
+            <path className={styles.mountainFront} d="M0 450 122 345l79 75 105-105 88 91 72-58 91 93 81-56 73 59 84-86 125 112v50H0Z" />
+          </svg>
+          <div className={styles.horizon} />
+        </div>
         <header className={styles.header}>
           <div className={styles.brandGroup}><BrandLogo /><LanguageSwitcher /></div>
           <button className={styles.close} type="button" onClick={close} disabled={pending} aria-label={t("Close booking")}>
@@ -125,7 +153,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
             </div>
           </aside>
 
-          <main className={styles.main}>
+          <main className={styles.main} onPointerMove={moveGlass} onPointerDown={moveGlass} onPointerLeave={resetGlass} onPointerUp={resetGlass}>
             <div className={styles.panelMeta}>
               <span>{t(confirmation ? "Consultation received" : "Consultation brief")}</span>
               <span aria-live="polite">{confirmation ? t("Confirmed") : `${String(step + 1).padStart(2, "0")} / 06`}</span>
@@ -135,6 +163,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
               <motion.div className={styles.stepContent} key={confirmation ? "confirmed" : step} initial={reduced ? false : { opacity: 0, x: direction * 16 }} animate={{ opacity: 1, x: 0 }} exit={reduced ? { opacity: 1 } : { opacity: 0, x: direction * -12 }} transition={{ duration: reduced ? 0 : .28, ease: [.22, 1, .36, 1] }} onAnimationComplete={focusHeading}>
               <h1 id="booking-question" ref={headingRef} tabIndex={-1} className={styles.question}>{t(confirmation ? "Thank you." : questions[step])}</h1>
               {confirmation ? <div className={styles.confirmation}>
+                <div className={styles.confirmationMark} aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" /><path d="m16.5 24.5 5 5 10.5-12" /></svg></div>
                 <p>{t("Thank you. We’ve received your project request.")}</p>
                 <p>{t("Our team will review the information you submitted and we’ll contact you directly on WhatsApp to discuss the next steps.")}</p>
                 <div className={styles.summary}>
