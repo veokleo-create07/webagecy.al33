@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent, type PointerEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { BrandLogo } from "@/components/ui/brand-logo";
@@ -25,25 +25,6 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
   const [confirmation, setConfirmation] = useState(false);
   const [pending, setPending] = useState(false);
   const reduced = useReducedMotion();
-
-  function moveGlass(event: PointerEvent<HTMLElement>) {
-    if (reduced) return;
-    const panel = event.currentTarget;
-    const bounds = panel.getBoundingClientRect();
-    const x = Math.min(Math.max((event.clientX - bounds.left) / bounds.width, 0), 1);
-    const y = Math.min(Math.max((event.clientY - bounds.top) / bounds.height, 0), 1);
-    panel.style.setProperty("--glass-x", `${x * 100}%`);
-    panel.style.setProperty("--glass-y", `${y * 100}%`);
-    panel.style.setProperty("--glass-rx", `${(0.5 - y) * 1.15}deg`);
-    panel.style.setProperty("--glass-ry", `${(x - 0.5) * 1.15}deg`);
-  }
-
-  function resetGlass(event: PointerEvent<HTMLElement>) {
-    event.currentTarget.style.setProperty("--glass-x", "50%");
-    event.currentTarget.style.setProperty("--glass-y", "18%");
-    event.currentTarget.style.setProperty("--glass-rx", "0deg");
-    event.currentTarget.style.setProperty("--glass-ry", "0deg");
-  }
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -120,15 +101,15 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
           </button>
         </header>
 
-        <div className={styles.workspace} onPointerMove={moveGlass} onPointerDown={moveGlass} onPointerLeave={resetGlass} onPointerUp={resetGlass}>
+        <div className={styles.workspace}>
           <main className={styles.main}>
-            <div className={styles.panelMeta}>
+            <div className={styles.invitation}>
               <span>{t(confirmation ? "Consultation received" : "Private consultation")}</span>
+              {!confirmation && <h2>{t("Start something worth building.")}</h2>}
             </div>
-            <div className={styles.progress} role="progressbar" aria-label={t("Project request progress")} aria-valuemin={0} aria-valuemax={6} aria-valuenow={confirmation ? 6 : step + 1}><span style={{ transform: `scaleX(${confirmation ? 1 : (step + 1) / 6})` }} /></div>
             <AnimatePresence mode="wait" initial={false}>
               <motion.div className={styles.stepContent} key={confirmation ? "confirmed" : step} initial={reduced ? false : { opacity: 0, x: direction * 16 }} animate={{ opacity: 1, x: 0 }} exit={reduced ? { opacity: 1 } : { opacity: 0, x: direction * -12 }} transition={{ duration: reduced ? 0 : .28, ease: [.22, 1, .36, 1] }} onAnimationComplete={focusHeading}>
-              <h1 id="booking-question" ref={headingRef} tabIndex={-1} className={styles.question}>{t(confirmation ? "Thank you." : questions[step])}</h1>
+              <h1 id="booking-question" ref={headingRef} tabIndex={-1} className={`${styles.question} ${confirmation ? styles.confirmationTitle : ""}`}>{t(confirmation ? "Thank you." : questions[step])}</h1>
               {confirmation ? <div className={styles.confirmation}>
                 <div className={styles.confirmationMark} aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" /><path d="m16.5 24.5 5 5 10.5-12" /></svg></div>
                 <p>{t("Thank you. We’ve received your project request.")}</p>
@@ -165,7 +146,6 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
                     {t(pending ? "Sending your request…" : step === 5 ? "Apply to Work With Us" : "Continue")}<ArrowIcon direction={step === 5 ? "up-right" : "right"} />
                   </button>
                 </div>
-                <p className={styles.privacy}>{t(step === 5 ? "A focused first step for your next project." : "A few details. Then we talk about where your business can go next.")}</p>
               </form>}
             </motion.div>
           </AnimatePresence>

@@ -123,6 +123,7 @@ export const albanian: Record<string, string> = {
   "Discovery call": "Konsultë",
   "Project request": "Kërkesë projekti",
   "Private consultation": "Konsultë private",
+  "Start something worth building.": "Nis diçka që ia vlen të ndërtohet.",
   "Consultation overview": "Përmbledhja e konsultës",
   "Consultation brief": "Përmbledhje e projektit",
   "Consultation received": "Kërkesa u pranua",

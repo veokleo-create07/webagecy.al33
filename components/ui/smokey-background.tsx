@@ -85,7 +85,6 @@ export function SmokeyBackground({ color = "#c2b6ec" }: { color?: string }) {
     const [r, g, b] = rgb(color);
     gl.uniform3f(tint, r, g, b);
 
-    const pointer = { x: .5, y: .5, targetX: .5, targetY: .5 };
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let visible = true;
     let frame = 0;
@@ -101,21 +100,13 @@ export function SmokeyBackground({ color = "#c2b6ec" }: { color?: string }) {
 
     const draw = (now: number) => {
       resize();
-      pointer.x += (pointer.targetX - pointer.x) * .035;
-      pointer.y += (pointer.targetY - pointer.y) * .035;
       gl.uniform2f(resolution, canvas.width, canvas.height);
       gl.uniform1f(time, reduced ? 4 : (now - start) / 1000);
-      gl.uniform2f(mouse, pointer.x, pointer.y);
+      gl.uniform2f(mouse, .5, .5);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
       if (visible && !reduced) frame = requestAnimationFrame(draw);
     };
 
-    const handlePointer = (event: PointerEvent) => {
-      const bounds = canvas.getBoundingClientRect();
-      pointer.targetX = Math.min(Math.max((event.clientX - bounds.left) / bounds.width, 0), 1);
-      pointer.targetY = 1 - Math.min(Math.max((event.clientY - bounds.top) / bounds.height, 0), 1);
-    };
-    const resetPointer = () => { pointer.targetX = .5; pointer.targetY = .5; };
     const observer = new IntersectionObserver(([entry]) => {
       const nextVisible = entry.isIntersecting;
       if (nextVisible && !visible && !reduced) { start = performance.now(); frame = requestAnimationFrame(draw); }
@@ -123,16 +114,12 @@ export function SmokeyBackground({ color = "#c2b6ec" }: { color?: string }) {
       if (!visible) cancelAnimationFrame(frame);
     });
 
-    window.addEventListener("pointermove", handlePointer, { passive: true });
-    document.documentElement.addEventListener("pointerleave", resetPointer);
     observer.observe(canvas);
     frame = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
-      window.removeEventListener("pointermove", handlePointer);
-      document.documentElement.removeEventListener("pointerleave", resetPointer);
       gl.deleteBuffer(buffer);
       gl.deleteProgram(program);
       gl.deleteShader(vertex);
