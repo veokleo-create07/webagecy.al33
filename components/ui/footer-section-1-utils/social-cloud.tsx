@@ -17,7 +17,7 @@ export function SocialCloud({ className = "" }: { className?: string }) {
   return (
     <div className={`flex items-center justify-center ${className}`}>
       <a
-        href="https://www.instagram.com/"
+        href="https://www.instagram.com/kreuweb/"
         target="_blank"
         rel="noreferrer"
         aria-label={t("Kreu Web on Instagram")}
