@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type FormEvent, type PointerEvent } from "
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { BrandLogo } from "@/components/ui/brand-logo";
+import { SmokeyBackground } from "@/components/ui/smokey-background";
 import { LanguageSwitcher, useLanguage } from "@/components/language-provider";
 import { emptyDetails, investmentOptions, whatsappCountries, validateStep, type BookingDetails } from "@/lib/booking";
 import styles from "./booking.module.css";
@@ -113,15 +114,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
   return (
     <dialog ref={dialogRef} className={styles.dialog} aria-labelledby="booking-question" onCancel={event => { event.preventDefault(); close(); }} onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); close(); } }}>
       <div className={styles.shell}>
-        <div className={styles.scene} aria-hidden="true">
-          <div className={styles.atmosphere} />
-          <svg className={styles.mountains} viewBox="0 0 920 520" preserveAspectRatio="xMinYMax meet">
-            <path className={styles.mountainBack} d="M0 344 94 258l68 46 115-145 76 94 70-54 137 128 94-101 73 71 105-135 88 98v260H0Z" />
-            <path className={styles.mountainMid} d="M0 407 106 312l78 55 117-144 83 112 60-44 99 97 82-76 73 49 93-121 129 151v129H0Z" />
-            <path className={styles.mountainFront} d="M0 450 122 345l79 75 105-105 88 91 72-58 91 93 81-56 73 59 84-86 125 112v50H0Z" />
-          </svg>
-          <div className={styles.horizon} />
-        </div>
+        <SmokeyBackground />
         <header className={styles.header}>
           <div className={styles.brandGroup}><BrandLogo /><LanguageSwitcher /></div>
           <button className={styles.close} type="button" onClick={close} disabled={pending} aria-label={t("Close booking")}>
@@ -129,7 +122,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
           </button>
         </header>
 
-        <div className={styles.workspace}>
+        <div className={styles.workspace} onPointerMove={moveGlass} onPointerDown={moveGlass} onPointerLeave={resetGlass} onPointerUp={resetGlass}>
           <aside className={styles.advisory} aria-label={t("Consultation overview")}>
             <div className={styles.advisoryIntro}>
               <span className={styles.eyebrow}>{t("Private consultation")}</span>
@@ -153,7 +146,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
             </div>
           </aside>
 
-          <main className={styles.main} onPointerMove={moveGlass} onPointerDown={moveGlass} onPointerLeave={resetGlass} onPointerUp={resetGlass}>
+          <main className={styles.main}>
             <div className={styles.panelMeta}>
               <span>{t(confirmation ? "Consultation received" : "Consultation brief")}</span>
               <span aria-live="polite">{confirmation ? t("Confirmed") : `${String(step + 1).padStart(2, "0")} / 06`}</span>
