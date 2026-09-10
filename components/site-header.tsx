@@ -172,6 +172,7 @@ export function SiteHeader() {
           <button
             type="button"
             className={`header-shimmer ${styles.opticalControl}`}
+            data-magnetic
             aria-haspopup="dialog"
             onClick={goToContact}
           >

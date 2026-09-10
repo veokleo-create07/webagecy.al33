@@ -22,7 +22,7 @@ function DoubleChevron({ index, dotColor }: { index: number; dotColor: string })
 }
 
 export const AntiMetalButton = forwardRef<HTMLAnchorElement, AntiMetalButtonProps>(function AntiMetalButton({ className, label, accentFrom = "#e6e5df", accentTo = "#bdbdb6", dotColor = "#10100f", ...props }, ref) {
-  return <BookingLink ref={ref} className={cn(styles.button, className)} {...props}>
+  return <BookingLink ref={ref} className={cn(styles.button, className)} data-magnetic {...props}>
     <span className={styles.label}>{label}</span>
     <span className={styles.rail} aria-hidden="true" style={{ background: `linear-gradient(180deg, ${accentFrom} 0%, ${accentTo} 100%)` }}>
       {[0, 1, 2, 3, 4].map(index => <DoubleChevron key={index} index={index} dotColor={dotColor} />)}

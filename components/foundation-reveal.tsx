@@ -19,6 +19,7 @@ export function FoundationReveal() {
     const hero = document.querySelector<HTMLElement>(".hero");
     const light = document.querySelector<HTMLElement>(".hero__light");
     const imageListeners: Array<{ image: HTMLImageElement; handler: () => void }> = [];
+    const magneticListeners: Array<{ element: HTMLElement; move: (event: PointerEvent) => void; leave: () => void }> = [];
     let refreshFrame = 0;
     let refreshTimer = 0;
     let isActive = true;
@@ -145,6 +146,28 @@ export function FoundationReveal() {
     };
     if (finePointer) hero?.addEventListener("pointermove", handlePointerMove, { passive: true });
 
+    if (finePointer) {
+      document.querySelectorAll<HTMLElement>("[data-magnetic]").forEach(element => {
+        const move = (event: PointerEvent) => {
+          if (event.pointerType !== "mouse") return;
+          const bounds = element.getBoundingClientRect();
+          const x = Math.max(-1, Math.min(1, (event.clientX - bounds.left) / bounds.width * 2 - 1));
+          const y = Math.max(-1, Math.min(1, (event.clientY - bounds.top) / bounds.height * 2 - 1));
+          element.style.setProperty("--magnetic-x", `${x * 5}px`);
+          element.style.setProperty("--magnetic-y", `${y * 4}px`);
+          element.style.setProperty("--glass-x", `${(x + 1) * 50}%`);
+        };
+        const leave = () => {
+          element.style.setProperty("--magnetic-x", "0px");
+          element.style.setProperty("--magnetic-y", "0px");
+          element.style.setProperty("--glass-x", "50%");
+        };
+        element.addEventListener("pointermove", move, { passive: true });
+        element.addEventListener("pointerleave", leave);
+        magneticListeners.push({ element, move, leave });
+      });
+    }
+
     document.fonts?.ready.then(refresh);
     document.querySelectorAll<HTMLImageElement>("img").forEach(image => {
       if (image.complete) return;
@@ -163,6 +186,10 @@ export function FoundationReveal() {
       moveX?.tween.kill();
       moveY?.tween.kill();
       hero?.removeEventListener("pointermove", handlePointerMove);
+      magneticListeners.forEach(({ element, move, leave }) => {
+        element.removeEventListener("pointermove", move);
+        element.removeEventListener("pointerleave", leave);
+      });
       window.removeEventListener("load", refresh);
       imageListeners.forEach(({ image, handler }) => {
         image.removeEventListener("load", handler);

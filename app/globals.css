@@ -89,6 +89,10 @@ a {
   text-decoration: none;
 }
 
+[data-magnetic] {
+  translate: var(--magnetic-x, 0) var(--magnetic-y, 0);
+}
+
 button,
 a {
   -webkit-tap-highlight-color: transparent;
@@ -152,7 +156,7 @@ a:focus-visible {
   font-weight: 400;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  transition: opacity 500ms ease 320ms, transform 220ms ease-out, box-shadow 220ms ease-out;
+  transition: opacity 500ms ease 320ms, transform 420ms var(--ease-out), box-shadow 420ms ease, translate 680ms var(--ease-out);
 }
 
 .header-shimmer:hover {
@@ -315,6 +319,8 @@ a:focus-visible {
   inset: 0;
   border-radius: inherit;
   background: linear-gradient(118deg, rgba(255, 255, 255, 0.13), transparent 28%, transparent 70%, rgba(255, 255, 255, 0.035));
+  background-position: var(--glass-x, 50%) 50%;
+  background-size: 180% 100%;
   transition: opacity 350ms ease, transform 500ms var(--ease-out);
 }
 
@@ -532,7 +538,7 @@ a:focus-visible {
   font-size: var(--text-sm);
   font-family: "Aspekta", var(--font-inter-tight), "Arial Narrow", Arial, sans-serif;
   font-weight: 400;
-  transition: color 250ms ease, transform 350ms var(--ease-out);
+  transition: color 350ms ease, transform 520ms var(--ease-out), translate 680ms var(--ease-out);
 }
 
 .hero__primary {
@@ -565,6 +571,8 @@ a:focus-visible {
   inset: 0;
   border-radius: inherit;
   background: linear-gradient(112deg, rgba(255, 255, 255, 0.15), transparent 26%, transparent 72%, rgba(255, 255, 255, 0.035));
+  background-position: var(--glass-x, 50%) 50%;
+  background-size: 180% 100%;
   transition: transform 550ms var(--ease-out), opacity 400ms ease;
 }
 
@@ -4100,6 +4108,10 @@ a:focus-visible {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+
+  [data-magnetic] {
+    translate: none !important;
   }
 
   .services__pin {

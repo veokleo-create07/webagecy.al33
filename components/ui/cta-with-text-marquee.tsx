@@ -100,7 +100,7 @@ export default function CTAWithTextMarquee() {
   }, [reducedMotion]);
 
   return <section ref={sectionRef} className={`services ${styles.root}`} id="expertise" aria-labelledby="services-title">
-    <motion.div className={styles.inner} initial={reducedMotion ? false : { opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "0px 0px -12%" }} transition={{ duration: reducedMotion ? 0 : .85, ease: [.22, 1, .36, 1] }}>
+    <motion.div className={styles.inner} initial={reducedMotion ? false : { opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "0px 0px -12%" }} transition={{ duration: reducedMotion ? 0 : 1.05, ease: [.22, 1, .36, 1] }}>
       <div className={styles.content}>
         <span className={styles.label}>{content.label}</span>
         <h2 id="services-title">{content.headline}</h2>

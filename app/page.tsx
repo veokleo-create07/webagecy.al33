@@ -34,7 +34,7 @@ export default function Home() {
             </p>
 
             <div className="hero__actions" data-intro>
-              <BookingLink className="hero__primary">
+              <BookingLink className="hero__primary" data-magnetic>
                 {t("Start a project")} <span aria-hidden="true"><ArrowIcon /></span>
               </BookingLink>
             </div>
