@@ -1,13 +1,18 @@
-.background { position: absolute; inset: 0; overflow: hidden; background: #09090b; pointer-events: none; }
-.canvas { display: block; width: 100%; height: 100%; opacity: .28; filter: saturate(.35) contrast(.9); }
-.veil { position: absolute; inset: 0; background: linear-gradient(180deg,rgba(5,5,7,.82),rgba(9,9,12,.48) 58%,rgba(20,19,25,.72)); }
+.background { --depth-x: 0px; --depth-y: 0px; --grid-x: 0px; --grid-y: 0px; --canvas-x: 0px; --canvas-y: 0px; position: absolute; inset: 0; overflow: hidden; background: #09090b; pointer-events: none; }
+.ambient { position: absolute; inset: -12%; background: radial-gradient(ellipse 72% 58% at 50% 52%,rgba(119,111,145,.13),rgba(50,47,61,.055) 48%,transparent 76%); transform: translate3d(var(--depth-x),var(--depth-y),0) scale(1.04); }
+.grid { position: absolute; inset: -4%; opacity: .055; background-image: linear-gradient(rgba(231,229,237,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(231,229,237,.14) 1px,transparent 1px); background-size: 76px 76px; mask-image: radial-gradient(ellipse 64% 58% at 50% 52%,#000,transparent 78%); -webkit-mask-image: radial-gradient(ellipse 64% 58% at 50% 52%,#000,transparent 78%); transform: translate3d(var(--grid-x),var(--grid-y),0); }
+.canvas { position: relative; display: block; width: 100%; height: 100%; opacity: .2; filter: saturate(.28) contrast(.88); transform: translate3d(var(--canvas-x),var(--canvas-y),0) scale(1.015); }
+.veil { position: absolute; inset: 0; background: linear-gradient(180deg,rgba(5,5,7,.78),rgba(9,9,12,.42) 58%,rgba(20,19,25,.68)); }
 
 @media (max-width: 767px) {
-  .canvas { opacity: .2; }
+  .ambient { opacity: .8; }
+  .grid { opacity: .035; background-size: 58px 58px; }
+  .canvas { opacity: .15; }
   .veil { background: linear-gradient(180deg,rgba(5,5,7,.82),rgba(12,11,15,.56) 62%,rgba(20,19,25,.76)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .background { background: #09090b; }
+  .ambient, .grid, .canvas { transform: none; }
   .canvas { opacity: .14; }
 }

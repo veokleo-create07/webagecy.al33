@@ -45,6 +45,7 @@ function rgb(hex: string): [number, number, number] {
 }
 
 export function SmokeyBackground({ color = "#c2b6ec" }: { color?: string }) {
+  const backgroundRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -86,9 +87,19 @@ export function SmokeyBackground({ color = "#c2b6ec" }: { color?: string }) {
     gl.uniform3f(tint, r, g, b);
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     let visible = true;
     let frame = 0;
     let start = performance.now();
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+
+    const handlePointerMove = (event: PointerEvent) => {
+      targetX = event.clientX / window.innerWidth - .5;
+      targetY = event.clientY / window.innerHeight - .5;
+    };
 
     const resize = () => {
       const scale = window.innerWidth < 768 ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
@@ -100,10 +111,18 @@ export function SmokeyBackground({ color = "#c2b6ec" }: { color?: string }) {
 
     const draw = (now: number) => {
       resize();
+      currentX += (targetX - currentX) * .025;
+      currentY += (targetY - currentY) * .025;
       gl.uniform2f(resolution, canvas.width, canvas.height);
       gl.uniform1f(time, reduced ? 4 : (now - start) / 1000);
-      gl.uniform2f(mouse, .5, .5);
+      gl.uniform2f(mouse, .5 + currentX * .18, .5 - currentY * .18);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
+      backgroundRef.current?.style.setProperty("--depth-x", `${currentX * 10}px`);
+      backgroundRef.current?.style.setProperty("--depth-y", `${currentY * 8}px`);
+      backgroundRef.current?.style.setProperty("--grid-x", `${currentX * -3.5}px`);
+      backgroundRef.current?.style.setProperty("--grid-y", `${currentY * -2.8}px`);
+      backgroundRef.current?.style.setProperty("--canvas-x", `${currentX * 2}px`);
+      backgroundRef.current?.style.setProperty("--canvas-y", `${currentY * 1.6}px`);
       if (visible && !reduced) frame = requestAnimationFrame(draw);
     };
 
@@ -115,11 +134,13 @@ export function SmokeyBackground({ color = "#c2b6ec" }: { color?: string }) {
     });
 
     observer.observe(canvas);
+    if (finePointer && !reduced) window.addEventListener("pointermove", handlePointerMove, { passive: true });
     frame = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
+      window.removeEventListener("pointermove", handlePointerMove);
       gl.deleteBuffer(buffer);
       gl.deleteProgram(program);
       gl.deleteShader(vertex);
@@ -127,5 +148,10 @@ export function SmokeyBackground({ color = "#c2b6ec" }: { color?: string }) {
     };
   }, [color]);
 
-  return <div className={styles.background} aria-hidden="true"><canvas ref={canvasRef} className={styles.canvas} /><div className={styles.veil} /></div>;
+  return <div ref={backgroundRef} className={styles.background} aria-hidden="true">
+    <div className={styles.ambient} />
+    <div className={styles.grid} />
+    <canvas ref={canvasRef} className={styles.canvas} />
+    <div className={styles.veil} />
+  </div>;
 }
