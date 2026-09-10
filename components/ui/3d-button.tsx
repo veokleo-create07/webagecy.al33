@@ -25,7 +25,7 @@ function AnimatedLabel({ label, copy = false }: { label: string; copy?: boolean 
 
 export function ThreeDButton({ label }: ThreeDButtonProps) {
   return (
-    <BookingLink className={styles.button} aria-label={label} data-magnetic>
+    <BookingLink className={styles.button} aria-label={label} data-button-variant="primary" data-magnetic>
       <span className={styles.wrap}>
         <span className={styles.content}>
           <span className={styles.labels}>

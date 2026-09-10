@@ -51,8 +51,8 @@ export default function Footer1() {
         <AntiMetalButton className={styles.bookingButton} label={t("Book a discovery call")} />
       </motion.div>
       <motion.div variants={reveal} className={styles.pills}>
-        <nav aria-label={t("Navigation")}>{navigation.map((item, index) => <a key={item.label} href={item.href} style={{ "--item-index": index } as CSSProperties}><span>{t(item.label)}</span><ArrowIcon /></a>)}</nav>
-        <nav aria-label={t("Socials")}>{socials.map((item, index) => <a key={item.label} href={item.href} target="_blank" rel="noreferrer" style={{ "--item-index": index } as CSSProperties}><span>{item.label}</span><ArrowIcon /></a>)}</nav>
+        <nav aria-label={t("Navigation")}>{navigation.map((item, index) => <a key={item.label} href={item.href} data-button-variant="secondary" style={{ "--item-index": index } as CSSProperties}><span>{t(item.label)}</span><ArrowIcon /></a>)}</nav>
+        <nav aria-label={t("Socials")}>{socials.map((item, index) => <a key={item.label} href={item.href} data-button-variant="secondary" target="_blank" rel="noreferrer" style={{ "--item-index": index } as CSSProperties}><span>{item.label}</span><ArrowIcon /></a>)}</nav>
       </motion.div>
       <motion.div variants={reveal} className={styles.bottom}>
         <p>© 2026 Kreu Web. All rights reserved.</p>

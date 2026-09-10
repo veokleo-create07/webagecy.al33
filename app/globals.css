@@ -40,6 +40,20 @@
   --text-display: clamp(4rem, 11vw, 12rem);
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --button-height-primary: 3.55rem;
+  --button-height-secondary: 3.2rem;
+  --button-height-navigation: 3.5rem;
+  --button-radius-primary: 1rem;
+  --button-radius-secondary: 999px;
+  --button-radius-navigation: 999px;
+  --button-padding-primary: 1.2rem;
+  --button-padding-secondary: 1rem;
+  --button-padding-navigation: 1.2rem;
+  --button-font-size: 0.78rem;
+  --button-icon-gap: 0.8rem;
+  --button-transition: 480ms var(--ease-out);
+  --button-shadow-dark: inset 0 1px rgba(255, 255, 255, 0.13), inset 0 -1px rgba(0, 0, 0, 0.46), 0 0.8rem 1.8rem rgba(0, 0, 0, 0.24);
 }
 
 * {
@@ -91,6 +105,30 @@ a {
 
 [data-magnetic] {
   translate: var(--magnetic-x, 0) var(--magnetic-y, 0);
+}
+
+[data-button-variant] {
+  align-items: center;
+  justify-content: center;
+  font-family: "Aspekta", var(--font-inter-tight), "Arial Narrow", Arial, sans-serif;
+  font-size: var(--button-font-size);
+  font-weight: 400;
+  line-height: 1;
+}
+
+[data-button-variant="primary"] {
+  min-height: var(--button-height-primary);
+  border-radius: var(--button-radius-primary);
+}
+
+[data-button-variant="secondary"] {
+  min-height: var(--button-height-secondary);
+  border-radius: var(--button-radius-secondary);
+}
+
+[data-button-variant="navigation"] {
+  min-height: var(--button-height-navigation);
+  border-radius: var(--button-radius-navigation);
 }
 
 button,
@@ -146,11 +184,11 @@ a:focus-visible {
 }
 
 .header-shimmer {
-  min-height: 3.5rem;
+  min-height: var(--button-height-navigation);
   justify-self: end;
   gap: 0.8rem;
   border: 0;
-  border-radius: 1.45rem;
+  border-radius: var(--button-radius-navigation);
   color: var(--color-text);
   font-family: inherit;
   font-weight: 400;
@@ -170,7 +208,7 @@ a:focus-visible {
 .header-shimmer > span:first-of-type {
   display: inline-flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: var(--button-icon-gap);
 }
 
 .header-shimmer__arrow {
@@ -534,8 +572,8 @@ a:focus-visible {
 .hero__secondary {
   display: inline-flex;
   align-items: center;
-  gap: 0.7rem;
-  font-size: var(--text-sm);
+  gap: var(--button-icon-gap);
+  font-size: var(--button-font-size);
   font-family: "Aspekta", var(--font-inter-tight), "Arial Narrow", Arial, sans-serif;
   font-weight: 400;
   transition: color 350ms ease, transform 520ms var(--ease-out), translate 680ms var(--ease-out);
@@ -545,9 +583,9 @@ a:focus-visible {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  min-height: 3.55rem;
-  padding: 0.85rem 1.35rem;
-  border-radius: 1.65rem;
+  min-height: var(--button-height-primary);
+  padding: 0 var(--button-padding-primary);
+  border-radius: var(--button-radius-primary);
   background: rgba(255, 255, 255, 0.1);
   box-shadow:
     0 12px 30px rgba(0, 0, 0, 0.16),
@@ -1277,21 +1315,19 @@ a:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2.5rem;
-  min-height: 3.5rem;
+  gap: var(--button-icon-gap);
   border: 0;
-  border-radius: 0;
   font: inherit;
-  font-size: var(--text-sm);
+  font-size: var(--button-font-size);
   cursor: pointer;
 }
 
 .button--solid {
   min-width: min(100%, 16rem);
-  padding: 0.8rem 1rem;
+  padding: 0 var(--button-padding-primary);
   background: var(--color-text);
   color: var(--color-ink);
-  transition: background 220ms ease, color 220ms ease;
+  transition: background var(--button-transition), color var(--button-transition), transform var(--button-transition), box-shadow var(--button-transition);
 }
 
 .button--solid:hover {
@@ -1299,8 +1335,7 @@ a:focus-visible {
 }
 
 .button--text {
-  min-height: auto;
-  padding: 0;
+  padding: 0 var(--button-padding-secondary);
   background: transparent;
   color: inherit;
 }
@@ -3743,7 +3778,7 @@ a:focus-visible {
   }
 
   .hero__primary {
-    min-height: 3.35rem;
+    min-height: var(--button-height-primary);
   }
 
   .selected-work__intro {

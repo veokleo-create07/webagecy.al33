@@ -172,6 +172,7 @@ export function SiteHeader() {
           <button
             type="button"
             className={`header-shimmer ${styles.opticalControl}`}
+            data-button-variant="navigation"
             data-magnetic
             aria-haspopup="dialog"
             onClick={goToContact}
@@ -215,6 +216,7 @@ export function SiteHeader() {
             <button
               type="button"
               className={`mobile-menu__shimmer ${styles.opticalControl}`}
+              data-button-variant="navigation"
               aria-haspopup="dialog"
               tabIndex={isMenuOpen ? 0 : -1}
               onClick={goToContact}

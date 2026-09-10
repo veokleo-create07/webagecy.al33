@@ -4,7 +4,14 @@ import { ArrowIcon } from "@/components/ui/arrow-icon";
 type SharedProps = {
   children: React.ReactNode;
   className?: string;
-  variant?: "solid" | "text";
+  variant?: "primary" | "secondary" | "navigation" | "solid" | "text";
+};
+
+const resolveVariant = (variant: SharedProps["variant"]) => {
+  if (variant === "text") return { system: "secondary", legacy: "text" } as const;
+  if (variant === "secondary") return { system: "secondary", legacy: "text" } as const;
+  if (variant === "navigation") return { system: "navigation", legacy: "solid" } as const;
+  return { system: "primary", legacy: "solid" } as const;
 };
 
 type LinkButtonProps = SharedProps &
@@ -21,10 +28,11 @@ export function Button(props: LinkButtonProps | NativeButtonProps) {
       variant = "solid",
       ...linkProps
     } = props as LinkButtonProps;
-    const classes = `button button--${variant} ${className}`.trim();
+    const resolved = resolveVariant(variant);
+    const classes = `button button--${resolved.legacy} ${className}`.trim();
 
     return (
-      <a className={classes} {...linkProps}>
+      <a className={classes} data-button-variant={resolved.system} {...linkProps}>
         <span>{children}</span>
         <span aria-hidden="true" className="button__arrow">
           <ArrowIcon />
@@ -39,10 +47,11 @@ export function Button(props: LinkButtonProps | NativeButtonProps) {
     variant = "solid",
     ...buttonProps
   } = props as NativeButtonProps;
-  const classes = `button button--${variant} ${className}`.trim();
+  const resolved = resolveVariant(variant);
+  const classes = `button button--${resolved.legacy} ${className}`.trim();
 
   return (
-    <button className={classes} {...buttonProps}>
+    <button className={classes} data-button-variant={resolved.system} {...buttonProps}>
       <span>{children}</span>
       <span aria-hidden="true" className="button__arrow">
         <ArrowIcon />

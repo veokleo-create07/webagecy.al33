@@ -117,7 +117,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
                   <div><span>{t("Business name")}</span><strong>{details.businessName.trim()}</strong></div>
                   <div><span>{t("WhatsApp number")}</span><strong>{details.countryCode} {details.whatsapp.trim()}</strong></div>
                 </div>
-                <button type="button" className={styles.primary} onClick={close}>{t("Back to Kreu")} <ArrowIcon /></button>
+                <button type="button" className={styles.primary} data-button-variant="primary" onClick={close}>{t("Back to Kreu")} <ArrowIcon /></button>
               </div> : <form onSubmit={submit} noValidate aria-busy={pending}>
                 <div className={styles.fields}>
                   {step === 0 && <label className={styles.field}><span>{t("Name")}</span><input {...fieldProps} name="fullName" autoComplete="name" value={details.fullName} onChange={e => update("fullName", e.target.value)} maxLength={120} placeholder={t("Your name")} required /></label>}
@@ -139,8 +139,8 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
                 </div>
                 {error && <p id="booking-error" className={styles.error} role="alert">{t(error)}</p>}
                 <div className={styles.actions}>
-                  {step > 0 && <button type="button" className={styles.back} disabled={pending} onClick={() => { setError(""); setDirection(-1); setStep(step - 1); }}>{t("Back")}</button>}
-                  <button className={styles.primary} type="submit" disabled={pending}>
+                  {step > 0 && <button type="button" className={styles.back} data-button-variant="secondary" disabled={pending} onClick={() => { setError(""); setDirection(-1); setStep(step - 1); }}>{t("Back")}</button>}
+                  <button className={styles.primary} data-button-variant="primary" type="submit" disabled={pending}>
                     {t(pending ? "Sending your request…" : step === 5 ? "Apply to Work With Us" : "Continue")}<ArrowIcon direction={step === 5 ? "up-right" : "right"} />
                   </button>
                 </div>
