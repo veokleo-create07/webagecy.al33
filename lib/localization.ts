@@ -23,6 +23,7 @@ export const albanian: Record<string, string> = {
   "Close": "Mbyll",
   "Menu": "Menu",
   "Book a discovery call": "Rezervo një konsultë",
+  "Start a project": "Fillo një projekt",
   "Build a business": "Ndërto një biznes",
   "people take seriously.": "që merret seriozisht.",
   "We position your business with clarity, credibility and authority so it is perceived at the level it aspires to.": "E pozicionojmë biznesin tuaj me qartësi, besueshmëri dhe autoritet që të perceptohet në nivelin që synon.",

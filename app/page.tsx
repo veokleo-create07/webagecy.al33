@@ -35,7 +35,7 @@ export default function Home() {
 
             <div className="hero__actions" data-intro>
               <BookingLink className="hero__primary">
-                {t("Book a discovery call")} <span aria-hidden="true"><ArrowIcon /></span>
+                {t("Start a project")} <span aria-hidden="true"><ArrowIcon /></span>
               </BookingLink>
             </div>
           </div>
