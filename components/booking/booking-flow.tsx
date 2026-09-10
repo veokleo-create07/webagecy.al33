@@ -107,7 +107,16 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
               <h2>{t(confirmation ? "Consultation received" : "Start something worth building.")}</h2>
             </div>
             <AnimatePresence mode="wait" initial={false}>
-              <motion.div className={styles.stepContent} key={confirmation ? "confirmed" : step} initial={reduced ? false : { opacity: 0, x: direction * 10 }} animate={{ opacity: 1, x: 0 }} exit={reduced ? { opacity: 1 } : { opacity: 0, x: direction * -8 }} transition={{ duration: reduced ? 0 : .34, ease: [.22, 1, .36, 1] }} onAnimationComplete={focusHeading}>
+              <motion.div
+                className={styles.stepContent}
+                data-step={confirmation ? "confirmation" : step + 1}
+                key={confirmation ? "confirmed" : step}
+                initial={reduced ? false : { opacity: 0, x: direction * 10, y: 6, scale: .995 }}
+                animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+                exit={reduced ? { opacity: 1 } : { opacity: 0, x: direction * -8, y: -4, scale: .997 }}
+                transition={{ duration: reduced ? 0 : .36, ease: [.22, 1, .36, 1] }}
+                onAnimationComplete={focusHeading}
+              >
               <h1 id="booking-question" ref={headingRef} tabIndex={-1} className={`${styles.question} ${confirmation ? styles.confirmationTitle : ""}`}>{t(confirmation ? "Thank you." : questions[step])}</h1>
               {confirmation ? <div className={styles.confirmation}>
                 <p>{t("Thank you. We’ve received your project request.")}</p>
