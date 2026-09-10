@@ -27,22 +27,22 @@
 
 .main {
   position: relative; isolation: isolate;
-  display: flex; width: 100%; min-height: 100%; padding: clamp(2rem,3.8vw,3rem) clamp(1.5rem,4.2vw,3.25rem);
+  display: flex; width: 100%; min-height: 100%; padding: clamp(2.25rem,3.8vw,3rem) clamp(1.5rem,4.2vw,3.25rem);
   overflow: hidden; background: rgba(8,7,11,.32); flex-direction: column;
 }
-.invitation h2 { max-width: 24ch; margin: 0; color: #f4f2ef; font-size: clamp(1.35rem,2.1vw,1.75rem); font-weight: 410; letter-spacing: -.045em; line-height: 1.08; text-wrap: balance; }
-.stepContent { display: flex; min-height: clamp(20rem,41vh,23rem); padding-top: clamp(2.5rem,5vh,3.25rem); flex: 1; flex-direction: column; }
-.question { max-width: 28rem; margin: 0 0 1.45rem; color: rgba(244,242,239,.68); font-size: clamp(.95rem,1.15vw,1.08rem); font-weight: 410; letter-spacing: -.01em; line-height: 1.35; text-wrap: balance; outline: none; }
+.invitation h2 { max-width: 24ch; margin: 0; color: #f4f2ef; font-size: clamp(1.4rem,2.1vw,1.75rem); font-weight: 410; letter-spacing: -.045em; line-height: 1.1; text-wrap: balance; }
+.stepContent { display: flex; min-height: clamp(20rem,41vh,23rem); padding-top: clamp(2.5rem,4.8vh,3rem); flex: 1; flex-direction: column; }
+.question { max-width: 28rem; margin: 0 0 1.5rem; color: rgba(244,242,239,.72); font-size: clamp(.96rem,1.15vw,1.08rem); font-weight: 410; letter-spacing: -.01em; line-height: 1.4; text-wrap: balance; outline: none; }
 .confirmationTitle { margin-bottom: 1rem; color: #f4f2f7; font-size: clamp(1.65rem,2.5vw,2.15rem); font-weight: 400; letter-spacing: -.045em; line-height: 1.05; }
 .stepContent form { display: flex; min-height: 0; flex: 1; flex-direction: column; }
 
 .fields { display: grid; gap: 1.25rem; }
 .field { display: flex; min-width: 0; flex-direction: column; gap: .65rem; transition: transform 360ms var(--ease-out); }
 .field > span, .label { color: #a7a79f; font-size: .67rem; letter-spacing: .08em; text-transform: uppercase; transition: color 300ms ease, transform 360ms var(--ease-out); transform-origin: left center; }
-.field small { float: right; color: #85887e; font-size: .7rem; }
+.field small { float: right; margin-left: .5rem; color: #85887e; font-size: .62rem; letter-spacing: .06em; }
 .field input, .field select, .field textarea { width: 100%; min-width: 0; min-height: 4rem; padding: .95rem 1.05rem; border: 1px solid rgba(241,239,232,.14); border-radius: .35rem; background: rgba(0,0,0,.2); color: inherit; font: inherit; font-size: clamp(.95rem,1.2vw,1.05rem); outline: none; transition: border-color 320ms var(--ease-out), background 300ms ease, box-shadow 320ms var(--ease-out), transform 360ms var(--ease-out); }
 .field input::placeholder, .field textarea::placeholder { color: #6f716b; opacity: 1; }
-.field input:focus, .field textarea:focus, .field select:focus { border-color: rgba(235,234,226,.48); background: rgba(255,255,255,.025); box-shadow: inset 2px 0 #d8d9d1; }
+.field input:focus, .field textarea:focus, .field select:focus { border-color: rgba(235,234,226,.5); background: rgba(255,255,255,.025); box-shadow: inset 2px 0 #d8d9d1; }
 .field:focus-within { transform: translateY(-1px); }
 .field:focus-within > span { color: #d8d8d1; transform: translateX(2px); }
 .field select { font-size: .92rem; text-overflow: ellipsis; }
@@ -73,15 +73,15 @@
 .stepContent[data-step="6"] .field textarea { min-height: 11rem; padding-top: 1.1rem; }
 .stepContent[data-step="6"] .field:focus-within { transform: translateY(-2px); }
 
-.actions { display: flex; margin-top: auto; padding-top: clamp(1.5rem,3vh,2rem); align-items: center; gap: 1.25rem; }
+.actions { display: flex; margin-top: auto; padding-top: clamp(1.75rem,3.2vh,2.25rem); align-items: center; justify-content: flex-end; gap: .75rem; }
 .dialog button { font-family: inherit; font-weight: 400; cursor: pointer; }
-.primary { display: inline-flex; min-height: var(--button-height-primary); margin-left: auto; padding: 0 var(--button-padding-primary); align-items: center; justify-content: center; gap: var(--button-icon-gap); border: 1px solid rgba(241,239,248,.18); border-radius: var(--button-radius-primary); background: rgba(11,9,18,.62); box-shadow: var(--button-shadow-dark); color: #f1eff7; font-size: var(--button-font-size); transition: border-color var(--button-transition),background var(--button-transition),transform var(--button-transition),box-shadow var(--button-transition); }
+.primary { display: inline-flex; min-height: var(--button-height-primary); margin-left: 0; padding: 0 var(--button-padding-primary); align-items: center; justify-content: center; gap: var(--button-icon-gap); border: 1px solid rgba(241,239,248,.18); border-radius: var(--button-radius-primary); background: rgba(11,9,18,.62); box-shadow: var(--button-shadow-dark); color: #f1eff7; font-size: var(--button-font-size); transition: border-color var(--button-transition),background var(--button-transition),transform var(--button-transition),box-shadow var(--button-transition); }
 .primary svg { transition: transform 260ms ease; }
 .primary:active { transform: scale(.985); }
 .back { min-height: var(--button-height-secondary); padding: 0 var(--button-padding-secondary); border: 1px solid rgba(241,239,248,.1); border-radius: var(--button-radius-secondary); background: rgba(255,255,255,.025); color: #9fa198; font-size: var(--button-font-size); transition: border-color var(--button-transition),background var(--button-transition),color var(--button-transition); }
 .error { margin: 1.2rem 0 0; padding: .8rem 1rem; border-left: 2px solid rgba(236,230,216,.5); background: rgba(236,230,216,.025); color: #ece6d8; font-size: .8rem; line-height: 1.5; }
 .dialog button:disabled { cursor: not-allowed; opacity: .38; }
-.dialog :is(button,a,input,textarea,select):focus-visible { outline: 1px solid #d8dbce; outline-offset: 4px; }
+.dialog :is(button,a):focus-visible { outline: 1px solid #d8dbce; outline-offset: 4px; }
 
 .confirmation > p { max-width: 36rem; margin: 0 0 .8rem; color: #aeb1a7; font-size: clamp(.95rem,1.15vw,1.1rem); line-height: 1.55; }
 .confirmation > p:first-child { color: #e3e3da; }
@@ -90,7 +90,7 @@
 .summary > div:last-child { border-bottom: 0; }
 .summary span { color: #85887f; font-size: .7rem; letter-spacing: .04em; text-transform: uppercase; }
 .summary strong { overflow-wrap: anywhere; font-size: .92rem; font-weight: 450; }
-.confirmation .primary { margin-left: 0; }
+.confirmation .primary { margin-top: .25rem; }
 .srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; border: 0; clip-path: inset(50%); white-space: nowrap; }
 
 @media (hover: hover) and (pointer: fine) {
@@ -111,9 +111,9 @@
   .header { padding-inline: .15rem; }
   .close { gap: .55rem; padding-inline: .55rem; }
   .workspace { display: block; min-height: auto; margin: auto; border-radius: .65rem; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-  .main { width: 100%; min-height: auto; margin-top: 0; padding: 1.5rem 1.25rem 1.3rem; border-radius: 0; }
+  .main { width: 100%; min-height: auto; margin-top: 0; padding: 1.5rem 1.25rem; border-radius: 0; }
   .invitation h2 { max-width: 18ch; font-size: clamp(1.2rem,5.4vw,1.45rem); }
-  .stepContent { min-height: 18rem; padding-top: 2.25rem; }
+  .stepContent { min-height: 18rem; padding-top: 2rem; }
   .question { margin-bottom: 1.25rem; font-size: .95rem; line-height: 1.35; }
   .confirmationTitle { font-size: 1.65rem; line-height: 1.05; }
   .fields { gap: 1rem; }
@@ -127,13 +127,15 @@
   .field textarea { min-height: 8.5rem; }
   .choice { min-height: 3.65rem; padding: .85rem 1rem; }
   .choice span { font-size: .9rem; }
-  .actions { padding-top: 1.75rem; }
+  .actions { gap: .65rem; padding-top: 1.75rem; }
   .primary { min-height: var(--button-height-primary); gap: var(--button-icon-gap); padding-inline: var(--button-padding-primary); font-size: var(--button-font-size); }
   .back { font-size: .76rem; }
   .summary > div { grid-template-columns: 1fr; gap: .3rem; }
 }
 
 @media (max-width: 390px) {
+  .shell { padding-inline: .75rem; }
+  .main { padding-inline: 1rem; }
   .question { font-size: .95rem; }
   .confirmationTitle { font-size: 1.55rem; }
   .primary { padding-inline: .95rem; }
