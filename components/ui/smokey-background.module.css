@@ -1,12 +1,13 @@
-.background { position: absolute; inset: 0; overflow: hidden; background: linear-gradient(180deg,#09090b 0%,#211d31 48%,#c7baf0 100%); pointer-events: none; }
-.canvas { display: block; width: 100%; height: 100%; opacity: .94; }
-.veil { position: absolute; inset: 0; background: linear-gradient(180deg,rgba(5,5,7,.74) 0%,rgba(5,5,7,.18) 38%,rgba(215,205,248,.1) 100%); }
+.background { position: absolute; inset: 0; overflow: hidden; background: #09090b; pointer-events: none; }
+.canvas { display: block; width: 100%; height: 100%; opacity: .28; filter: saturate(.35) contrast(.9); }
+.veil { position: absolute; inset: 0; background: linear-gradient(180deg,rgba(5,5,7,.82),rgba(9,9,12,.48) 58%,rgba(20,19,25,.72)); }
 
 @media (max-width: 767px) {
-  .canvas { opacity: .82; }
-  .veil { background: linear-gradient(180deg,rgba(5,5,7,.72),rgba(33,29,49,.24) 54%,rgba(215,205,248,.08)); }
+  .canvas { opacity: .2; }
+  .veil { background: linear-gradient(180deg,rgba(5,5,7,.82),rgba(12,11,15,.56) 62%,rgba(20,19,25,.76)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .background { background: linear-gradient(180deg,#09090b 0%,#211d31 52%,#b4a8db 100%); }
+  .background { background: #09090b; }
+  .canvas { opacity: .14; }
 }
