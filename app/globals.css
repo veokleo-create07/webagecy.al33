@@ -406,7 +406,7 @@ a:focus-visible {
   margin-left: 0;
   place-items: center;
   overflow: clip;
-  padding: clamp(10rem, 18svh, 13rem) var(--space-page) clamp(3rem, 6vh, 5rem);
+  padding: clamp(10rem, 18svh, 13rem) var(--space-page) clamp(2.4rem, 4.8vh, 4rem);
   background: var(--color-ink);
 }
 
@@ -3694,7 +3694,7 @@ a:focus-visible {
 
   .hero {
     min-height: 0;
-    padding: 7rem 1rem 3.5rem;
+    padding: 7rem 1rem 2.8rem;
   }
 
   .hero__light {

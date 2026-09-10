@@ -16,7 +16,7 @@
   width: 100%;
   min-height: min(58rem, 92svh);
   margin-inline: auto;
-  padding: clamp(6rem, 8vw, 8.5rem) var(--space-page);
+  padding: clamp(4.8rem, 6.4vw, 6.8rem) var(--space-page);
 }
 
 .content { max-width: 41rem; }
@@ -201,7 +201,7 @@
     grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
     min-height: min(48rem, 88svh);
     gap: clamp(.95rem, 4vw, 1.25rem);
-    padding: clamp(4.5rem, 18vw, 5.5rem) .75rem clamp(3.5rem, 14vw, 4.5rem);
+    padding: clamp(3.6rem, 14.4vw, 4.4rem) .75rem clamp(3.5rem, 14vw, 4.5rem);
   }
   .content { width: 100%; max-width: none; text-align: left; }
   .label { font-size: .5rem; letter-spacing: .18em; }
