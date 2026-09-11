@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Inter_Tight } from "next/font/google";
-import { MetaPixel } from "@/components/analytics/meta-pixel";
+import {
+  MetaPixelNoScript,
+  MetaPixelRouteTracker,
+  MetaPixelScript,
+} from "@/components/analytics/meta-pixel";
 import { BookingProvider } from "@/components/booking/booking-provider";
 import { LanguageProvider } from "@/components/language-provider";
 import { cookies } from "next/headers";
@@ -51,8 +55,12 @@ export default async function RootLayout({
   const language = (await cookies()).get(languageCookie)?.value === "en" ? "en" : "sq";
   return (
     <html lang={language}>
+      <head>
+        <MetaPixelScript />
+      </head>
       <body className={interTight.variable}>
-        <MetaPixel />
+        <MetaPixelRouteTracker />
+        <MetaPixelNoScript />
         <LanguageProvider initialLanguage={language}>
           <BookingProvider>{children}</BookingProvider>
         </LanguageProvider>
