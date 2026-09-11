@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { trackMetaLead } from "@/components/analytics/meta-pixel";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { BrandLogo } from "@/components/ui/brand-logo";
 import { SmokeyBackground } from "@/components/ui/smokey-background";
@@ -75,6 +76,7 @@ export default function BookingFlow({ open, opener, onClose }: { open: boolean; 
       });
       const data = await response.json();
       if (!response.ok || !data.success) throw new Error("Lead delivery failed");
+      trackMetaLead();
       setConfirmation(true);
     } catch {
       setError("We couldn’t send your project request. Please try again.");
